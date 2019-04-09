@@ -25,6 +25,34 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public string Purpose { get; set; }
     }
 
+    public class AddCustomerProfileViewModel
+    {
+        [Required]
+        [DataType(DataType.Text)]
+        [StringLength(100)]
+        [Display(Name = "Имя")]
+        public string Name { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [StringLength(100)]
+        [Display(Name = "Фамилия")]
+        public string Surname { get; set; }
+    }
+
+    public class AddServiceProviderProfileViewModel
+    {
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Наименование организации / ИП")]
+        public string Name { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Подтверждающие документы")]
+        public string ConfirmDoc { get; set; }
+    }
+
     public class SetPasswordViewModel
     {
         [Required]

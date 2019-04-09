@@ -55,8 +55,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="ApplicationDbInitializer.cs" />
     <Compile Include="IdentityModels\ApplicationUser.cs" />
+    <Compile Include="IdentityModels\CustomerProfile.cs" />
+    <Compile Include="IdentityModels\ServiceProviderProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServicesModels\Photo.cs" />
+    <Compile Include="ServicesModels\Service.cs" />
+    <Compile Include="ServicesModels\ServiceTime.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

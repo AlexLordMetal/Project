@@ -78,7 +78,9 @@
     <Compile Include="IdentityServices\ApplicationSignInManager.cs" />
     <Compile Include="IdentityServices\ApplicationUserManager.cs" />
     <Compile Include="IdentityServices\MessageServices.cs" />
+    <Compile Include="Interfaces\IServicesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServicesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -90,5 +92,6 @@
       <Name>ServicesApp.DataProvider</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

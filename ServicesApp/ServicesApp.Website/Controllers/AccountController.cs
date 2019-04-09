@@ -151,11 +151,25 @@ namespace ServicesApp.Website.Controllers
             if (ModelState.IsValid)
             {
                 //This is govnocode
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email                    
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    if (model.IsServiceProvider)
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, "ServiceProvider");
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("AddServiceProviderProfile", "Manage");
+                    }
+                    else
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, "Customer");
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("AddCustomerProfile", "Manage");
+                    }
                     
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
                     // Отправка сообщения электронной почты с этой ссылкой
@@ -163,7 +177,6 @@ namespace ServicesApp.Website.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
-                    return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }

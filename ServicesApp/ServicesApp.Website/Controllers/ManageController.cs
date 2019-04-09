@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ServicesApp.BusinessLogic.IdentityServices;
+using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
 
 namespace ServicesApp.Website.Controllers
@@ -33,9 +34,9 @@ namespace ServicesApp.Website.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -62,6 +63,8 @@ namespace ServicesApp.Website.Controllers
                 : message == ManageMessageId.Error ? "Произошла ошибка."
                 : message == ManageMessageId.AddPhoneSuccess ? "Ваш номер телефона добавлен."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Ваш номер телефона удален."
+                : message == ManageMessageId.AddCustomerProfileSuccess ? "Ваш профиль пользователя обновлен."
+                : message == ManageMessageId.AddServiceProviderProfileSuccess ? "Ваш профиль поставщика услуг обновлен."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -74,6 +77,68 @@ namespace ServicesApp.Website.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        //
+        // GET: /Manage/AddCustomerProfile
+        [Authorize(Roles = "Customer")]
+        public ActionResult AddCustomerProfile()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Manage/AddCustomerProfile
+        [HttpPost]
+        [Authorize(Roles = "Customer")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddCustomerProfile(AddCustomerProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                user.CustomerProfile = new CustomerProfile { Id=user.Id, Name = model.Name, Surname = model.Surname };
+                await UserManager.UpdateAsync(user);
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            }
+
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.AddCustomerProfileSuccess });
+        }
+
+        //
+        // GET: /Manage/AddServiceProviderProfile
+        [Authorize(Roles = "ServiceProvider")]
+        public ActionResult AddServiceProviderProfile()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Manage/AddServiceProviderProfile
+        [HttpPost]
+        [Authorize(Roles = "ServiceProvider")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddServiceProviderProfile(AddServiceProviderProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                user.ServiceProviderProfile = new ServiceProviderProfile { Id = user.Id, Name = model.Name, ConfirmDoc = model.ConfirmDoc };
+                await UserManager.UpdateAsync(user);
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            }
+
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.AddServiceProviderProfileSuccess });
         }
 
         //
@@ -334,7 +399,7 @@ namespace ServicesApp.Website.Controllers
             base.Dispose(disposing);
         }
 
-#region Вспомогательные приложения
+        #region Вспомогательные приложения
         // Используется для защиты от XSRF-атак при добавлении внешних имен входа
         private const string XsrfKey = "XsrfId";
 
@@ -382,9 +447,11 @@ namespace ServicesApp.Website.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            AddCustomerProfileSuccess,
+            AddServiceProviderProfileSuccess,
             Error
         }
 
-#endregion
+        #endregion
     }
 }
