@@ -10,7 +10,7 @@ namespace ServicesApp.Website.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Services");
+            return View();
         }
 
         public ActionResult About()

@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using ServicesApp.BusinessLogic.Interfaces;
 using System.Threading.Tasks;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ServicesApp.DataProvider;
-using ServicesApp.DataProvider.ServicesModels;
-using ServicesApp.BusinessLogic.Interfaces;
 
 namespace ServicesApp.Website.Controllers
 {
@@ -23,9 +14,9 @@ namespace ServicesApp.Website.Controllers
 
         //
         // GET: Services
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var model = _servicesManager.GetAll();
+            var model = await _servicesManager.GetAllAsync();
             return View(model);
         }
 

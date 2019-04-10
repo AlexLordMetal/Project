@@ -1,4 +1,4 @@
-﻿using ServicesApp.DataProvider.ServicesModels;
+﻿using ServicesApp.DataProvider.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace ServicesApp.BusinessLogic.Interfaces
 {
     public interface IServicesManager
     {
-        List<Service> GetAll();
+        Task<List<Service>> GetAllAsync();
     }
 }

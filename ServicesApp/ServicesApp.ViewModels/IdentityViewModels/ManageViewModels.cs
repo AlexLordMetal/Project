@@ -14,18 +14,7 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public bool BrowserRemembered { get; set; }
     }
 
-    public class ManageLoginsViewModel
-    {
-        public IList<UserLoginInfo> CurrentLogins { get; set; }
-        public IList<AuthenticationDescription> OtherLogins { get; set; }
-    }
-
-    public class FactorViewModel
-    {
-        public string Purpose { get; set; }
-    }
-
-    public class AddCustomerProfileViewModel
+    public class ChangeCustomerProfileViewModel
     {
         [Required]
         [DataType(DataType.Text)]
@@ -40,7 +29,7 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public string Surname { get; set; }
     }
 
-    public class AddServiceProviderProfileViewModel
+    public class ChangeServiceProviderProfileViewModel
     {
         [Required]
         [DataType(DataType.Text)]
@@ -51,20 +40,6 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Подтверждающие документы")]
         public string ConfirmDoc { get; set; }
-    }
-
-    public class SetPasswordViewModel
-    {
-        [Required]
-        [StringLength(100, ErrorMessage = "Значение {0} должно содержать символов не менее: {2}.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Новый пароль")]
-        public string NewPassword { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Подтверждение нового пароля")]
-        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
-        public string ConfirmPassword { get; set; }
     }
 
     public class ChangePasswordViewModel
@@ -86,29 +61,4 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public string ConfirmPassword { get; set; }
     }
 
-    public class AddPhoneNumberViewModel
-    {
-        [Required]
-        [Phone]
-        [Display(Name = "Номер телефона")]
-        public string Number { get; set; }
-    }
-
-    public class VerifyPhoneNumberViewModel
-    {
-        [Required]
-        [Display(Name = "Код")]
-        public string Code { get; set; }
-
-        [Required]
-        [Phone]
-        [Display(Name = "Номер телефона")]
-        public string PhoneNumber { get; set; }
-    }
-
-    public class ConfigureTwoFactorViewModel
-    {
-        public string SelectedProvider { get; set; }
-        public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
-    }
 }

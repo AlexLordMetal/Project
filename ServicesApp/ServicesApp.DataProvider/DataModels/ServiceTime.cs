@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServicesApp.DataProvider.ServicesModels
+namespace ServicesApp.DataProvider.DataModels
 {
     public class ServiceTime
     {

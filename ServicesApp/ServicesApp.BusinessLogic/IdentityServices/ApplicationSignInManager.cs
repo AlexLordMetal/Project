@@ -7,7 +7,7 @@ using ServicesApp.DataProvider.IdentityModels;
 
 namespace ServicesApp.BusinessLogic.IdentityServices
 {
-    // Настройка диспетчера входа для приложения.
+    // Configure the application sign in manager used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using ServicesApp.DataProvider.IdentityModels;
-using ServicesApp.DataProvider.ServicesModels;
+using ServicesApp.DataProvider.DataModels;
 using System.Data.Entity;
 
 namespace ServicesApp.DataProvider
