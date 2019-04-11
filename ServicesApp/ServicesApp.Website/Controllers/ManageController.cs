@@ -30,11 +30,6 @@ namespace ServicesApp.Website.Controllers
             SignInManager = signInManager;
             _profilesManager = profilesManager;
         }
-        
-        public ManageController(IProfilesManager profilesManager)
-        {
-            _profilesManager = profilesManager;
-        }
 
         public ApplicationSignInManager SignInManager
         {
@@ -103,7 +98,6 @@ namespace ServicesApp.Website.Controllers
                 return View(model);
             }
 
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             var userId = User.Identity.GetUserId();
             if (userId != null)
             {
