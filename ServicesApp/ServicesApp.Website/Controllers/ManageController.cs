@@ -20,14 +20,12 @@ namespace ServicesApp.Website.Controllers
         private ApplicationUserManager _userManager;
         private IProfilesManager _profilesManager;
 
-        public ManageController()
-        {
-        }
+        //public ManageController()
+        //{
+        //}
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IProfilesManager profilesManager)
+        public ManageController(IProfilesManager profilesManager)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
             _profilesManager = profilesManager;
         }
 
@@ -81,9 +79,15 @@ namespace ServicesApp.Website.Controllers
         //
         // GET: /Manage/UpdateCustomerProfile
         [Authorize(Roles = "Customer")]
-        public ActionResult UpdateCustomerProfile()
+        public async Task<ActionResult> UpdateCustomerProfile()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var customerProfileViewModel = await _profilesManager.GetCustomerProfileAsync(userId);
+            if (customerProfileViewModel == null)
+            {
+                customerProfileViewModel = new CustomerProfileViewModel();
+            }
+            return View(customerProfileViewModel);
         }
 
         //
@@ -97,7 +101,6 @@ namespace ServicesApp.Website.Controllers
             {
                 return View(model);
             }
-
             var userId = User.Identity.GetUserId();
             if (userId != null)
             {

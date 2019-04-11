@@ -1,3 +1,5 @@
+using AutoMapper;
+using ServicesApp.BusinessLogic;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.BusinessLogic.Services;
 using ServicesApp.Website.Controllers;
@@ -49,9 +51,12 @@ namespace ServicesApp.Website
             container.RegisterType<IServicesManager, ServicesManager>();
             container.RegisterType<IProfilesManager, ProfilesManager>();
 
-            //Why necessary?
-            container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<ManageController>(new InjectionConstructor());
+            // Initialize AutoMapper
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+            container.RegisterInstance<IMapper>(config.CreateMapper());
         }
     }
 }
