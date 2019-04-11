@@ -273,8 +273,8 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Manage\ChangeCustomerProfile.cshtml" />
-    <Content Include="Views\Manage\ChangeServiceProviderProfile.cshtml" />
+    <Content Include="Views\Manage\UpdateCustomerProfile.cshtml" />
+    <Content Include="Views\Manage\UpdateServiceProviderProfile.cshtml" />
     <Content Include="Views\Services\Create.cshtml" />
     <Content Include="Views\Services\Delete.cshtml" />
     <Content Include="Views\Services\Details.cshtml" />

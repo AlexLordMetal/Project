@@ -114,13 +114,13 @@ namespace ServicesApp.Website.Controllers
                     {
                         await UserManager.AddToRoleAsync(user.Id, "ServiceProvider");
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("ChangeServiceProviderProfile", "Manage");
+                        return RedirectToAction("UpdateServiceProviderProfile", "Manage");
                     }
                     else
                     {
                         await UserManager.AddToRoleAsync(user.Id, "Customer");
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("ChangeCustomerProfile", "Manage");
+                        return RedirectToAction("UpdateCustomerProfile", "Manage");
                     }
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771

@@ -1,11 +1,11 @@
-﻿@model ServicesApp.ViewModels.IdentityViewModels.ChangeCustomerProfileViewModel
+﻿@model ServicesApp.ViewModels.IdentityViewModels.CustomerProfileViewModel
 @{
     ViewBag.Title = "Данные пользователя";
 }
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("ChangeCustomerProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("UpdateCustomerProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Добавьте данные пользователя.</h4>

@@ -14,22 +14,7 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public bool BrowserRemembered { get; set; }
     }
 
-    public class ChangeCustomerProfileViewModel
-    {
-        [Required]
-        [DataType(DataType.Text)]
-        [StringLength(100)]
-        [Display(Name = "Имя")]
-        public string Name { get; set; }
-
-        [Required]
-        [DataType(DataType.Text)]
-        [StringLength(100)]
-        [Display(Name = "Фамилия")]
-        public string Surname { get; set; }
-    }
-
-    public class ChangeServiceProviderProfileViewModel
+    public class UpdateServiceProviderProfileViewModel
     {
         [Required]
         [DataType(DataType.Text)]

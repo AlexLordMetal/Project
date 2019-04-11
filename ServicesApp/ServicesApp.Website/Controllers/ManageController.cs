@@ -2,6 +2,8 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ServicesApp.BusinessLogic.IdentityServices;
+using ServicesApp.BusinessLogic.Interfaces;
+using ServicesApp.BusinessLogic.Services;
 using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
 using System.Linq;
@@ -16,15 +18,22 @@ namespace ServicesApp.Website.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IProfilesManager _profilesManager;
 
         public ManageController()
         {
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IProfilesManager profilesManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _profilesManager = profilesManager;
+        }
+        
+        public ManageController(IProfilesManager profilesManager)
+        {
+            _profilesManager = profilesManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -58,8 +67,8 @@ namespace ServicesApp.Website.Controllers
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Ваш пароль изменен."
                 : message == ManageMessageId.Error ? "Произошла ошибка."
-                : message == ManageMessageId.ChangeCustomerProfileSuccess ? "Ваш профиль пользователя обновлен."
-                : message == ManageMessageId.ChangeServiceProviderProfileSuccess ? "Ваш профиль поставщика услуг обновлен."
+                : message == ManageMessageId.UpdateCustomerProfileSuccess ? "Ваш профиль пользователя обновлен."
+                : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Ваш профиль поставщика услуг обновлен."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -75,31 +84,19 @@ namespace ServicesApp.Website.Controllers
         }
 
         //
-        // GET: /Manage/ChangeCustomerProfile
+        // GET: /Manage/UpdateCustomerProfile
         [Authorize(Roles = "Customer")]
-        public async Task<ActionResult> ChangeCustomerProfile()
+        public ActionResult UpdateCustomerProfile()
         {
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            if (user.CustomerProfile == null)
-            {
-                return View();
-            }
-            else
-            {
-                var model = new ChangeCustomerProfileViewModel
-                {
-                    //need to use extension method for ApplicationUserManager
-                }
-                return View(model);
-            }
+            return View();
         }
 
         //
-        // POST: /Manage/ChangeCustomerProfile
+        // POST: /Manage/UpdateCustomerProfile
         [HttpPost]
         [Authorize(Roles = "Customer")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeCustomerProfile(ChangeCustomerProfileViewModel model)
+        public async Task<ActionResult> UpdateCustomerProfile(CustomerProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -107,30 +104,29 @@ namespace ServicesApp.Website.Controllers
             }
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            if (user != null)
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
             {
-                user.CustomerProfile = new CustomerProfile { Id=user.Id, Name = model.Name, Surname = model.Surname };
-                await UserManager.UpdateAsync(user);
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await _profilesManager.UpdateCustomerProfileAsync(model, userId);
             }
 
-            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangeCustomerProfileSuccess });
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
         }
 
         //
-        // GET: /Manage/ChangeServiceProviderProfile
+        // GET: /Manage/UpdateServiceProviderProfile
         [Authorize(Roles = "ServiceProvider")]
-        public ActionResult ChangeServiceProviderProfile()
+        public ActionResult UpdateServiceProviderProfile()
         {
             return View();
         }
 
         //
-        // POST: /Manage/ChangeServiceProviderProfile
+        // POST: /Manage/UpdateServiceProviderProfile
         [HttpPost]
         [Authorize(Roles = "ServiceProvider")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeServiceProviderProfile(ChangeServiceProviderProfileViewModel model)
+        public async Task<ActionResult> UpdateServiceProviderProfile(UpdateServiceProviderProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -145,7 +141,7 @@ namespace ServicesApp.Website.Controllers
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
 
-            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangeServiceProviderProfileSuccess });
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
         }
 
         //
@@ -234,8 +230,8 @@ namespace ServicesApp.Website.Controllers
         {
             ChangePasswordSuccess,
             RemoveLoginSuccess,
-            ChangeCustomerProfileSuccess,
-            ChangeServiceProviderProfileSuccess,
+            UpdateCustomerProfileSuccess,
+            UpdateServiceProviderProfileSuccess,
             Error
         }
 

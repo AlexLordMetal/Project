@@ -47,6 +47,7 @@ namespace ServicesApp.Website
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IServicesManager, ServicesManager>();
+            container.RegisterType<IProfilesManager, ProfilesManager>();
 
             //Why necessary?
             container.RegisterType<AccountController>(new InjectionConstructor());

@@ -1,11 +1,11 @@
-﻿@model ServicesApp.ViewModels.IdentityViewModels.ChangeCustomerProfileViewModel
+﻿@model ServicesApp.ViewModels.IdentityViewModels.UpdateServiceProviderProfileViewModel
 @{
     ViewBag.Title = "Данные поставщика услуг";
 }
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("ChangeServiceProviderProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("UpdateServiceProviderProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Добавьте (обновите) данные поставщика услуг.</h4>
