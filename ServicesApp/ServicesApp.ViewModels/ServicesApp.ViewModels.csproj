@@ -88,8 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IdentityViewModels\AccountViewModels.cs" />
+    <Compile Include="IdentityViewModels\ServiceProviderProfileViewModels.cs" />
     <Compile Include="IdentityViewModels\ManageViewModels.cs" />
-    <Compile Include="IdentityViewModels\CustomerProfilesViewModels.cs" />
+    <Compile Include="IdentityViewModels\CustomerProfileViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

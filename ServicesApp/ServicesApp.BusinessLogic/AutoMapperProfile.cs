@@ -10,6 +10,9 @@ namespace ServicesApp.BusinessLogic
         {
             CreateMap<CustomerProfile, CustomerProfileViewModel>();
             CreateMap<CustomerProfileViewModel, CustomerProfile>();
+
+            CreateMap<ServiceProviderProfile, ServiceProviderProfileViewModel>();
+            CreateMap<ServiceProviderProfileViewModel, ServiceProviderProfile>();
         }
-    }
+    }    
 }

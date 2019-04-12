@@ -39,6 +39,21 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<ServiceProviderProfileViewModel> GetServiceProviderProfileAsync(string userId)
+        {
+            var serviceProviderProfile = await context.ServiceProviderProfiles.FindAsync(userId);
+            ServiceProviderProfileViewModel serviceProviderProfileViewModel = _mapper.Map<ServiceProviderProfile, ServiceProviderProfileViewModel>(serviceProviderProfile);
+            return serviceProviderProfileViewModel;
+        }
+
+        public async Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId)
+        {
+            ServiceProviderProfile serviceProviderProfile = _mapper.Map<ServiceProviderProfileViewModel, ServiceProviderProfile>(serviceProviderProfileViewModel);
+            serviceProviderProfile.Id = userId;
+            context.ServiceProviderProfiles.AddOrUpdate(serviceProviderProfile);
+            await context.SaveChangesAsync();
+        }
+
         public void Dispose()
         {
             context.Dispose();

@@ -9,7 +9,7 @@ namespace ServicesApp.DataProvider.IdentityModels
         [ForeignKey("ApplicationUser")]
         public string Id { get; set; }
         public string Name { get; set; }
-        public string ConfirmDoc { get; set; }
+        public string ConfirmDocs { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
     }

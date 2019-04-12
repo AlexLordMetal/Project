@@ -7,16 +7,16 @@ namespace ServicesApp.ViewModels.IdentityViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Адрес электронной почты")]
+        [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Запомнить меня")]
+        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 
@@ -24,22 +24,22 @@ namespace ServicesApp.ViewModels.IdentityViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Адрес электронной почты")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Подтверждение пароля")]
-        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         [Required]
-        [Display(Name = "Выберите роль")]
+        [Display(Name = "Register as")]
         public bool IsServiceProvider { get; set; }
     }
 

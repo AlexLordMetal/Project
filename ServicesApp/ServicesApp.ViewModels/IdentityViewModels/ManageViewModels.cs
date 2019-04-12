@@ -14,35 +14,22 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public bool BrowserRemembered { get; set; }
     }
 
-    public class UpdateServiceProviderProfileViewModel
-    {
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Наименование организации / ИП")]
-        public string Name { get; set; }
-
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Подтверждающие документы")]
-        public string ConfirmDoc { get; set; }
-    }
-
     public class ChangePasswordViewModel
     {
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Текущий пароль")]
+        [Display(Name = "Current password")]
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Значение {0} должно содержать символов не менее: {2}.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Новый пароль")]
+        [Display(Name = "New password")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Подтверждение нового пароля")]
-        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
+        [Display(Name = "Confirm new password")]
+        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 

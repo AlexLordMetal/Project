@@ -58,13 +58,37 @@ namespace ServicesApp.Website.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Ваш пароль изменен."
-                : message == ManageMessageId.Error ? "Произошла ошибка."
-                : message == ManageMessageId.UpdateCustomerProfileSuccess ? "Ваш профиль пользователя обновлен."
-                : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Ваш профиль поставщика услуг обновлен."
+                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.Error ? "An error has occurred."
+                : message == ManageMessageId.UpdateCustomerProfileSuccess ? "Your customer profile has been updated."
+                : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Your service provider profile has been updated."
                 : "";
 
             var userId = User.Identity.GetUserId();
+            if (await UserManager.IsInRoleAsync(userId, "Administrator"))
+            {
+                View("ManageAdministrator", HasPassword());
+            }
+            else if (await UserManager.IsInRoleAsync(userId, "Customer"))
+            {
+                var manageCustomerProfileViewModel = new ManageCustomerProfileViewModel();
+                manageCustomerProfileViewModel.HasPassword = HasPassword();
+                var customerProfileViewModel = await _profilesManager.GetCustomerProfileAsync(userId);
+                if (customerProfileViewModel == null)
+                {
+                    customerProfileViewModel = new CustomerProfileViewModel();
+                }
+                manageCustomerProfileViewModel.CustomerProfileViewModel = customerProfileViewModel;
+                return View("ManageCustomer", manageCustomerProfileViewModel);
+
+            }
+            else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
+            {
+
+            }
+
+
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -108,14 +132,24 @@ namespace ServicesApp.Website.Controllers
             }
 
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
+
+
+
+            //Sign in - does it need?
         }
 
         //
         // GET: /Manage/UpdateServiceProviderProfile
         [Authorize(Roles = "ServiceProvider")]
-        public ActionResult UpdateServiceProviderProfile()
+        public async Task<ActionResult> UpdateServiceProviderProfile()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var serviceProviderProfileViewModel = await _profilesManager.GetServiceProviderProfileAsync(userId);
+            if (serviceProviderProfileViewModel == null)
+            {
+                serviceProviderProfileViewModel = new ServiceProviderProfileViewModel();
+            }
+            return View(serviceProviderProfileViewModel);
         }
 
         //
@@ -123,22 +157,23 @@ namespace ServicesApp.Website.Controllers
         [HttpPost]
         [Authorize(Roles = "ServiceProvider")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateServiceProviderProfile(UpdateServiceProviderProfileViewModel model)
+        public async Task<ActionResult> UpdateServiceProviderProfile(ServiceProviderProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            if (user != null)
+            var userId = User.Identity.GetUserId();
+            if (userId != null)
             {
-                user.ServiceProviderProfile = new ServiceProviderProfile { Id = user.Id, Name = model.Name, ConfirmDoc = model.ConfirmDoc };
-                await UserManager.UpdateAsync(user);
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await _profilesManager.UpdateServiceProviderProfileAsync(model, userId);
             }
 
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
+
+
+
+            //Sign in - does it need?
         }
 
         //
@@ -184,8 +219,6 @@ namespace ServicesApp.Website.Controllers
         }
 
         #region Вспомогательные приложения
-        // Используется для защиты от XSRF-атак при добавлении внешних имен входа
-        private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -209,16 +242,6 @@ namespace ServicesApp.Website.Controllers
             if (user != null)
             {
                 return user.PasswordHash != null;
-            }
-            return false;
-        }
-
-        private bool HasPhoneNumber()
-        {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            if (user != null)
-            {
-                return user.PhoneNumber != null;
             }
             return false;
         }

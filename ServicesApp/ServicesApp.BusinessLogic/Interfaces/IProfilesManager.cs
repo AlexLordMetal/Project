@@ -12,5 +12,8 @@ namespace ServicesApp.BusinessLogic.Interfaces
     {
         Task UpdateCustomerProfileAsync(CustomerProfileViewModel customerProfileViewModel, string userId);
         Task<CustomerProfileViewModel> GetCustomerProfileAsync(string userId);
+
+        Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId);
+        Task<ServiceProviderProfileViewModel> GetServiceProviderProfileAsync(string userId);
     }
 }

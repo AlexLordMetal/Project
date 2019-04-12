@@ -1,6 +1,6 @@
-﻿@model ServicesApp.ViewModels.IdentityViewModels.UpdateServiceProviderProfileViewModel
+﻿@model ServicesApp.ViewModels.IdentityViewModels.ServiceProviderProfileViewModel
 @{
-    ViewBag.Title = "Данные поставщика услуг";
+    ViewBag.Title = "Service Provider Profile";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -8,7 +8,7 @@
 @using (Html.BeginForm("UpdateServiceProviderProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Добавьте (обновите) данные поставщика услуг.</h4>
+    <h4>Add or update service provider profile.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
@@ -18,14 +18,14 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmDoc, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.ConfirmDocs, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.ConfirmDoc, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.ConfirmDocs, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Подтвердить" />
+            <input type="submit" class="btn btn-default" value="Confirm" />
         </div>
     </div>
 }
