@@ -49,7 +49,9 @@ namespace ServicesApp.Website
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IServicesManager, ServicesManager>();
-            container.RegisterType<IProfilesManager, ProfilesManager>();
+            container.RegisterType<ICustomerManager, CustomerManager>();
+            container.RegisterType<IServiceProviderManager, ServiceProviderManager>();
+            container.RegisterType<IServiceCategoryManager, ServiceCategoryManager>();
 
             // Initialize AutoMapper
             var config = new MapperConfiguration(cfg =>

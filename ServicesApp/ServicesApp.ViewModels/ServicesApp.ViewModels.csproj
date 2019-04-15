@@ -92,6 +92,8 @@
     <Compile Include="IdentityViewModels\ManageViewModels.cs" />
     <Compile Include="IdentityViewModels\CustomerProfileViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ServiceCategoryViewModels.cs" />
+    <Compile Include="ViewModels\ServiceViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -100,8 +102,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ServicesViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

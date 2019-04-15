@@ -18,15 +18,17 @@ namespace ServicesApp.Website.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private IProfilesManager _profilesManager;
+        private ICustomerManager _customerManager;
+        private IServiceProviderManager _serviceProviderManager;
 
         //public ManageController()
         //{
         //}
 
-        public ManageController(IProfilesManager profilesManager)
+        public ManageController(ICustomerManager customerManager, IServiceProviderManager serviceProviderManager)
         {
-            _profilesManager = profilesManager;
+            _customerManager = customerManager;
+            _serviceProviderManager = serviceProviderManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -67,13 +69,13 @@ namespace ServicesApp.Website.Controllers
             var userId = User.Identity.GetUserId();
             if (await UserManager.IsInRoleAsync(userId, "Administrator"))
             {
-                View("ManageAdministrator", HasPassword());
+                return View("ManageAdministrator", HasPassword());
             }
             else if (await UserManager.IsInRoleAsync(userId, "Customer"))
             {
                 var manageCustomerProfileViewModel = new ManageCustomerProfileViewModel();
                 manageCustomerProfileViewModel.HasPassword = HasPassword();
-                var customerProfileViewModel = await _profilesManager.GetCustomerProfileAsync(userId);
+                var customerProfileViewModel = await _customerManager.GetCustomerProfileAsync(userId);
                 if (customerProfileViewModel == null)
                 {
                     customerProfileViewModel = new CustomerProfileViewModel();
@@ -84,20 +86,17 @@ namespace ServicesApp.Website.Controllers
             }
             else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
             {
-
+                var manageServiceProviderProfileViewModel = new ManageServiceProviderProfileViewModel();
+                manageServiceProviderProfileViewModel.HasPassword = HasPassword();
+                var serviceProviderProfileViewModel = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
+                if (serviceProviderProfileViewModel == null)
+                {
+                    serviceProviderProfileViewModel = new ServiceProviderProfileViewModel();
+                }
+                manageServiceProviderProfileViewModel.ServiceProviderProfileViewModel = serviceProviderProfileViewModel;
+                return View("ManageServiceProvider", manageServiceProviderProfileViewModel);
             }
-
-
-
-            var model = new IndexViewModel
-            {
-                HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
-            };
-            return View(model);
+            return View("Index");                   //Change This
         }
 
         //
@@ -106,7 +105,7 @@ namespace ServicesApp.Website.Controllers
         public async Task<ActionResult> UpdateCustomerProfile()
         {
             var userId = User.Identity.GetUserId();
-            var customerProfileViewModel = await _profilesManager.GetCustomerProfileAsync(userId);
+            var customerProfileViewModel = await _customerManager.GetCustomerProfileAsync(userId);
             if (customerProfileViewModel == null)
             {
                 customerProfileViewModel = new CustomerProfileViewModel();
@@ -128,7 +127,7 @@ namespace ServicesApp.Website.Controllers
             var userId = User.Identity.GetUserId();
             if (userId != null)
             {
-                await _profilesManager.UpdateCustomerProfileAsync(model, userId);
+                await _customerManager.UpdateCustomerProfileAsync(model, userId);
             }
 
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
@@ -144,7 +143,7 @@ namespace ServicesApp.Website.Controllers
         public async Task<ActionResult> UpdateServiceProviderProfile()
         {
             var userId = User.Identity.GetUserId();
-            var serviceProviderProfileViewModel = await _profilesManager.GetServiceProviderProfileAsync(userId);
+            var serviceProviderProfileViewModel = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
             if (serviceProviderProfileViewModel == null)
             {
                 serviceProviderProfileViewModel = new ServiceProviderProfileViewModel();
@@ -166,7 +165,7 @@ namespace ServicesApp.Website.Controllers
             var userId = User.Identity.GetUserId();
             if (userId != null)
             {
-                await _profilesManager.UpdateServiceProviderProfileAsync(model, userId);
+                await _serviceProviderManager.UpdateServiceProviderProfileAsync(model, userId);
             }
 
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
@@ -213,6 +212,12 @@ namespace ServicesApp.Website.Controllers
             {
                 _userManager.Dispose();
                 _userManager = null;
+            }
+
+            if (disposing && _signInManager != null)
+            {
+                _signInManager.Dispose();
+                _signInManager = null;
             }
 
             base.Dispose(disposing);

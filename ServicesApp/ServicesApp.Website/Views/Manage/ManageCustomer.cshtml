@@ -1,0 +1,44 @@
+﻿@model ServicesApp.ViewModels.IdentityViewModels.ManageCustomerProfileViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Change your account settings</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Password:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Change your password", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </dd>
+        <dt>@Html.DisplayNameFor(m => m.CustomerProfileViewModel.Name):</dt>
+        <dd>
+            @Html.DisplayFor(m => m.CustomerProfileViewModel.Name)
+        </dd>
+        <dt>@Html.DisplayNameFor(m => m.CustomerProfileViewModel.Surname):</dt>
+        <dd>
+            @Html.DisplayFor(m => m.CustomerProfileViewModel.Surname)
+        </dd>
+        <dt>@Html.DisplayNameFor(m => m.CustomerProfileViewModel.Phone):</dt>
+        <dd>
+            @Html.DisplayFor(m => m.CustomerProfileViewModel.Phone)
+        </dd>
+        <dd>
+            [
+            @Html.ActionLink("Change", "UpdateCustomerProfile")
+            ]
+        </dd>
+    </dl>
+</div>

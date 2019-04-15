@@ -34,7 +34,7 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public bool HasPassword { get; set; }
 
         public CustomerProfileViewModel CustomerProfileViewModel { get; set; }
-}
+    }
 
     //public class ManageCustomerProfileViewModel
     //{

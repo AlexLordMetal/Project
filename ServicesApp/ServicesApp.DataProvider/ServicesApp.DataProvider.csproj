@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="ApplicationDbInitializer.cs" />
+    <Compile Include="DataModels\ServiceCategory.cs" />
     <Compile Include="IdentityModels\ApplicationUser.cs" />
     <Compile Include="IdentityModels\CustomerProfile.cs" />
     <Compile Include="IdentityModels\ServiceProviderProfile.cs" />

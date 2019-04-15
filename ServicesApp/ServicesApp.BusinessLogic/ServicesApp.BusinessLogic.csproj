@@ -84,10 +84,14 @@
     <Compile Include="AutoMapperProfile.cs" />
     <Compile Include="IdentityServices\ApplicationSignInManager.cs" />
     <Compile Include="IdentityServices\ApplicationUserManager.cs" />
+    <Compile Include="Interfaces\ICustomerManager.cs" />
+    <Compile Include="Interfaces\IServiceProviderManager.cs" />
     <Compile Include="Interfaces\IServicesManager.cs" />
-    <Compile Include="Interfaces\IProfilesManager.cs" />
+    <Compile Include="Interfaces\IServiceCategoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ProfilesManager.cs" />
+    <Compile Include="Services\CustomerManager.cs" />
+    <Compile Include="Services\ServiceCategoryManager.cs" />
+    <Compile Include="Services\ServiceProviderManager.cs" />
     <Compile Include="Services\ServicesManager.cs" />
   </ItemGroup>
   <ItemGroup>
