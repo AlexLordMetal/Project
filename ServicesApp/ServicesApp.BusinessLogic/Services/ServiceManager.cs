@@ -6,6 +6,7 @@ using ServicesApp.ViewModels.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServicesApp.BusinessLogic.Services
@@ -32,17 +33,32 @@ namespace ServicesApp.BusinessLogic.Services
             return viewModel;
         }
 
-        public async Task<FullServiceViewModel> GetByIdAsync(int? id)
+        public async Task<List<ShortServiceViewModel>> GetAllApprovedAsync()
         {
-            var dataModel = await context.Services.FindAsync(id);
-            var viewModel = _mapper.Map<Service, FullServiceViewModel>(dataModel);
+            var dataModel = await context.Services.Where(x => x.CategoryId != null).Include(x => x.Category).ToListAsync();
+            var viewModel = new List<ShortServiceViewModel>();
+            foreach (var item in dataModel)
+            {
+                viewModel.Add(_mapper.Map<Service, ShortServiceViewModel>(item));
+            }
             return viewModel;
         }
 
-        public async Task<ShortServiceViewModel> GetShortByIdAsync(int? id)
+        public async Task<List<ShortServiceViewModel>> GetNotApprovedAsync()
+        {
+            var dataModel = await context.Services.Where(x => x.CategoryId == null).ToListAsync();
+            var viewModel = new List<ShortServiceViewModel>();
+            foreach (var item in dataModel)
+            {
+                viewModel.Add(_mapper.Map<Service, ShortServiceViewModel>(item));
+            }
+            return viewModel;
+        }
+
+        public async Task<T> GetByIdAsync<T>(int? id)
         {
             var dataModel = await context.Services.FindAsync(id);
-            var viewModel = _mapper.Map<Service, ShortServiceViewModel>(dataModel);
+            var viewModel = _mapper.Map<Service, T>(dataModel);
             return viewModel;
         }
 
@@ -53,28 +69,27 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
-        //public async Task ModifyAsync(ShortServiceCategoryViewModel viewModel)
-        //{
-        //    if (await context.ServiceCategories.AnyAsync(x=>x.Id==viewModel.Id))
-        //    {
-        //        var dataModel = _mapper.Map<ShortServiceCategoryViewModel, ServiceCategory>(viewModel);
-        //        context.ServiceCategories.Attach(dataModel);
-        //        context.Entry<ServiceCategory>(dataModel).State = EntityState.Modified;
-        //        await context.SaveChangesAsync();
-        //    }
-        //}
+        public async Task ModifyAsync(CreateServiceViewModel viewModel)
+        {
+            if (await context.Services.AnyAsync(x => x.Id == viewModel.Id))
+            {
+                var dataModel = _mapper.Map<CreateServiceViewModel, Service>(viewModel);
+                context.Services.Attach(dataModel);
+                context.Entry<Service>(dataModel).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
+        }
 
-        //public async Task DeleteByIdAsync(int? id)
-        //{
-        //    var dataModel = await context.ServiceCategories.FindAsync(id);
-        //    if (dataModel != null)
-        //    {
-        //        //doesn't work if any services are in this category
-        //        context.ServiceCategories.Remove(dataModel);
-        //        await context.SaveChangesAsync();
-        //    }            
-        //}
-        
+        public async Task DeleteByIdAsync(int? id)
+        {
+            var dataModel = await context.ServiceCategories.FindAsync(id);
+            if (dataModel != null)
+            {
+                context.ServiceCategories.Remove(dataModel);
+                await context.SaveChangesAsync();
+            }
+        }
+
         public void Dispose()
         {
             context.Dispose();

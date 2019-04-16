@@ -28,7 +28,21 @@
         <dt>Service Categories:</dt>
         <dd>
             [
-                @Html.ActionLink("Manage", "Index", "ServiceCategory")
+            @Html.ActionLink("Manage Categories", "Index", "ServiceCategory")
+            ]
+        </dd>
+
+        <dt>Services:</dt>
+        <dd>
+            [
+            @Html.ActionLink("Manage Services", "Index", "Service")
+            ]
+        </dd>
+
+        <dt>Not Approved Services:</dt>
+        <dd>
+            [
+            @Html.ActionLink("Approve Services", "Approve", "Service")
             ]
         </dd>
 

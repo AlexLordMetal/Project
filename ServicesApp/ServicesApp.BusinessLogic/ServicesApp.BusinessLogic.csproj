@@ -87,14 +87,12 @@
     <Compile Include="Interfaces\ICustomerManager.cs" />
     <Compile Include="Interfaces\IServiceManager.cs" />
     <Compile Include="Interfaces\IServiceProviderManager.cs" />
-    <Compile Include="Interfaces\IServicesManager.cs" />
     <Compile Include="Interfaces\IServiceCategoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CustomerManager.cs" />
     <Compile Include="Services\ServiceManager.cs" />
     <Compile Include="Services\ServiceCategoryManager.cs" />
     <Compile Include="Services\ServiceProviderManager.cs" />
-    <Compile Include="Services\ServicesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -69,7 +69,10 @@ namespace ServicesApp.BusinessLogic.Services
             var dataModel = await context.ServiceCategories.FindAsync(id);
             if (dataModel != null)
             {
-                //doesn't work if any services are in this category
+                foreach (var service in dataModel.Services)
+                {
+                    service.CategoryId = null;
+                }
                 context.ServiceCategories.Remove(dataModel);
                 await context.SaveChangesAsync();
             }            

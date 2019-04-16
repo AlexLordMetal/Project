@@ -13,6 +13,7 @@ using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.BusinessLogic.IdentityServices;
 using Microsoft.AspNet.Identity;
 using ServicesApp.ViewModels.ViewModels;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ServicesApp.Website.Controllers
 {
@@ -27,30 +28,50 @@ namespace ServicesApp.Website.Controllers
             _serviceManager = serviceManager;
             _serviceCategoryManager = serviceCategoryManager;
         }
-        
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         // GET: Service
         public async Task<ActionResult> Index()
         {
-            var services = await _serviceManager.GetAllAsync();
+            var services = await _serviceManager.GetAllApprovedAsync();
 
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                if (await _userManager.IsInRoleAsync(userId, "Administrator"))
+                if (await UserManager.IsInRoleAsync(userId, "Administrator"))
                 {
                     return View("IndexAdministrator", services);
                 }
-                else if (await _userManager.IsInRoleAsync(userId, "ServiceProvider"))
+                else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
                 {
                     return View("IndexServiceProvider", services);
                 }
-                else if (await _userManager.IsInRoleAsync(userId, "Customer"))
+                else if (await UserManager.IsInRoleAsync(userId, "Customer"))
                 {
                     return View("IndexCustomer", services);
                 }
             }
 
             return View(services);
+        }
+
+        // GET: Approve
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> Approve()
+        {
+            var services = await _serviceManager.GetNotApprovedAsync();
+            return View("ApproveAdministrator", services);
         }
 
         // GET: Service/Details/5
@@ -60,7 +81,7 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceViewModel = await _serviceManager.GetByIdAsync(id);
+            var fullServiceViewModel = await _serviceManager.GetByIdAsync<FullServiceViewModel>(id);
             if (fullServiceViewModel == null)
             {
                 return HttpNotFound();
@@ -69,15 +90,15 @@ namespace ServicesApp.Website.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                if (await _userManager.IsInRoleAsync(userId, "Administrator"))
+                if (await UserManager.IsInRoleAsync(userId, "Administrator"))
                 {
                     return View("DetailsAdministrator", fullServiceViewModel);
                 }
-                else if (await _userManager.IsInRoleAsync(userId, "ServiceProvider"))
+                else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
                 {
                     return View("DetailsServiceProvider", fullServiceViewModel);
                 }
-                else if (await _userManager.IsInRoleAsync(userId, "Customer"))
+                else if (await UserManager.IsInRoleAsync(userId, "Customer"))
                 {
                     return View("DetailsCustomer", fullServiceViewModel);
                 }
@@ -90,10 +111,10 @@ namespace ServicesApp.Website.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Create()
         {
-            var createServiceViewModel = new CreateServiceViewModel() { ServiceCategories = new List<ShortServiceCategoryViewModel>() };
-            createServiceViewModel.ServiceCategories = await _serviceCategoryManager.GetAllAsync();
+            var createServiceViewModel = new CreateServiceViewModel();
+            createServiceViewModel.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
 
-            return View(createServiceViewModel);
+            return View("CreateAdministrator", createServiceViewModel);
         }
 
         // POST: Service/Create
@@ -113,68 +134,66 @@ namespace ServicesApp.Website.Controllers
             return View(createServiceViewModel);
         }
 
-        //// GET: Service/Edit/5
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Service service = await db.Services.FindAsync(id);
-        //    if (service == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.CategoryId = new SelectList(db.ServiceCategories, "Id", "Name", service.CategoryId);
-        //    return View(service);
-        //}
+        // GET: Service/Edit/5
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var createServiceViewModel = await _serviceManager.GetByIdAsync<CreateServiceViewModel>(id);
+            if (createServiceViewModel == null)
+            {
+                return HttpNotFound();
+            }
 
-        //// POST: Service/Edit/5
-        //// Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        //// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,CategoryId")] Service service)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(service).State = EntityState.Modified;
-        //        await db.SaveChangesAsync();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.CategoryId = new SelectList(db.ServiceCategories, "Id", "Name", service.CategoryId);
-        //    return View(service);
-        //}
+            createServiceViewModel.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            return View("EditAdministrator", createServiceViewModel);
+        }
 
-        //// GET: Service/Delete/5
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Service service = await db.Services.FindAsync(id);
-        //    if (service == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(service);
-        //}
+        // POST: Service/Edit/5
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> Edit(CreateServiceViewModel createServiceViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _serviceManager.ModifyAsync(createServiceViewModel);
+                return RedirectToAction("Index");
+            }
 
-        //// POST: Service/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> DeleteConfirmed(int id)
-        //{
-        //    Service service = await db.Services.FindAsync(id);
-        //    db.Services.Remove(service);
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
+            return View("EditAdministrator", createServiceViewModel);
+        }
+
+        // GET: Service/Delete/5
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var fullServiceViewModel = await _serviceManager.GetByIdAsync<FullServiceViewModel>(id);
+            if (fullServiceViewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(fullServiceViewModel);
+        }
+
+        // POST: Service/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            await _serviceManager.DeleteByIdAsync(id);
+            return RedirectToAction("Index");
+        }
 
         //protected override void Dispose(bool disposing)
         //{

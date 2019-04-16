@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ServicesApp.ViewModels.ViewModels
 {
@@ -37,7 +38,10 @@ namespace ServicesApp.ViewModels.ViewModels
     }
 
     public class CreateServiceViewModel
-    {        
+    {
+        [Display(Name = "Id")]
+        public int Id { get; set; }
+
         [Required]
         [DataType(DataType.Text)]
         [StringLength(100)]
@@ -54,8 +58,8 @@ namespace ServicesApp.ViewModels.ViewModels
         [Display(Name = "CategoryId")]
         public int CategoryId { get; set; }
 
-        [Display(Name = "Services")]
-        public List<ShortServiceCategoryViewModel> ServiceCategories { get; set; }
+        [Display(Name = "Categories")]
+        public SelectList ServiceCategories { get; set; }
     }
 
 }

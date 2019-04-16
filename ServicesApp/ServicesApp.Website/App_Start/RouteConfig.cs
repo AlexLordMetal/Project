@@ -16,7 +16,7 @@ namespace ServicesApp.Website
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Services", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Service", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

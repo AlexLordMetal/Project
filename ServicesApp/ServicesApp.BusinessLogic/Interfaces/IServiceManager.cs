@@ -7,10 +7,11 @@ namespace ServicesApp.BusinessLogic.Interfaces
     public interface IServiceManager
     {
         Task<List<ShortServiceViewModel>> GetAllAsync();
-        Task<FullServiceViewModel> GetByIdAsync(int? id);
-        Task<ShortServiceViewModel> GetShortByIdAsync(int? id);
+        Task<List<ShortServiceViewModel>> GetAllApprovedAsync();
+        Task<List<ShortServiceViewModel>> GetNotApprovedAsync();
+        Task<T> GetByIdAsync<T>(int? id);
         Task AddAsync(CreateServiceViewModel viewModel);
-        //Task ModifyAsync(ShortServiceViewModel viewModel);
-        //Task DeleteByIdAsync(int? id);
+        Task ModifyAsync(CreateServiceViewModel viewModel);
+        Task DeleteByIdAsync(int? id);
     }
 }
