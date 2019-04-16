@@ -53,16 +53,15 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
-//Does it sovsem dich? Не работает
         public async Task ModifyAsync(ShortServiceCategoryViewModel viewModel)
         {
-            //if (await context.ServiceCategories.FindAsync(viewModel.Id) != null)
-            //{
+            if (await context.ServiceCategories.AnyAsync(x=>x.Id==viewModel.Id))
+            {
                 var dataModel = _mapper.Map<ShortServiceCategoryViewModel, ServiceCategory>(viewModel);
                 context.ServiceCategories.Attach(dataModel);
                 context.Entry<ServiceCategory>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
-            //}
+            }
         }
 
         public async Task DeleteByIdAsync(int? id)
@@ -75,7 +74,7 @@ namespace ServicesApp.BusinessLogic.Services
                 await context.SaveChangesAsync();
             }            
         }
-
+        
         public void Dispose()
         {
             context.Dispose();

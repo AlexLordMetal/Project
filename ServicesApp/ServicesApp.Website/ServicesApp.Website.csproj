@@ -198,6 +198,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ServiceCategoryController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\Services1Controller.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -295,6 +297,22 @@
     <Content Include="Views\ServiceCategory\Details.cshtml" />
     <Content Include="Views\ServiceCategory\Edit.cshtml" />
     <Content Include="Views\ServiceCategory\Index.cshtml" />
+    <Content Include="Views\Service\Create.cshtml" />
+    <Content Include="Views\Service\Delete.cshtml" />
+    <Content Include="Views\Service\Details.cshtml" />
+    <Content Include="Views\Service\Edit.cshtml" />
+    <Content Include="Views\Service\Index.cshtml" />
+    <Content Include="Views\Services1\Create.cshtml" />
+    <Content Include="Views\Services1\Delete.cshtml" />
+    <Content Include="Views\Services1\Details.cshtml" />
+    <Content Include="Views\Services1\Edit.cshtml" />
+    <Content Include="Views\Services1\Index.cshtml" />
+    <Content Include="Views\Service\IndexCustomer.cshtml" />
+    <Content Include="Views\Service\IndexAdministrator.cshtml" />
+    <Content Include="Views\Service\IndexServiceProvider.cshtml" />
+    <Content Include="Views\Service\DetailsServiceProvider.cshtml" />
+    <Content Include="Views\Service\DetailsAdministrator.cshtml" />
+    <Content Include="Views\Service\DetailsCustomer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

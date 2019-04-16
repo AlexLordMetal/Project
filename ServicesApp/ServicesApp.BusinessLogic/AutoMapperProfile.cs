@@ -21,6 +21,13 @@ namespace ServicesApp.BusinessLogic
 
             CreateMap<ServiceCategory, FullServiceCategoryViewModel>();
             CreateMap<FullServiceCategoryViewModel, ServiceCategory>();
+
+            CreateMap<Service, ShortServiceViewModel>();
+
+            CreateMap<CreateServiceViewModel, Service>();
+
+            CreateMap<Service, FullServiceViewModel>();
+            CreateMap<FullServiceViewModel, Service>();
         }
     }    
 }

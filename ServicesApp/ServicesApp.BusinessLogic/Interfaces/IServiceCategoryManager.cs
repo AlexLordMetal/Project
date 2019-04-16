@@ -9,8 +9,8 @@ namespace ServicesApp.BusinessLogic.Interfaces
         Task<List<ShortServiceCategoryViewModel>> GetAllAsync();
         Task<FullServiceCategoryViewModel> GetByIdAsync(int? id);
         Task<ShortServiceCategoryViewModel> GetShortByIdAsync(int? id);
-        Task AddAsync(ShortServiceCategoryViewModel shortServiceCategoryViewModel);
-        Task ModifyAsync(ShortServiceCategoryViewModel shortServiceCategoryViewModel);
+        Task AddAsync(ShortServiceCategoryViewModel viewModel);
+        Task ModifyAsync(ShortServiceCategoryViewModel viewModel);
         Task DeleteByIdAsync(int? id);
     }
 }

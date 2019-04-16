@@ -1,126 +1,134 @@
-﻿using ServicesApp.BusinessLogic.Interfaces;
-using ServicesApp.ViewModels.ViewModels;
-using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
+using ServicesApp.DataProvider;
+using ServicesApp.DataProvider.DataModels;
 
 namespace ServicesApp.Website.Controllers
 {
-    [Authorize(Roles = "Administrator")]
-    public class ServiceCategoryController : Controller
+    public class Services1Controller : Controller
     {
-        private IServiceCategoryManager _serviceCategoryManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ServiceCategoryController(IServiceCategoryManager serviceCategoryManager)
-        {
-            _serviceCategoryManager = serviceCategoryManager;
-        }
-
-        // GET: ServiceCategories
+        // GET: Services1
         public async Task<ActionResult> Index()
         {
-            return View(await _serviceCategoryManager.GetAllAsync());
+            var services = db.Services.Include(s => s.Category);
+            return View(await services.ToListAsync());
         }
 
-        // GET: ServiceCategories/Details/5
+        // GET: Services1/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceCategoryViewModel = await _serviceCategoryManager.GetByIdAsync(id);
-            if (fullServiceCategoryViewModel == null)
+            Service service = await db.Services.FindAsync(id);
+            if (service == null)
             {
                 return HttpNotFound();
             }
-            return View(fullServiceCategoryViewModel);
+            return View(service);
         }
 
-        // GET: ServiceCategories/Create
+        // GET: Services1/Create
         public ActionResult Create()
         {
+            ViewBag.CategoryId = new SelectList(db.ServiceCategories, "Id", "Name");
             return View();
         }
 
-        // POST: ServiceCategories/Create
+        // POST: Services1/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(ShortServiceCategoryViewModel shortServiceCategoryViewModel)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,CategoryId")] Service service)
         {
             if (ModelState.IsValid)
             {
-                await _serviceCategoryManager.AddAsync(shortServiceCategoryViewModel);
+                db.Services.Add(service);
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(shortServiceCategoryViewModel);
+            ViewBag.CategoryId = new SelectList(db.ServiceCategories, "Id", "Name", service.CategoryId);
+            return View(service);
         }
 
-        // GET: ServiceCategories/Edit/5                            //Short or Full?????????????????????
+        // GET: Services1/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var shortServiceCategoryViewModel = await _serviceCategoryManager.GetShortByIdAsync(id);
-            if (shortServiceCategoryViewModel == null)
+            Service service = await db.Services.FindAsync(id);
+            if (service == null)
             {
                 return HttpNotFound();
             }
-            return View(shortServiceCategoryViewModel);
+            ViewBag.CategoryId = new SelectList(db.ServiceCategories, "Id", "Name", service.CategoryId);
+            return View(service);
         }
 
-        // POST: ServiceCategories/Edit/5
+        // POST: Services1/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ShortServiceCategoryViewModel shortServiceCategoryViewModel)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,CategoryId")] Service service)
         {
             if (ModelState.IsValid)
             {
-                await _serviceCategoryManager.ModifyAsync(shortServiceCategoryViewModel);
+                db.Entry(service).State = EntityState.Modified;
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(shortServiceCategoryViewModel);
+            ViewBag.CategoryId = new SelectList(db.ServiceCategories, "Id", "Name", service.CategoryId);
+            return View(service);
         }
 
-        // GET: ServiceCategories/Delete/5
+        // GET: Services1/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceCategoryViewModel = await _serviceCategoryManager.GetByIdAsync(id);
-            if (fullServiceCategoryViewModel == null)
+            Service service = await db.Services.FindAsync(id);
+            if (service == null)
             {
                 return HttpNotFound();
             }
-            return View(fullServiceCategoryViewModel);
+            return View(service);
         }
 
-        // POST: ServiceCategories/Delete/5
+        // POST: Services1/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await _serviceCategoryManager.DeleteByIdAsync(id);
+            Service service = await db.Services.FindAsync(id);
+            db.Services.Remove(service);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        //Is it necessary?
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
