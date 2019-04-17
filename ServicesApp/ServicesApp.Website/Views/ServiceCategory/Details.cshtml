@@ -1,4 +1,4 @@
-﻿@model ServicesApp.ViewModels.ViewModels.FullServiceCategoryViewModel
+﻿@model ServicesApp.ViewModels.ViewModels.ServiceCategoryViewModelFull
 
 @{
     ViewBag.Title = "Details";
@@ -11,13 +11,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Id):
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Name):
         </dt>
         <dd>
@@ -27,12 +20,10 @@
         <dt>
             @Html.DisplayNameFor(model => model.Services):
         </dt>
-        <dd>
-            @foreach (var service in Model.Services)
-            {
-                <p>@service.Name</p>
-            }
-        </dd>
+        @foreach (var service in Model.Services)
+        {
+            <dd>@service.Name</dd>
+        }
     </dl>
 </div>
 <p>

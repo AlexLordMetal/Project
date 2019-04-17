@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNet.Identity.Owin;
+using ServicesApp.BusinessLogic.IdentityServices;
+using ServicesApp.BusinessLogic.Interfaces;
+using ServicesApp.ViewModels.ViewModels;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using ServicesApp.DataProvider;
-using ServicesApp.DataProvider.DataModels;
-using ServicesApp.BusinessLogic.Interfaces;
-using ServicesApp.BusinessLogic.IdentityServices;
-using Microsoft.AspNet.Identity;
-using ServicesApp.ViewModels.ViewModels;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace ServicesApp.Website.Controllers
 {
@@ -45,28 +37,10 @@ namespace ServicesApp.Website.Controllers
         public async Task<ActionResult> Index()
         {
             var services = await _serviceManager.GetAllApprovedAsync();
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var userId = User.Identity.GetUserId();
-                if (await UserManager.IsInRoleAsync(userId, "Administrator"))
-                {
-                    return View("IndexAdministrator", services);
-                }
-                else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
-                {
-                    return View("IndexServiceProvider", services);
-                }
-                else if (await UserManager.IsInRoleAsync(userId, "Customer"))
-                {
-                    return View("IndexCustomer", services);
-                }
-            }
-
             return View(services);
         }
 
-        // GET: Approve
+        // GET: Service/Approve
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Approve()
         {
@@ -81,57 +55,36 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceViewModel = await _serviceManager.GetByIdAsync<FullServiceViewModel>(id);
-            if (fullServiceViewModel == null)
+            var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelFull>(id);
+            if (serviceViewModelFull == null)
             {
                 return HttpNotFound();
             }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var userId = User.Identity.GetUserId();
-                if (await UserManager.IsInRoleAsync(userId, "Administrator"))
-                {
-                    return View("DetailsAdministrator", fullServiceViewModel);
-                }
-                else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
-                {
-                    return View("DetailsServiceProvider", fullServiceViewModel);
-                }
-                else if (await UserManager.IsInRoleAsync(userId, "Customer"))
-                {
-                    return View("DetailsCustomer", fullServiceViewModel);
-                }
-            }
-
-            return View(fullServiceViewModel);
+            return View(serviceViewModelFull);
         }
 
         // GET: Service/Create
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Create()
         {
-            var createServiceViewModel = new CreateServiceViewModel();
-            createServiceViewModel.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            var serviceViewModelCreateFull = new ServiceViewModelCreateFull();
+            serviceViewModelCreateFull.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
 
-            return View("CreateAdministrator", createServiceViewModel);
+            return View(serviceViewModelCreateFull);
         }
 
         // POST: Service/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Create(CreateServiceViewModel createServiceViewModel)
+        public async Task<ActionResult> Create(ServiceViewModelCreateShort serviceViewModelCreateShort)
         {
             if (ModelState.IsValid)
             {
-                await _serviceManager.AddAsync(createServiceViewModel);
+                await _serviceManager.AddAsync(serviceViewModelCreateShort);
                 return RedirectToAction("Index");
             }
-
-            return View(createServiceViewModel);
+            return View(serviceViewModelCreateShort);
         }
 
         // GET: Service/Edit/5
@@ -142,31 +95,28 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var createServiceViewModel = await _serviceManager.GetByIdAsync<CreateServiceViewModel>(id);
-            if (createServiceViewModel == null)
+            var serviceViewModelCreateFull = await _serviceManager.GetByIdAsync<ServiceViewModelCreateFull>(id);
+            if (serviceViewModelCreateFull == null)
             {
                 return HttpNotFound();
             }
-
-            createServiceViewModel.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
-            return View("EditAdministrator", createServiceViewModel);
+            serviceViewModelCreateFull.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            return View(serviceViewModelCreateFull);
         }
 
         // POST: Service/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Edit(CreateServiceViewModel createServiceViewModel)
+        public async Task<ActionResult> Edit(ServiceViewModelCreateShort serviceViewModelCreateShort)
         {
             if (ModelState.IsValid)
             {
-                await _serviceManager.ModifyAsync(createServiceViewModel);
+                await _serviceManager.ModifyAsync(serviceViewModelCreateShort);
                 return RedirectToAction("Index");
             }
 
-            return View("EditAdministrator", createServiceViewModel);
+            return View(serviceViewModelCreateShort);
         }
 
         // GET: Service/Delete/5
@@ -177,12 +127,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceViewModel = await _serviceManager.GetByIdAsync<FullServiceViewModel>(id);
-            if (fullServiceViewModel == null)
+            var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelFull>(id);
+            if (serviceViewModelFull == null)
             {
                 return HttpNotFound();
             }
-            return View(fullServiceViewModel);
+            return View(serviceViewModelFull);
         }
 
         // POST: Service/Delete/5
@@ -195,13 +145,14 @@ namespace ServicesApp.Website.Controllers
             return RedirectToAction("Index");
         }
 
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && _userManager != null)
+            {
+                _userManager.Dispose();
+                _userManager = null;
+            }
+            base.Dispose(disposing);
+        }
     }
 }

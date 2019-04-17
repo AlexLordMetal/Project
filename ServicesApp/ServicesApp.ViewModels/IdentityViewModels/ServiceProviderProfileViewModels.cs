@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.IdentityViewModels
 {
@@ -22,24 +17,12 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public string ConfirmDocs { get; set; }
     }
 
-    public class ManageServiceProviderProfileViewModel
+    public class ServiceProviderProfileViewModelManage
     {
         [Display(Name = "Password")]
         public bool HasPassword { get; set; }
 
-        public ServiceProviderProfileViewModel ServiceProviderProfileViewModel { get; set; }
+        public ServiceProviderProfileViewModel ServiceProviderProfile { get; set; }
     }
-
-    //public class ManageServiceProviderProfileViewModel
-    //{
-    //    [Display(Name = "Password")]
-    //    public bool HasPassword { get; set; }
-
-    //    [Display(Name = "Organization Name")]
-    //    public string Name { get; set; }
-
-    //    [Display(Name = "Confirmative Documents")]
-    //    public string ConfirmDocs { get; set; }
-    //}
 
 }

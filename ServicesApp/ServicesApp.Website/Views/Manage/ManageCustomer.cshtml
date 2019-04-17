@@ -1,4 +1,4 @@
-﻿@model ServicesApp.ViewModels.IdentityViewModels.ManageCustomerProfileViewModel
+﻿@model ServicesApp.ViewModels.IdentityViewModels.CustomerProfileViewModelManage
 @{
     ViewBag.Title = "Manage";
 }
@@ -23,17 +23,17 @@
             }
             ]
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.CustomerProfileViewModel.Name):</dt>
+        <dt>@Html.DisplayNameFor(m => m.CustomerProfile.Name):</dt>
         <dd>
-            @Html.DisplayFor(m => m.CustomerProfileViewModel.Name)
+            @Html.DisplayFor(m => m.CustomerProfile.Name)
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.CustomerProfileViewModel.Surname):</dt>
+        <dt>@Html.DisplayNameFor(m => m.CustomerProfile.Surname):</dt>
         <dd>
-            @Html.DisplayFor(m => m.CustomerProfileViewModel.Surname)
+            @Html.DisplayFor(m => m.CustomerProfile.Surname)
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.CustomerProfileViewModel.Phone):</dt>
+        <dt>@Html.DisplayNameFor(m => m.CustomerProfile.Phone):</dt>
         <dd>
-            @Html.DisplayFor(m => m.CustomerProfileViewModel.Phone)
+            @Html.DisplayFor(m => m.CustomerProfile.Phone)
         </dd>
         <dd>
             [

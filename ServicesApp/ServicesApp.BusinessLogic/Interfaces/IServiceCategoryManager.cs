@@ -6,11 +6,10 @@ namespace ServicesApp.BusinessLogic.Interfaces
 {
     public interface IServiceCategoryManager
     {
-        Task<List<ShortServiceCategoryViewModel>> GetAllAsync();
-        Task<FullServiceCategoryViewModel> GetByIdAsync(int? id);
-        Task<ShortServiceCategoryViewModel> GetShortByIdAsync(int? id);
-        Task AddAsync(ShortServiceCategoryViewModel viewModel);
-        Task ModifyAsync(ShortServiceCategoryViewModel viewModel);
+        Task<List<ServiceCategoryViewModelShort>> GetAllAsync();
+        Task<T> GetByIdAsync<T>(int? id) where T : ServiceCategoryViewModelShort;
+        Task AddAsync(ServiceCategoryViewModelShort viewModel);
+        Task ModifyAsync(ServiceCategoryViewModelShort viewModel);
         Task DeleteByIdAsync(int? id);
     }
 }

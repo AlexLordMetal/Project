@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.IdentityViewModels
 {
-
     public class LoginViewModel
     {
         [Required]

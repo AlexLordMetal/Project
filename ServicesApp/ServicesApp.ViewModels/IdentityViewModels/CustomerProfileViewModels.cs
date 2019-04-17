@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.IdentityViewModels
 {
@@ -28,26 +23,12 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public string Phone { get; set; }
     }
 
-    public class ManageCustomerProfileViewModel
+    public class CustomerProfileViewModelManage
     {
         [Display(Name = "Password")]
         public bool HasPassword { get; set; }
 
-        public CustomerProfileViewModel CustomerProfileViewModel { get; set; }
+        public CustomerProfileViewModel CustomerProfile { get; set; }
     }
 
-    //public class ManageCustomerProfileViewModel
-    //{
-    //    [Display(Name = "Password")]
-    //    public bool HasPassword { get; set; }
-
-    //    [Display(Name = "Name")]
-    //    public string Name { get; set; }
-
-    //    [Display(Name = "Surname")]
-    //    public string Surname { get; set; }
-
-    //    [Display(Name = "Phone Number")]
-    //    public string Phone { get; set; }
-    //}
 }

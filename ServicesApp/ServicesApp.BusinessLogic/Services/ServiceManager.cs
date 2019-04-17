@@ -22,62 +22,51 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<ShortServiceViewModel>> GetAllAsync()
+        public async Task<List<ServiceViewModelFull>> GetAllAsync()
         {
             var dataModel = await context.Services.Include(x => x.Category).ToListAsync();
-            var viewModel = new List<ShortServiceViewModel>();
-            foreach (var item in dataModel)
-            {
-                viewModel.Add(_mapper.Map<Service, ShortServiceViewModel>(item));
-            }
+            var viewModel = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
             return viewModel;
         }
 
-        public async Task<List<ShortServiceViewModel>> GetAllApprovedAsync()
+        public async Task<List<ServiceViewModelFull>> GetAllApprovedAsync()
         {
             var dataModel = await context.Services.Where(x => x.CategoryId != null).Include(x => x.Category).ToListAsync();
-            var viewModel = new List<ShortServiceViewModel>();
-            foreach (var item in dataModel)
-            {
-                viewModel.Add(_mapper.Map<Service, ShortServiceViewModel>(item));
-            }
+            var viewModel = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
             return viewModel;
         }
 
-        public async Task<List<ShortServiceViewModel>> GetNotApprovedAsync()
+        public async Task<List<ServiceViewModelFull>> GetNotApprovedAsync()
         {
             var dataModel = await context.Services.Where(x => x.CategoryId == null).ToListAsync();
-            var viewModel = new List<ShortServiceViewModel>();
-            foreach (var item in dataModel)
-            {
-                viewModel.Add(_mapper.Map<Service, ShortServiceViewModel>(item));
-            }
+            var viewModel = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
             return viewModel;
         }
 
-        public async Task<T> GetByIdAsync<T>(int? id)
+        public async Task<T> GetByIdAsync<T>(int? id) where T : ServiceViewModelShort
         {
             var dataModel = await context.Services.FindAsync(id);
-            var viewModel = _mapper.Map<Service, T>(dataModel);
+            var viewModel = _mapper.Map<T>(dataModel);
             return viewModel;
         }
 
-        public async Task AddAsync(CreateServiceViewModel viewModel)
+        public async Task AddAsync(ServiceViewModelCreateShort viewModel)
         {
-            var dataModel = _mapper.Map<CreateServiceViewModel, Service>(viewModel);
+            var dataModel = _mapper.Map<Service>(viewModel);
             context.Services.Add(dataModel);
             await context.SaveChangesAsync();
         }
 
-        public async Task ModifyAsync(CreateServiceViewModel viewModel)
+        public async Task ModifyAsync(ServiceViewModelCreateShort viewModel)
         {
             if (await context.Services.AnyAsync(x => x.Id == viewModel.Id))
             {
-                var dataModel = _mapper.Map<CreateServiceViewModel, Service>(viewModel);
+                var dataModel = _mapper.Map<Service>(viewModel);
                 context.Services.Attach(dataModel);
                 context.Entry<Service>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
+            //Need exception "Id not found" or something else
         }
 
         public async Task DeleteByIdAsync(int? id)
@@ -88,6 +77,7 @@ namespace ServicesApp.BusinessLogic.Services
                 context.ServiceCategories.Remove(dataModel);
                 await context.SaveChangesAsync();
             }
+            //Need exception "Id not found" or something else
         }
 
         public void Dispose()

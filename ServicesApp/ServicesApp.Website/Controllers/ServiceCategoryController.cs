@@ -29,12 +29,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceCategoryViewModel = await _serviceCategoryManager.GetByIdAsync(id);
-            if (fullServiceCategoryViewModel == null)
+            var serviceCategoryViewModelFull = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelFull>(id);
+            if (serviceCategoryViewModelFull == null)
             {
                 return HttpNotFound();
             }
-            return View(fullServiceCategoryViewModel);
+            return View(serviceCategoryViewModelFull);
         }
 
         // GET: ServiceCategories/Create
@@ -44,49 +44,44 @@ namespace ServicesApp.Website.Controllers
         }
 
         // POST: ServiceCategories/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(ShortServiceCategoryViewModel shortServiceCategoryViewModel)
+        public async Task<ActionResult> Create(ServiceCategoryViewModelShort serviceCategoryViewModelShort)
         {
             if (ModelState.IsValid)
             {
-                await _serviceCategoryManager.AddAsync(shortServiceCategoryViewModel);
+                await _serviceCategoryManager.AddAsync(serviceCategoryViewModelShort);
                 return RedirectToAction("Index");
             }
-
-            return View(shortServiceCategoryViewModel);
+            return View(serviceCategoryViewModelShort);
         }
 
-        // GET: ServiceCategories/Edit/5                            //Short or Full?????????????????????
+        // GET: ServiceCategories/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var shortServiceCategoryViewModel = await _serviceCategoryManager.GetShortByIdAsync(id);
-            if (shortServiceCategoryViewModel == null)
+            var serviceCategoryViewModelFull = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelFull>(id);
+            if (serviceCategoryViewModelFull == null)
             {
                 return HttpNotFound();
             }
-            return View(shortServiceCategoryViewModel);
+            return View(serviceCategoryViewModelFull);
         }
 
         // POST: ServiceCategories/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ShortServiceCategoryViewModel shortServiceCategoryViewModel)
+        public async Task<ActionResult> Edit(ServiceCategoryViewModelShort serviceCategoryViewModelShort)
         {
             if (ModelState.IsValid)
             {
-                await _serviceCategoryManager.ModifyAsync(shortServiceCategoryViewModel);
+                await _serviceCategoryManager.ModifyAsync(serviceCategoryViewModelShort);
                 return RedirectToAction("Index");
             }
-            return View(shortServiceCategoryViewModel);
+            return View(serviceCategoryViewModelShort);
         }
 
         // GET: ServiceCategories/Delete/5
@@ -96,12 +91,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var fullServiceCategoryViewModel = await _serviceCategoryManager.GetByIdAsync(id);
-            if (fullServiceCategoryViewModel == null)
+            var serviceCategoryViewModelFull = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelFull>(id);
+            if (serviceCategoryViewModelFull == null)
             {
                 return HttpNotFound();
             }
-            return View(fullServiceCategoryViewModel);
+            return View(serviceCategoryViewModelFull);
         }
 
         // POST: ServiceCategories/Delete/5
@@ -113,14 +108,5 @@ namespace ServicesApp.Website.Controllers
             return RedirectToAction("Index");
         }
 
-        //Is it necessary?
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
     }
 }

@@ -1,4 +1,4 @@
-﻿@model ServicesApp.ViewModels.IdentityViewModels.ManageServiceProviderProfileViewModel
+﻿@model ServicesApp.ViewModels.IdentityViewModels.ServiceProviderProfileViewModelManage
 @{
     ViewBag.Title = "Manage";
 }
@@ -23,13 +23,13 @@
             }
             ]
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfileViewModel.Name):</dt>
+        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfile.Name):</dt>
         <dd>
-            @Html.DisplayFor(m => m.ServiceProviderProfileViewModel.Name)
+            @Html.DisplayFor(m => m.ServiceProviderProfile.Name)
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfileViewModel.ConfirmDocs):</dt>
+        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfile.ConfirmDocs):</dt>
         <dd>
-            @Html.DisplayFor(m => m.ServiceProviderProfileViewModel.ConfirmDocs)
+            @Html.DisplayFor(m => m.ServiceProviderProfile.ConfirmDocs)
         </dd>
         <dd>
             [

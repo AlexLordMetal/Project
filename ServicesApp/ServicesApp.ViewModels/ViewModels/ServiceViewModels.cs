@@ -1,53 +1,31 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace ServicesApp.ViewModels.ViewModels
 {
-    public class FullServiceViewModel
+    public class ServiceViewModelShort
     {
-        [Display(Name= "Id")]
-        public int Id { get; set; }
+        [Display(Name = "Id")]
+        public int? Id { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
         [StringLength(100)]
         [Display(Name = "Service Name")]
         public string Name { get; set; }
-        
-        [Required]
-        [DataType(DataType.Text)]
-        [StringLength(1000)]
+    }
+
+    public class ServiceViewModelFull : ServiceViewModelShort
+    {
+        [Display(Name = "Category")]
+        public string Category { get; set; }
+
         [Display(Name = "Service Description")]
         public string Description { get; set; }
-
-        [Display(Name = "Category")]
-        public string Category { get; set; }
     }
-
-    public class ShortServiceViewModel
+       
+    public class ServiceViewModelCreateShort : ServiceViewModelShort
     {
-        [Display(Name = "Id")]
-        public int Id { get; set; }
-
-        [Display(Name = "Service Name")]
-        public string Name { get; set; }
-
-        [Display(Name = "Category")]
-        public string Category { get; set; }
-    }
-
-    public class CreateServiceViewModel
-    {
-        [Display(Name = "Id")]
-        public int Id { get; set; }
-
-        [Required]
-        [DataType(DataType.Text)]
-        [StringLength(100)]
-        [Display(Name = "Service Name")]
-        public string Name { get; set; }
-
         [Required]
         [DataType(DataType.Text)]
         [StringLength(1000)]
@@ -57,9 +35,11 @@ namespace ServicesApp.ViewModels.ViewModels
         [Required]
         [Display(Name = "CategoryId")]
         public int CategoryId { get; set; }
+    }
 
+    public class ServiceViewModelCreateFull : ServiceViewModelCreateShort
+    {
         [Display(Name = "Categories")]
         public SelectList ServiceCategories { get; set; }
     }
-
 }

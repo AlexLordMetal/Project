@@ -21,10 +21,6 @@ namespace ServicesApp.Website.Controllers
         private ICustomerManager _customerManager;
         private IServiceProviderManager _serviceProviderManager;
 
-        //public ManageController()
-        //{
-        //}
-
         public ManageController(ICustomerManager customerManager, IServiceProviderManager serviceProviderManager)
         {
             _customerManager = customerManager;
@@ -55,12 +51,12 @@ namespace ServicesApp.Website.Controllers
             }
         }
 
-        //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.UpdateCustomerProfileSuccess ? "Your customer profile has been updated."
                 : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Your service provider profile has been updated."
@@ -73,33 +69,21 @@ namespace ServicesApp.Website.Controllers
             }
             else if (await UserManager.IsInRoleAsync(userId, "Customer"))
             {
-                var manageCustomerProfileViewModel = new ManageCustomerProfileViewModel();
-                manageCustomerProfileViewModel.HasPassword = HasPassword();
-                var customerProfileViewModel = await _customerManager.GetCustomerProfileAsync(userId);
-                if (customerProfileViewModel == null)
-                {
-                    customerProfileViewModel = new CustomerProfileViewModel();
-                }
-                manageCustomerProfileViewModel.CustomerProfileViewModel = customerProfileViewModel;
-                return View("ManageCustomer", manageCustomerProfileViewModel);
-
+                var customerProfileViewModelManage = new CustomerProfileViewModelManage();
+                customerProfileViewModelManage.HasPassword = HasPassword();
+                customerProfileViewModelManage.CustomerProfile = await _customerManager.GetCustomerProfileAsync(userId);
+                return View("ManageCustomer", customerProfileViewModelManage);
             }
             else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
             {
-                var manageServiceProviderProfileViewModel = new ManageServiceProviderProfileViewModel();
-                manageServiceProviderProfileViewModel.HasPassword = HasPassword();
-                var serviceProviderProfileViewModel = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
-                if (serviceProviderProfileViewModel == null)
-                {
-                    serviceProviderProfileViewModel = new ServiceProviderProfileViewModel();
-                }
-                manageServiceProviderProfileViewModel.ServiceProviderProfileViewModel = serviceProviderProfileViewModel;
-                return View("ManageServiceProvider", manageServiceProviderProfileViewModel);
+                var serviceProviderProfileViewModelManage = new ServiceProviderProfileViewModelManage();
+                serviceProviderProfileViewModelManage.HasPassword = HasPassword();
+                serviceProviderProfileViewModelManage.ServiceProviderProfile = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
+                return View("ManageCustomer", serviceProviderProfileViewModelManage);
             }
-            return View("Index");                   //Change This
+            return HttpNotFound();
         }
 
-        //
         // GET: /Manage/UpdateCustomerProfile
         [Authorize(Roles = "Customer")]
         public async Task<ActionResult> UpdateCustomerProfile()
@@ -108,12 +92,11 @@ namespace ServicesApp.Website.Controllers
             var customerProfileViewModel = await _customerManager.GetCustomerProfileAsync(userId);
             if (customerProfileViewModel == null)
             {
-                customerProfileViewModel = new CustomerProfileViewModel();
+                return View();
             }
             return View(customerProfileViewModel);
         }
 
-        //
         // POST: /Manage/UpdateCustomerProfile
         [HttpPost]
         [Authorize(Roles = "Customer")]
@@ -128,16 +111,15 @@ namespace ServicesApp.Website.Controllers
             if (userId != null)
             {
                 await _customerManager.UpdateCustomerProfileAsync(model, userId);
+                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
             }
-
-            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.Error });
 
 
 
             //Sign in - does it need?
         }
 
-        //
         // GET: /Manage/UpdateServiceProviderProfile
         [Authorize(Roles = "ServiceProvider")]
         public async Task<ActionResult> UpdateServiceProviderProfile()
@@ -146,12 +128,11 @@ namespace ServicesApp.Website.Controllers
             var serviceProviderProfileViewModel = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
             if (serviceProviderProfileViewModel == null)
             {
-                serviceProviderProfileViewModel = new ServiceProviderProfileViewModel();
+                return View();
             }
             return View(serviceProviderProfileViewModel);
         }
 
-        //
         // POST: /Manage/UpdateServiceProviderProfile
         [HttpPost]
         [Authorize(Roles = "ServiceProvider")]
@@ -166,23 +147,21 @@ namespace ServicesApp.Website.Controllers
             if (userId != null)
             {
                 await _serviceProviderManager.UpdateServiceProviderProfileAsync(model, userId);
+                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
             }
-
-            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.Error });
 
 
 
             //Sign in - does it need?
         }
 
-        //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        //
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -206,6 +185,34 @@ namespace ServicesApp.Website.Controllers
             return View(model);
         }
 
+        // GET: /Manage/SetPassword
+        public ActionResult SetPassword()
+        {
+            return View();
+        }
+
+        // POST: /Manage/SetPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetPassword(SetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                if (result.Succeeded)
+                {
+                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+                    return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
+                }
+                AddErrors(result);
+            }
+            return View(model);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)
@@ -223,7 +230,7 @@ namespace ServicesApp.Website.Controllers
             base.Dispose(disposing);
         }
 
-        #region Вспомогательные приложения
+        #region Helpers
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -254,6 +261,7 @@ namespace ServicesApp.Website.Controllers
         public enum ManageMessageId
         {
             ChangePasswordSuccess,
+            SetPasswordSuccess,
             RemoveLoginSuccess,
             UpdateCustomerProfileSuccess,
             UpdateServiceProviderProfileSuccess,
