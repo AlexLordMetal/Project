@@ -79,7 +79,7 @@ namespace ServicesApp.Website.Controllers
                 var serviceProviderProfileViewModelManage = new ServiceProviderProfileViewModelManage();
                 serviceProviderProfileViewModelManage.HasPassword = HasPassword();
                 serviceProviderProfileViewModelManage.ServiceProviderProfile = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
-                return View("ManageCustomer", serviceProviderProfileViewModelManage);
+                return View("ManageServiceProvider", serviceProviderProfileViewModelManage);
             }
             return HttpNotFound();
         }

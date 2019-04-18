@@ -23,13 +23,13 @@ namespace ServicesApp.BusinessLogic.Services
         public async Task<ServiceProviderProfileViewModel> GetServiceProviderProfileAsync(string userId)
         {
             var serviceProviderProfile = await context.ServiceProviderProfiles.FindAsync(userId);
-            ServiceProviderProfileViewModel serviceProviderProfileViewModel = _mapper.Map<ServiceProviderProfile, ServiceProviderProfileViewModel>(serviceProviderProfile);
+            ServiceProviderProfileViewModel serviceProviderProfileViewModel = _mapper.Map<ServiceProviderProfileViewModel>(serviceProviderProfile);
             return serviceProviderProfileViewModel;
         }
 
         public async Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId)
         {
-            ServiceProviderProfile serviceProviderProfile = _mapper.Map<ServiceProviderProfileViewModel, ServiceProviderProfile>(serviceProviderProfileViewModel);
+            ServiceProviderProfile serviceProviderProfile = _mapper.Map<ServiceProviderProfile>(serviceProviderProfileViewModel);
             serviceProviderProfile.Id = userId;
             context.ServiceProviderProfiles.AddOrUpdate(serviceProviderProfile);
             await context.SaveChangesAsync();

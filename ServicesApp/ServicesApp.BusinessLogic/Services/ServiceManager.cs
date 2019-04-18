@@ -71,10 +71,10 @@ namespace ServicesApp.BusinessLogic.Services
 
         public async Task DeleteByIdAsync(int? id)
         {
-            var dataModel = await context.ServiceCategories.FindAsync(id);
+            var dataModel = await context.Services.FindAsync(id);
             if (dataModel != null)
             {
-                context.ServiceCategories.Remove(dataModel);
+                context.Services.Remove(dataModel);
                 await context.SaveChangesAsync();
             }
             //Need exception "Id not found" or something else

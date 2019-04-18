@@ -45,7 +45,7 @@ namespace ServicesApp.Website.Controllers
         public async Task<ActionResult> Approve()
         {
             var services = await _serviceManager.GetNotApprovedAsync();
-            return View("ApproveAdministrator", services);
+            return View(services);
         }
 
         // GET: Service/Details/5
