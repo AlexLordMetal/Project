@@ -34,19 +34,18 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchString, int pageNumber=1)
         {
-            var services = await _serviceManager.GetAllApprovedAsync();
-            return View(services);
+            return View(await _serviceManager.GetListAsync(true, pageNumber, 3, searchString));
         }
 
-        // GET: Service/Approve
-        [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Approve()
-        {
-            var services = await _serviceManager.GetNotApprovedAsync();
-            return View(services);
-        }
+        //// GET: Service/Approve
+        //[Authorize(Roles = "Administrator")]
+        //public async Task<ActionResult> Approve()
+        //{
+        //    var services = await _serviceManager.GetNotApprovedAsync();
+        //    return View(services);
+        //}
 
         // GET: Service/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -81,7 +80,7 @@ namespace ServicesApp.Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _serviceManager.AddAsync(serviceViewModelCreateShort);
+                await _serviceManager.AddAsync(serviceViewModelCreateShort, true);
                 return RedirectToAction("Index");
             }
             return View(serviceViewModelCreateShort);

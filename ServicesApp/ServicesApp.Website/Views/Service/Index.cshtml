@@ -1,10 +1,18 @@
-﻿@model IEnumerable<ServicesApp.ViewModels.ViewModels.ServiceViewModelFull>
-
+﻿@model ServicesApp.ViewModels.ViewModels.ServicesListViewModel
+@using ServicesApp.Website.HtmlHelpers
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Services</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
 
 @if (User.IsInRole("Administrator"))
 {
@@ -22,18 +30,18 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Category)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Description)
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Services)
     {
         <tr>
             <td>
@@ -63,3 +71,7 @@
     }
 
 </table>
+
+<ul class="pagination">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+</ul>

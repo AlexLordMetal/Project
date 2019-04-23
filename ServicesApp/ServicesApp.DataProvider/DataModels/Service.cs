@@ -15,7 +15,8 @@ namespace ServicesApp.DataProvider.DataModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        
+        public bool IsApproved { get; set; }
+
         [ForeignKey("Category")]
         public int? CategoryId { get; set; }
 

@@ -22,24 +22,47 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<ServiceViewModelFull>> GetAllAsync()
+        public async Task<ServicesListViewModel> GetListAsync(bool isApproved, int pageNumber, int itemsPerPage, string searchString)
         {
-            var dataModel = await context.Services.Include(x => x.Category).ToListAsync();
-            var viewModel = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
-            return viewModel;
-        }
+            var pageInfo = new PageInfoViewModel();
+            pageInfo.PageNumber = pageNumber;
+            pageInfo.PageSize = itemsPerPage;
 
-        public async Task<List<ServiceViewModelFull>> GetAllApprovedAsync()
-        {
-            var dataModel = await context.Services.Where(x => x.CategoryId != null).Include(x => x.Category).ToListAsync();
-            var viewModel = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
-            return viewModel;
-        }
+            List<Service> dataModel = null;
 
-        public async Task<List<ServiceViewModelFull>> GetNotApprovedAsync()
-        {
-            var dataModel = await context.Services.Where(x => x.CategoryId == null).ToListAsync();
-            var viewModel = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
+            if (!String.IsNullOrWhiteSpace(searchString))
+            {
+                pageInfo.TotalItems = await context.Services
+                    .Where(x => x.IsApproved == isApproved)
+                    .Where(x => x.Name.Contains(searchString))
+                    .CountAsync();
+
+                dataModel = await context.Services
+                    .Where(x => x.IsApproved == isApproved)
+                    .Where(x => x.Name.Contains(searchString))
+                    .OrderBy(x => x.Id)
+                    .Skip(pageInfo.SkipItems)
+                    .Take(pageInfo.PageSize)
+                    .Include(x => x.Category)
+                    .ToListAsync();
+            }
+            else
+            {
+                pageInfo.TotalItems = await context.Services
+                    .Where(x => x.IsApproved == isApproved)
+                    .CountAsync();
+
+                dataModel = await context.Services
+                    .Where(x => x.IsApproved == isApproved)
+                    .OrderBy(x => x.Id)
+                    .Skip(pageInfo.SkipItems)
+                    .Take(pageInfo.PageSize)
+                    .Include(x => x.Category)
+                    .ToListAsync();
+            }
+            var viewModel = new ServicesListViewModel();
+            viewModel.Services = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
+            viewModel.PageInfo = pageInfo;
             return viewModel;
         }
 
@@ -50,9 +73,10 @@ namespace ServicesApp.BusinessLogic.Services
             return viewModel;
         }
 
-        public async Task AddAsync(ServiceViewModelCreateShort viewModel)
+        public async Task AddAsync(ServiceViewModelCreateShort viewModel, bool isApproved)
         {
             var dataModel = _mapper.Map<Service>(viewModel);
+            dataModel.IsApproved = isApproved;
             context.Services.Add(dataModel);
             await context.SaveChangesAsync();
         }

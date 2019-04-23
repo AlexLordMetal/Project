@@ -62,6 +62,7 @@ namespace ServicesApp.BusinessLogic.Services
                 foreach (var service in dataModel.Services)
                 {
                     service.CategoryId = null;
+                    service.IsApproved = false;
                 }
                 context.ServiceCategories.Remove(dataModel);
                 await context.SaveChangesAsync();
