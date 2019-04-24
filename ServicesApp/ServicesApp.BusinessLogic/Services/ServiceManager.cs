@@ -22,7 +22,7 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<ServicesListViewModel> GetListAsync(bool isApproved, int pageNumber, int itemsPerPage, string searchString)
+        public async Task<ServicesListViewModel> GetListAsync(bool isApproved, int pageNumber, int itemsPerPage, string searchString=null)
         {
             var pageInfo = new PageInfoViewModel();
             pageInfo.PageNumber = pageNumber;
@@ -63,6 +63,7 @@ namespace ServicesApp.BusinessLogic.Services
             var viewModel = new ServicesListViewModel();
             viewModel.Services = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
             viewModel.PageInfo = pageInfo;
+            viewModel.Search = searchString;
             return viewModel;
         }
 
@@ -81,11 +82,12 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task ModifyAsync(ServiceViewModelCreateShort viewModel)
+        public async Task ModifyAsync(ServiceViewModelCreateShort viewModel, bool isApproved=true)
         {
             if (await context.Services.AnyAsync(x => x.Id == viewModel.Id))
             {
                 var dataModel = _mapper.Map<Service>(viewModel);
+                dataModel.IsApproved = isApproved;
                 context.Services.Attach(dataModel);
                 context.Entry<Service>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();

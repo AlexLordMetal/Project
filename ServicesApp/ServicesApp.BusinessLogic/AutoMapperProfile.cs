@@ -25,7 +25,7 @@ namespace ServicesApp.BusinessLogic
 
             CreateMap<Service, ServiceViewModelCreateShort>();
             CreateMap<Service, ServiceViewModelCreateFull>();
-            CreateMap<ServiceViewModelCreateShort, Service>();
+            CreateMap<ServiceViewModelCreateShort, Service>().ForMember(x => x.IsApproved, x => x.Ignore());
 
         }
     }    

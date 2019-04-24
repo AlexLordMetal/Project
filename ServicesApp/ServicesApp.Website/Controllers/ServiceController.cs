@@ -34,18 +34,18 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service
-        public async Task<ActionResult> Index(string searchString, int pageNumber=1)
+        public async Task<ActionResult> Index(string search, int page=1)
         {
-            return View(await _serviceManager.GetListAsync(true, pageNumber, 3, searchString));
+            return View(await _serviceManager.GetListAsync(true, page, 3, search));
         }
 
-        //// GET: Service/Approve
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> Approve()
-        //{
-        //    var services = await _serviceManager.GetNotApprovedAsync();
-        //    return View(services);
-        //}
+        // GET: Service/Approve
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> Approve(int page = 1)
+        {
+            var services = await _serviceManager.GetListAsync(false, page, 3);
+            return View(services);
+        }
 
         // GET: Service/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -63,7 +63,7 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service/Create
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, ServiceProvider")]
         public async Task<ActionResult> Create()
         {
             var serviceViewModelCreateFull = new ServiceViewModelCreateFull();
@@ -75,12 +75,13 @@ namespace ServicesApp.Website.Controllers
         // POST: Service/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, ServiceProvider")]
         public async Task<ActionResult> Create(ServiceViewModelCreateShort serviceViewModelCreateShort)
         {
             if (ModelState.IsValid)
             {
-                await _serviceManager.AddAsync(serviceViewModelCreateShort, true);
+                var isAdministrator = User.IsInRole("Administrator");
+                await _serviceManager.AddAsync(serviceViewModelCreateShort, isAdministrator);
                 return RedirectToAction("Index");
             }
             return View(serviceViewModelCreateShort);

@@ -33,7 +33,7 @@ namespace ServicesApp.ViewModels.ViewModels
         public string Description { get; set; }
 
         [Required]
-        [Display(Name = "CategoryId")]
+        [Display(Name = "Category")]
         public int CategoryId { get; set; }
     }
 

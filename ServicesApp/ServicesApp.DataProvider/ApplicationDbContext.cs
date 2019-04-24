@@ -11,6 +11,7 @@ namespace ServicesApp.DataProvider
         public DbSet<ServiceProviderProfile> ServiceProviderProfiles { get; set; }
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<ServiceProviderService> ServiceProviderServices { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

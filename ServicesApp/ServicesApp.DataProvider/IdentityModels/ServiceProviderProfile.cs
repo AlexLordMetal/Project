@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ServicesApp.DataProvider.DataModels;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ServicesApp.DataProvider.IdentityModels
@@ -12,5 +14,9 @@ namespace ServicesApp.DataProvider.IdentityModels
         public string ConfirmDocs { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
+
+        public virtual List<Service> Services { get; set; }
+
+        public virtual List<ServiceProviderService> ServiceProviderServices { get; set; }
     }
 }

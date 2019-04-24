@@ -6,12 +6,12 @@
 
 <h2>Services</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Service", FormMethod.Get))
 {
-    <p>
-        Find by name: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
+<p>
+    Find by name: @Html.EditorFor(model => model.Search)
+    <input type="submit" value="Search" />
+</p>
 }
 
 @if (User.IsInRole("Administrator"))
@@ -73,5 +73,5 @@
 </table>
 
 <ul class="pagination">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }), Model.Search)
 </ul>

@@ -21,5 +21,7 @@ namespace ServicesApp.DataProvider.DataModels
         public int? CategoryId { get; set; }
 
         public virtual ServiceCategory Category { get; set; }
+
+        public virtual List<ServiceProviderService> ServiceProviderServices { get; set; }
     }
 }
