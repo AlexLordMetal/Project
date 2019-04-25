@@ -3,10 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
-using ServicesApp.BusinessLogic.Services;
-using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -19,12 +16,10 @@ namespace ServicesApp.Website.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ICustomerManager _customerManager;
-        private IServiceProviderManager _serviceProviderManager;
 
-        public ManageController(ICustomerManager customerManager, IServiceProviderManager serviceProviderManager)
+        public ManageController(ICustomerManager customerManager)
         {
             _customerManager = customerManager;
-            _serviceProviderManager = serviceProviderManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -76,10 +71,7 @@ namespace ServicesApp.Website.Controllers
             }
             else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
             {
-                var serviceProviderProfileViewModelManage = new ServiceProviderProfileViewModelManage();
-                serviceProviderProfileViewModelManage.HasPassword = HasPassword();
-                serviceProviderProfileViewModelManage.ServiceProviderProfile = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
-                return View("ManageServiceProvider", serviceProviderProfileViewModelManage);
+                return RedirectToAction("Index", "ServiceProvider", new { Message = message });
             }
             return HttpNotFound();
         }
@@ -112,42 +104,6 @@ namespace ServicesApp.Website.Controllers
             {
                 await _customerManager.UpdateCustomerProfileAsync(model, userId);
                 return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
-            }
-            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.Error });
-
-
-
-            //Sign in - does it need?
-        }
-
-        // GET: /Manage/UpdateServiceProviderProfile
-        [Authorize(Roles = "ServiceProvider")]
-        public async Task<ActionResult> UpdateServiceProviderProfile()
-        {
-            var userId = User.Identity.GetUserId();
-            var serviceProviderProfileViewModel = await _serviceProviderManager.GetServiceProviderProfileAsync(userId);
-            if (serviceProviderProfileViewModel == null)
-            {
-                return View();
-            }
-            return View(serviceProviderProfileViewModel);
-        }
-
-        // POST: /Manage/UpdateServiceProviderProfile
-        [HttpPost]
-        [Authorize(Roles = "ServiceProvider")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateServiceProviderProfile(ServiceProviderProfileViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var userId = User.Identity.GetUserId();
-            if (userId != null)
-            {
-                await _serviceProviderManager.UpdateServiceProviderProfileAsync(model, userId);
-                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
             }
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.Error });
 

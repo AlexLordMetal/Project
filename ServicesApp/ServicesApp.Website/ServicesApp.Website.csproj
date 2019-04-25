@@ -195,6 +195,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ServiceProviderController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ServiceCategoryController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
@@ -276,10 +277,10 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Manage\UpdateCustomerProfile.cshtml" />
-    <Content Include="Views\Manage\UpdateServiceProviderProfile.cshtml" />
+    <Content Include="Views\ServiceProvider\UpdateProfile.cshtml" />
     <Content Include="Views\Manage\ManageAdministrator.cshtml" />
     <Content Include="Views\Manage\ManageCustomer.cshtml" />
-    <Content Include="Views\Manage\ManageServiceProvider.cshtml" />
+    <Content Include="Views\ServiceProvider\Index.cshtml" />
     <Content Include="Views\ServiceCategory\Create.cshtml" />
     <Content Include="Views\ServiceCategory\Delete.cshtml" />
     <Content Include="Views\ServiceCategory\Details.cshtml" />
@@ -292,6 +293,7 @@
     <Content Include="Views\Service\Details.cshtml" />
     <Content Include="Views\Service\Approve.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\ServiceProvider\AddServiceRelation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

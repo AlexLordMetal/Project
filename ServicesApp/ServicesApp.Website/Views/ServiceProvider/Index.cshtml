@@ -15,11 +15,11 @@
             [
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                @Html.ActionLink("Change your password", "ChangePassword", "Manage")
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword")
+                @Html.ActionLink("Create", "SetPassword", "Manage")
             }
             ]
         </dd>
@@ -33,7 +33,7 @@
         </dd>
         <dd>
             [
-            @Html.ActionLink("Change", "UpdateServiceProviderProfile")
+            @Html.ActionLink("Change", "UpdateProfile")
             ]
         </dd>
     </dl>

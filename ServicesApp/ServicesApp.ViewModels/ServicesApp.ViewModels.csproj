@@ -94,6 +94,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\PageInfoViewModels.cs" />
     <Compile Include="ViewModels\ServiceCategoryViewModels.cs" />
+    <Compile Include="ViewModels\ServiceProviderServiceViewModels.cs" />
     <Compile Include="ViewModels\ServicesListViewModels.cs" />
     <Compile Include="ViewModels\ServiceViewModels.cs" />
   </ItemGroup>

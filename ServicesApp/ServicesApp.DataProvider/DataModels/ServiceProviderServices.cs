@@ -11,14 +11,14 @@ namespace ServicesApp.DataProvider.DataModels
 {
     public class ServiceProviderService
     {
-        [Key, Column(Order = 0)]
-        public int MemberID { get; set; }
-        [Key, Column(Order = 1)]
-        public int CommentID { get; set; }
+        [Key, ForeignKey("ServiceProvider"), Column(Order = 0)]
+        public string ServiceProviderId { get; set; }
+        [Key, ForeignKey("Service"), Column(Order = 1)]
+        public int ServiceId { get; set; }
 
         public virtual Service Service { get; set; }
         public virtual ServiceProviderProfile ServiceProvider { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal ServicePrice { get; set; }
     }
 }

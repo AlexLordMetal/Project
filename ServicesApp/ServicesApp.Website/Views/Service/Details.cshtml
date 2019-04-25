@@ -38,18 +38,21 @@
 
     </dl>
 </div>
+
 @if (User.IsInRole("Administrator"))
 {
     <p>
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
     </p>
 }
-else
+else if (User.IsInRole("ServiceProvider"))
 {
     <p>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Provide this Service", "AddServiceRelation", "ServiceProvider", new { serviceId = Model.Id }, null) |
     </p>
 }
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
 
 
