@@ -1,0 +1,56 @@
+﻿@model ServicesApp.ViewModels.ViewModels.ServiceProviderServiceFullViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete relation to this service?</h3>
+<div>
+    <h4>Service</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Service.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Service.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Service.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Service.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Service.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Service.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServicePrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServicePrice)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Services")
+        </div>
+    }
+</div>

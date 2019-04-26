@@ -1,5 +1,6 @@
 ﻿using ServicesApp.ViewModels.IdentityViewModels;
 using ServicesApp.ViewModels.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ServicesApp.BusinessLogic.Interfaces
@@ -8,8 +9,9 @@ namespace ServicesApp.BusinessLogic.Interfaces
     {
         Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId);
         Task<ServiceProviderProfileViewModel> GetServiceProviderProfileAsync(string userId);
-        Task<ServiceProviderServiceRelationViewModel> GetServiceRelationAsync(string serviceProviderId, int serviceId);
+        Task<ServiceProviderServiceFullViewModel> GetServiceRelationAsync(string serviceProviderId, int serviceId);
+        Task<List<ServiceProviderServiceFullViewModel>> GetServiceProviderServicesAsync(string UserId);
         Task AddOrUpdateServiceRelationAsync(ServiceProviderServiceRelationViewModel viewModel);
-        Task DeleteServiceRelationAsync(ServiceProviderServiceRelationDeleteViewModel viewModel);
+        Task DeleteServiceRelationAsync(string serviceProviderId, int serviceId);
     }
 }

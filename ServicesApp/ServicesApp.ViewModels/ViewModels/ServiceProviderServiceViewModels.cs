@@ -20,4 +20,9 @@ namespace ServicesApp.ViewModels.ViewModels
         [Display(Name = "Service Price")]
         public decimal ServicePrice { get; set; }
     }
+
+    public class ServiceProviderServiceFullViewModel : ServiceProviderServiceRelationViewModel
+    {
+        public ServiceViewModelFull Service { get; set; }
+    }
 }

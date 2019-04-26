@@ -294,6 +294,8 @@
     <Content Include="Views\Service\Approve.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\ServiceProvider\AddServiceRelation.cshtml" />
+    <Content Include="Views\ServiceProvider\Services.cshtml" />
+    <Content Include="Views\ServiceProvider\DeleteServiceRelation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

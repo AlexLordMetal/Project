@@ -30,6 +30,8 @@ namespace ServicesApp.BusinessLogic
             CreateMap<ServiceProviderService, ServiceProviderServiceRelationViewModel>();
             CreateMap<ServiceProviderService, ServiceProviderServiceRelationDeleteViewModel>();
             CreateMap<ServiceProviderServiceRelationViewModel, ServiceProviderService>();
+
+            CreateMap<ServiceProviderService, ServiceProviderServiceFullViewModel>();
         }
     }    
 }

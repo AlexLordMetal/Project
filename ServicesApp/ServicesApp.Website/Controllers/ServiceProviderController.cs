@@ -83,11 +83,11 @@ namespace ServicesApp.Website.Controllers
 
         }
 
-        //// GET: /ServiceProvider/Services
-        //public async Task<ActionResult> Services(string search, int page = 1)
-        //{
-        //    return View(await _serviceManager.GetListAsync(true, page, 3, search));
-        //}
+        // GET: /ServiceProvider/Services
+        public async Task<ActionResult> Services()
+        {
+            return View(await _serviceProviderManager.GetServiceProviderServicesAsync(User.Identity.GetUserId()));
+        }
 
         // GET: /ServiceProvider/AddServiceRelation
         public async Task<ActionResult> AddServiceRelation(int? serviceId)
@@ -97,12 +97,12 @@ namespace ServicesApp.Website.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            var serviceProviderServiceRelationViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)serviceId);
-            if (serviceProviderServiceRelationViewModel == null)
+            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)serviceId);
+            if (serviceProviderServiceFullViewModel == null)
             {
                 View();
             }
-            return View(serviceProviderServiceRelationViewModel);
+            return View(serviceProviderServiceFullViewModel);
         }
 
         // POST: /ServiceProvider/AddServiceRelation
@@ -123,31 +123,31 @@ namespace ServicesApp.Website.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.Error });
         }
 
-        //// GET: Service/Delete/5
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelFull>(id);
-        //    if (serviceViewModelFull == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(serviceViewModelFull);
-        //}
+        // GET: /ServiceProvider/DeleteServiceRelation/5
+        public async Task<ActionResult> DeleteServiceRelation(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)id);
+            if (serviceProviderServiceFullViewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(serviceProviderServiceFullViewModel);
+        }
 
-        //// POST: Service/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<ActionResult> DeleteConfirmed(int id)
-        //{
-        //    await _serviceManager.DeleteByIdAsync(id);
-        //    return RedirectToAction("Index");
-        //}
+        // POST: /ServiceProvider/DeleteServiceRelation/5
+        [HttpPost, ActionName("DeleteServiceRelation")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteServiceRelationConfirmed(int? id)
+        {
+            var userId = User.Identity.GetUserId();
+            await _serviceProviderManager.DeleteServiceRelationAsync(userId, (int)id);
+            return RedirectToAction("Services");
+        }
 
         protected override void Dispose(bool disposing)
         {

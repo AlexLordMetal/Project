@@ -1,0 +1,49 @@
+﻿@model List<ServicesApp.ViewModels.ViewModels.ServiceProviderServiceFullViewModel>
+
+@{
+    ViewBag.Title = "Your Services";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Service.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Service.Category)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Service.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().ServicePrice)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Service.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Service.Category)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Service.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServicePrice)
+        </td>
+
+        <td>
+            @Html.ActionLink("Service Details", "Details", "Service", new { id = item.ServiceId }, null) |
+            @Html.ActionLink("Delete Relation", "DeleteServiceRelation", new { id = item.Service.Id })
+        </td>
+    </tr>
+    }
+
+</table>
