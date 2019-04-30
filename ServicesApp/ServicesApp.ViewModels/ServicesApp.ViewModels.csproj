@@ -92,6 +92,8 @@
     <Compile Include="IdentityViewModels\ManageViewModels.cs" />
     <Compile Include="IdentityViewModels\CustomerProfileViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\OrderTimeViewModels.cs" />
+    <Compile Include="ViewModels\OrderViewModels.cs" />
     <Compile Include="ViewModels\PageInfoViewModels.cs" />
     <Compile Include="ViewModels\ServiceCategoryViewModels.cs" />
     <Compile Include="ViewModels\ServiceProviderServiceViewModels.cs" />

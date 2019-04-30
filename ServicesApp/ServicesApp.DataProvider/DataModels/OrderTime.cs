@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace ServicesApp.DataProvider.DataModels
 {
-    public class ServiceTime
+    public class OrderTime
     {
         public int Id { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime Duration { get; set; }
-        public bool IsFree { get; set; }
+        public DateTime Date { get; set; }
     }
 }
