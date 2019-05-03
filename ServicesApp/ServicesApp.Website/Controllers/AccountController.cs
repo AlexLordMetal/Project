@@ -101,13 +101,13 @@ namespace ServicesApp.Website.Controllers
                     {
                         await UserManager.AddToRoleAsync(user.Id, "ServiceProvider");
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("UpdateServiceProviderProfile", "Manage");
+                        return RedirectToAction("UpdateProfile", "ServiceProvider");
                     }
                     else
                     {
                         await UserManager.AddToRoleAsync(user.Id, "Customer");
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("UpdateCustomerProfile", "Manage");
+                        return RedirectToAction("UpdateProfile", "Customer");
                     }
                 }
                 AddErrors(result);

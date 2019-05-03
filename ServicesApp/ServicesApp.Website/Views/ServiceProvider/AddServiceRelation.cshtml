@@ -8,6 +8,7 @@
 @using (Html.BeginForm("AddServiceRelation", "ServiceProvider", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
     @Html.HiddenFor(model => model.ServiceId)
     @Html.HiddenFor(model => model.ServiceProviderId)
     <h4>Add or update service relation.</h4>

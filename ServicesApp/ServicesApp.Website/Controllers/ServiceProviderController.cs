@@ -100,7 +100,7 @@ namespace ServicesApp.Website.Controllers
             var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)serviceId);
             if (serviceProviderServiceFullViewModel == null)
             {
-                View();
+                return View();
             }
             return View(serviceProviderServiceFullViewModel);
         }
@@ -131,8 +131,8 @@ namespace ServicesApp.Website.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)id);
-            if (serviceProviderServiceFullViewModel == null)
+            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync((int)id);
+            if (serviceProviderServiceFullViewModel == null || User.Identity.GetUserId() != serviceProviderServiceFullViewModel.ServiceProviderId)
             {
                 return HttpNotFound();
             }
@@ -144,8 +144,7 @@ namespace ServicesApp.Website.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteServiceRelationConfirmed(int? id)
         {
-            var userId = User.Identity.GetUserId();
-            await _serviceProviderManager.DeleteServiceRelationAsync(userId, (int)id);
+            await _serviceProviderManager.DeleteServiceRelationAsync((int)id);
             return RedirectToAction("Services");
         }
 

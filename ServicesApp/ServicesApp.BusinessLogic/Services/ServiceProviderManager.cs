@@ -42,19 +42,26 @@ namespace ServicesApp.BusinessLogic.Services
 
         public async Task<ServiceProviderServiceFullViewModel> GetServiceRelationAsync(string serviceProviderId, int serviceId)
         {
-            var dataModel = await context.ServiceProviderServices.FindAsync(serviceProviderId, serviceId);
+            var dataModel = await context.ServiceProviderServices.FirstOrDefaultAsync(x => (x.ServiceProviderId == serviceProviderId) & (x.ServiceId == serviceId));
             var viewModel = _mapper.Map<ServiceProviderServiceFullViewModel>(dataModel);
             return viewModel;
         }
 
-        public async Task<List<ServiceProviderServiceFullViewModel>> GetServiceProviderServicesAsync(string UserId)
+        public async Task<ServiceProviderServiceFullViewModel> GetServiceRelationAsync(int id)
+        {
+            var dataModel = await context.ServiceProviderServices.FindAsync(id);
+            var viewModel = _mapper.Map<ServiceProviderServiceFullViewModel>(dataModel);
+            return viewModel;
+        }
+
+        public async Task<List<ServiceProviderServiceFullViewModel>> GetServiceProviderServicesAsync(string userId)
         {
             var dataModel = await context.ServiceProviderServices
-                .Where(x => x.ServiceProviderId == UserId)
+                .Where(x => x.ServiceProviderId == userId)
                 .Include(x => x.Service)
                 .Include(x => x.Service.Category)
                 .ToListAsync();
-            var viewModel =_mapper.Map<List<ServiceProviderServiceFullViewModel>>(dataModel);
+            var viewModel = _mapper.Map<List<ServiceProviderServiceFullViewModel>>(dataModel);
             return viewModel;
         }
 
@@ -65,9 +72,9 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteServiceRelationAsync(string serviceProviderId, int serviceId)
+        public async Task DeleteServiceRelationAsync(int id)
         {
-            var dataModel = await context.ServiceProviderServices.FindAsync(serviceProviderId, serviceId);
+            var dataModel = await context.ServiceProviderServices.FindAsync(id);
             context.ServiceProviderServices.Remove(dataModel);
             await context.SaveChangesAsync();
         }

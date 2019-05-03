@@ -54,7 +54,7 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelFull>(id);
+            var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelWithRelations>(id);
             if (serviceViewModelFull == null)
             {
                 return HttpNotFound();

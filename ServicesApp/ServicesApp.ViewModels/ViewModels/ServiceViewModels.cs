@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ServicesApp.ViewModels.IdentityViewModels;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace ServicesApp.ViewModels.ViewModels
@@ -23,7 +25,12 @@ namespace ServicesApp.ViewModels.ViewModels
         [Display(Name = "Service Description")]
         public string Description { get; set; }
     }
-       
+
+    public class ServiceViewModelWithRelations : ServiceViewModelFull
+    {
+        public List<ServiceProviderServiceViewModelCustomer> ServiceProviderServices { get; set; }
+    }
+
     public class ServiceViewModelCreateShort : ServiceViewModelShort
     {
         [Required]

@@ -22,13 +22,13 @@ namespace ServicesApp.BusinessLogic
             
             CreateMap<Service, ServiceViewModelShort>();
             CreateMap<Service, ServiceViewModelFull>().ForMember(x => x.Category, x => x.MapFrom(z => z.Category.Name));
+            CreateMap<Service, ServiceViewModelWithRelations>();
 
             CreateMap<Service, ServiceViewModelCreateShort>();
             CreateMap<Service, ServiceViewModelCreateFull>();
             CreateMap<ServiceViewModelCreateShort, Service>().ForMember(x => x.IsApproved, x => x.Ignore());
 
             CreateMap<ServiceProviderService, ServiceProviderServiceRelationViewModel>();
-            CreateMap<ServiceProviderService, ServiceProviderServiceRelationDeleteViewModel>();
             CreateMap<ServiceProviderServiceRelationViewModel, ServiceProviderService>();
 
             CreateMap<ServiceProviderService, ServiceProviderServiceFullViewModel>();
