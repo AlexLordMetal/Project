@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ServicesApp.ViewModels.IdentityViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.ViewModels
 {
@@ -20,6 +21,6 @@ namespace ServicesApp.ViewModels.ViewModels
 
     public class ServiceProviderServiceViewModelCustomer : ServiceProviderServiceRelationViewModel
     {
-        public ServiceProviderServiceFullViewModel ServiceProvider { get; set; }
+        public ServiceProviderProfileViewModel ServiceProvider { get; set; }
     }
 }

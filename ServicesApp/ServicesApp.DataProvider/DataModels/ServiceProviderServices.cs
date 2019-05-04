@@ -1,4 +1,5 @@
 ﻿using ServicesApp.DataProvider.IdentityModels;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,5 +19,7 @@ namespace ServicesApp.DataProvider.DataModels
         public virtual ServiceProviderProfile ServiceProvider { get; set; }
 
         public int ServicePrice { get; set; }
+
+        public virtual List<Order> Orders  { get; set; }
     }
 }

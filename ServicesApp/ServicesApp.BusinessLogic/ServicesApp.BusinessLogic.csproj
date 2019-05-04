@@ -85,6 +85,7 @@
     <Compile Include="IdentityServices\ApplicationSignInManager.cs" />
     <Compile Include="IdentityServices\ApplicationUserManager.cs" />
     <Compile Include="Interfaces\ICustomerManager.cs" />
+    <Compile Include="Interfaces\IOrderManager.cs" />
     <Compile Include="Interfaces\IServiceManager.cs" />
     <Compile Include="Interfaces\IServiceProviderManager.cs" />
     <Compile Include="Interfaces\IServiceCategoryManager.cs" />

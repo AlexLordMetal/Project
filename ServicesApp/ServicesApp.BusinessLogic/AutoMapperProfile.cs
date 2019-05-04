@@ -22,7 +22,7 @@ namespace ServicesApp.BusinessLogic
             
             CreateMap<Service, ServiceViewModelShort>();
             CreateMap<Service, ServiceViewModelFull>().ForMember(x => x.Category, x => x.MapFrom(z => z.Category.Name));
-            CreateMap<Service, ServiceViewModelWithRelations>();
+            CreateMap<Service, ServiceViewModelWithRelations>().ForMember(x => x.Category, x => x.MapFrom(z => z.Category.Name));
 
             CreateMap<Service, ServiceViewModelCreateShort>();
             CreateMap<Service, ServiceViewModelCreateFull>();
@@ -32,6 +32,7 @@ namespace ServicesApp.BusinessLogic
             CreateMap<ServiceProviderServiceRelationViewModel, ServiceProviderService>();
 
             CreateMap<ServiceProviderService, ServiceProviderServiceFullViewModel>();
+            CreateMap<ServiceProviderService, ServiceProviderServiceViewModelCustomer>();
         }
     }    
 }

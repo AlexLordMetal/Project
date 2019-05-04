@@ -21,17 +21,29 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<OrderCustomerViewModel>> GetCustomerOrdersAsync(string userId)
+        public async Task<List<T>> GetOrdersAsync<T>(string userId) where T : OrderViewModelShort
         {
             var datamodel = await context.Orders
-                .Where(x=>x.CustomerId==userId)
-                .Include(x=>x.ServiceProviderService)
-                .Include(x=>x.OrderTime)
+                .Where(x => x.CustomerId == userId)
+                .Include(x => x.ServiceProviderService)
+                .Include(x => x.Customer)
+                .Include(x => x.OrderTime)
                 .ToListAsync();
-            var viewModel = _mapper.Map<List<OrderCustomerViewModel>>(datamodel);
+            var viewModel = _mapper.Map<List<T>>(datamodel);
             return viewModel;
         }
 
+        public async Task<T> GetOrderByIdAsync<T>(int id) where T : OrderViewModelShort
+        {
+            var datamodel = await context.Orders.FindAsync(id);
+            var viewModel = _mapper.Map<T>(datamodel);
+            return viewModel;
+        }
+
+        public async Task CreateOrderAsync(OrderViewModelShort viewModel, string customerId)
+        {
+
+        }
 
         public void Dispose()
         {

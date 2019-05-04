@@ -195,6 +195,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ServiceProviderController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ServiceCategoryController.cs" />
@@ -296,6 +297,11 @@
     <Content Include="Views\ServiceProvider\AddServiceRelation.cshtml" />
     <Content Include="Views\ServiceProvider\Services.cshtml" />
     <Content Include="Views\ServiceProvider\DeleteServiceRelation.cshtml" />
+    <Content Include="Views\Order\Create.cshtml" />
+    <Content Include="Views\Order\Delete.cshtml" />
+    <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

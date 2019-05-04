@@ -54,12 +54,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelWithRelations>(id);
-            if (serviceViewModelFull == null)
+            var serviceViewModelWithRelations = await _serviceManager.GetByIdAsync<ServiceViewModelWithRelations>(id);
+            if (serviceViewModelWithRelations == null)
             {
                 return HttpNotFound();
             }
-            return View(serviceViewModelFull);
+            return View(serviceViewModelWithRelations);
         }
 
         // GET: Service/Create

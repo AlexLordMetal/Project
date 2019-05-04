@@ -1,4 +1,4 @@
-﻿@model ServicesApp.ViewModels.ViewModels.ServiceViewModelFull
+﻿@model ServicesApp.ViewModels.ViewModels.ServiceViewModelWithRelations
 
 @{
     ViewBag.Title = "Details";
@@ -38,6 +38,46 @@
 
     </dl>
 </div>
+
+<h4>Service Providers</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceProviderServices.FirstOrDefault().ServiceProvider.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceProviderServices.FirstOrDefault().ServiceProvider.ConfirmDocs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceProviderServices.FirstOrDefault().ServicePrice)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.ServiceProviderServices)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceProvider.ConfirmDocs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServicePrice)
+        </td>
+        <td>
+            @if (User.IsInRole("Customer"))
+            {
+                <p>
+                    @Html.ActionLink("Make Order", "Create", "Order", new { id = item.Id }, null)
+                </p>
+            }
+        </td>
+    </tr>
+    }
+
+</table>
 
 @if (User.IsInRole("Administrator"))
 {
