@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.DataProvider;
+using ServicesApp.DataProvider.DataModels;
 using ServicesApp.ViewModels.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ServicesApp.BusinessLogic.Services
 {
-    class OrderManager : IDisposable
+    public class OrderManager : IDisposable, IOrderManager
     {
         private ApplicationDbContext context = new ApplicationDbContext();
 
@@ -21,13 +23,12 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<T>> GetOrdersAsync<T>(string userId) where T : OrderViewModelShort
+        public async Task<List<T>> GetCustomerOrdersAsync<T>(string userId) where T : OrderViewModelShort
         {
             var datamodel = await context.Orders
                 .Where(x => x.CustomerId == userId)
                 .Include(x => x.ServiceProviderService)
                 .Include(x => x.Customer)
-                .Include(x => x.OrderTime)
                 .ToListAsync();
             var viewModel = _mapper.Map<List<T>>(datamodel);
             return viewModel;
@@ -42,7 +43,10 @@ namespace ServicesApp.BusinessLogic.Services
 
         public async Task CreateOrderAsync(OrderViewModelShort viewModel, string customerId)
         {
-
+            var dataModel = _mapper.Map<Order>(viewModel);
+            dataModel.CustomerId = customerId;
+            context.Orders.Add(dataModel);
+            await context.SaveChangesAsync();
         }
 
         public void Dispose()

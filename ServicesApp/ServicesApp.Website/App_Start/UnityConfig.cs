@@ -52,6 +52,7 @@ namespace ServicesApp.Website
             container.RegisterType<IServiceProviderManager, ServiceProviderManager>();
             container.RegisterType<IServiceCategoryManager, ServiceCategoryManager>();
             container.RegisterType<IServiceManager, ServiceManager>();
+            container.RegisterType<IOrderManager, OrderManager>();
 
             // Initialize AutoMapper
             var config = new MapperConfiguration(cfg =>

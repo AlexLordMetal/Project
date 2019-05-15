@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using ServicesApp.DataProvider;
 using ServicesApp.DataProvider.DataModels;
 using ServicesApp.BusinessLogic.Interfaces;
+using ServicesApp.ViewModels.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace ServicesApp.Website.Controllers
 {
@@ -28,39 +30,41 @@ namespace ServicesApp.Website.Controllers
 
         // GET: Order/Create
         [Authorize(Roles = "Customer")]
-        public async Task<ActionResult> Create(int? id)
+        public async Task<ActionResult> Create(int? serviceProviderServiceId)
         {
-            if (id==null)
+            if (serviceProviderServiceId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var viewModel = await _serviceProviderManager.GetServiceRelationAsync((int)id);
+            var viewModel = new OrderViewModelCustomer();
+            viewModel.ServiceProviderService = await _serviceProviderManager.GetServiceRelationAsync<ServiceProviderServiceViewModelCustomer>((int)serviceProviderServiceId);
+            viewModel.OrderDate = DateTime.Today.AddDays(1);
             return View(viewModel);
         }
 
-        // POST: Order/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Create([Bind(Include = "Id,IsComplete,Feedback,CustomerId")] Order order)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Orders.Add(order);
-        //        await db.SaveChangesAsync();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.CustomerId = new SelectList(db.CustomerProfiles, "Id", "Name", order.CustomerId);
-        //    return View(order);
-        //}
+        //POST: Order/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
+        public async Task<ActionResult> Create(OrderViewModelCustomer viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _orderManager.CreateOrderAsync(viewModel, User.Identity.GetUserId());
+                return RedirectToAction("Index");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.Conflict);
+        }
 
 
-        //// GET: Order
-        //public async Task<ActionResult> Index()
-        //{
-        //    var orders = db.Orders.Include(o => o.Customer);
-        //    return View(await orders.ToListAsync());
-        //}
+        // GET: Order
+        public async Task<ActionResult> Index()
+        {
+            var userId = User.Identity.GetUserId();
+            var viewModel = await _orderManager.GetCustomerOrdersAsync<OrderViewModelCustomer>(userId);
+            //var orders = db.Orders.Include(o => o.Customer);
+            return View(viewModel);
+        }
 
         //// GET: Order/Details/5
         //public async Task<ActionResult> Details(int? id)

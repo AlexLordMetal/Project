@@ -47,10 +47,10 @@ namespace ServicesApp.BusinessLogic.Services
             return viewModel;
         }
 
-        public async Task<ServiceProviderServiceFullViewModel> GetServiceRelationAsync(int id)
+        public async Task<T> GetServiceRelationAsync<T>(int id) where T : ServiceProviderServiceFullViewModel
         {
             var dataModel = await context.ServiceProviderServices.FindAsync(id);
-            var viewModel = _mapper.Map<ServiceProviderServiceFullViewModel>(dataModel);
+            var viewModel = _mapper.Map<T>(dataModel);
             return viewModel;
         }
 

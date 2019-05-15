@@ -70,7 +70,7 @@
             @if (User.IsInRole("Customer"))
             {
                 <p>
-                    @Html.ActionLink("Make Order", "Create", "Order", new { id = item.Id }, null)
+                    @Html.ActionLink("Make Order", "Create", "Order", new { serviceProviderServiceId = item.Id }, null)
                 </p>
             }
         </td>

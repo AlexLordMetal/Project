@@ -15,7 +15,7 @@ namespace ServicesApp.DataProvider.DataModels
         public int Id { get; set; }
         public bool IsComplete { get; set; }
         public bool ServiceProviderConfirm { get; set; }
-        public OrderTime OrderTime { get; set; }
+        public DateTime OrderDate { get; set; }
         public string Feedback { get; set; }
         public int Stars { get; set; }
 
@@ -23,7 +23,7 @@ namespace ServicesApp.DataProvider.DataModels
         public string CustomerId { get; set; }
 
         [ForeignKey("ServiceProviderService")]
-        public string ServiceProviderServiceId { get; set; }
+        public int ServiceProviderServiceId { get; set; }
 
         public virtual CustomerProfile Customer { get; set; }
         public virtual ServiceProviderService ServiceProviderService { get; set; }

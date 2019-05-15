@@ -33,6 +33,9 @@ namespace ServicesApp.BusinessLogic
 
             CreateMap<ServiceProviderService, ServiceProviderServiceFullViewModel>();
             CreateMap<ServiceProviderService, ServiceProviderServiceViewModelCustomer>();
+
+            CreateMap<OrderViewModelCustomer, Order>();
+            CreateMap<Order, OrderViewModelCustomer>();
         }
     }    
 }

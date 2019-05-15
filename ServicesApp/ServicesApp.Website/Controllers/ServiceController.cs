@@ -84,7 +84,7 @@ namespace ServicesApp.Website.Controllers
                 await _serviceManager.AddAsync(serviceViewModelCreateShort, isAdministrator);
                 return RedirectToAction("Index");
             }
-            return View(serviceViewModelCreateShort);
+            return new HttpStatusCodeResult(HttpStatusCode.Conflict); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
 
         // GET: Service/Edit/5

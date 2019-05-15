@@ -1,4 +1,5 @@
 ﻿using ServicesApp.ViewModels.IdentityViewModels;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.ViewModels
@@ -8,7 +9,6 @@ namespace ServicesApp.ViewModels.ViewModels
         [Display(Name = "Id")]
         public int? Id { get; set; }
 
-        [Required]
         [DataType(DataType.Text)]
         [StringLength(200)]
         [Display(Name = "Feedback")]
@@ -21,25 +21,14 @@ namespace ServicesApp.ViewModels.ViewModels
         public bool ServiceProviderConfirm { get; set; }
 
         [Required]
-        [Display(Name = "Order Time")]
-        public OrderTimeViewModel OrderTime { get; set; }
+        [Display(Name = "Order Date")]
+        public DateTime OrderDate { get; set; }
     }
 
-    public class OrderViewModelFull : OrderViewModelShort
+    public class OrderViewModelCustomer : OrderViewModelShort
     {
-        public ServiceViewModelFull Service { get; set; }
+        public int ServiceProviderServiceId { get; set; }
 
-        public ServiceProviderServiceFullViewModel ServiceProviderService { get; set; }
-    }
-
-
-    public class OrderCustomerViewModel : OrderViewModelShort
-    {
-        public ServiceProviderProfileViewModel ServiceProvider { get; set; }
-    }
-
-    public class OrderServiceProviderViewModel : OrderViewModelShort
-    {
-        public CustomerProfileViewModel Customer { get; set; }
+        public ServiceProviderServiceViewModelCustomer ServiceProviderService { get; set; }
     }
 }

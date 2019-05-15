@@ -131,7 +131,7 @@ namespace ServicesApp.Website.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
-            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync((int)id);
+            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync<ServiceProviderServiceFullViewModel>((int)id);
             if (serviceProviderServiceFullViewModel == null || User.Identity.GetUserId() != serviceProviderServiceFullViewModel.ServiceProviderId)
             {
                 return HttpNotFound();

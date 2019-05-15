@@ -17,7 +17,7 @@ namespace ServicesApp.DataProvider
             roleManager.Create(new IdentityRole { Name = "ServiceProvider" });
             roleManager.Create(new IdentityRole { Name = "Customer" });
 
-            var admin = new ApplicationUser { Email = "alexedbogdanov@gmail.com", UserName = "alexedbogdanov@gmail.com", PasswordHash = "AEMxJ4C8x1KHdjOkqx9ME3/TVqVdo7BNUEMzGUXQiRxAcPvO90poGqAssBVko0xsig==" };
+            var admin = new ApplicationUser { Email = "admin@gmail.com", UserName = "admin@gmail.com", PasswordHash = "AEMxJ4C8x1KHdjOkqx9ME3/TVqVdo7BNUEMzGUXQiRxAcPvO90poGqAssBVko0xsig==" };
             var result = userManager.Create(admin);
 
             if (result.Succeeded)

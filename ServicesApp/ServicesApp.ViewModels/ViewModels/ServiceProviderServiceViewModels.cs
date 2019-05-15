@@ -19,7 +19,7 @@ namespace ServicesApp.ViewModels.ViewModels
         public ServiceViewModelFull Service { get; set; }
     }
 
-    public class ServiceProviderServiceViewModelCustomer : ServiceProviderServiceRelationViewModel
+    public class ServiceProviderServiceViewModelCustomer : ServiceProviderServiceFullViewModel
     {
         public ServiceProviderProfileViewModel ServiceProvider { get; set; }
     }
