@@ -4,6 +4,7 @@ using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
 using ServicesApp.ViewModels.ViewModels;
+using ServicesApp.Website.Enums;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -43,6 +44,7 @@ namespace ServicesApp.Website.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Your service provider profile has been updated."
                 : message == ManageMessageId.AddServiceRelationSuccess ? "Your service relation has been updated."
+                : message == ManageMessageId.NullErrorServiceProviderProfile ? "You can't provide services now. At first you must add an info to your profile."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -97,6 +99,10 @@ namespace ServicesApp.Website.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var userId = User.Identity.GetUserId();
+            if (!await _serviceProviderManager.IsServiceProviderProfileExistAsync(userId))
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.NullErrorServiceProviderProfile });
+            }
             var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)serviceId);
             if (serviceProviderServiceFullViewModel == null)
             {
@@ -169,16 +175,6 @@ namespace ServicesApp.Website.Controllers
                 return user.PasswordHash != null;
             }
             return false;
-        }
-
-        public enum ManageMessageId
-        {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
-            UpdateServiceProviderProfileSuccess,
-            AddServiceRelationSuccess,
-            Error
         }
 
         #endregion

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
+using ServicesApp.Website.Enums;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -53,8 +53,6 @@ namespace ServicesApp.Website.Controllers
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.UpdateCustomerProfileSuccess ? "Your customer profile has been updated."
-                : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Your service provider profile has been updated."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -64,52 +62,13 @@ namespace ServicesApp.Website.Controllers
             }
             else if (await UserManager.IsInRoleAsync(userId, "Customer"))
             {
-                var customerProfileViewModelManage = new CustomerProfileViewModelManage();
-                customerProfileViewModelManage.HasPassword = HasPassword();
-                customerProfileViewModelManage.CustomerProfile = await _customerManager.GetCustomerProfileAsync(userId);
-                return View("ManageCustomer", customerProfileViewModelManage);
+                return RedirectToAction("Index", "Customer", new { Message = message });
             }
             else if (await UserManager.IsInRoleAsync(userId, "ServiceProvider"))
             {
                 return RedirectToAction("Index", "ServiceProvider", new { Message = message });
             }
             return HttpNotFound();
-        }
-
-        // GET: /Manage/UpdateCustomerProfile
-        [Authorize(Roles = "Customer")]
-        public async Task<ActionResult> UpdateCustomerProfile()
-        {
-            var userId = User.Identity.GetUserId();
-            var customerProfileViewModel = await _customerManager.GetCustomerProfileAsync(userId);
-            if (customerProfileViewModel == null)
-            {
-                return View();
-            }
-            return View(customerProfileViewModel);
-        }
-
-        // POST: /Manage/UpdateCustomerProfile
-        [HttpPost]
-        [Authorize(Roles = "Customer")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateCustomerProfile(CustomerProfileViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var userId = User.Identity.GetUserId();
-            if (userId != null)
-            {
-                await _customerManager.UpdateCustomerProfileAsync(model, userId);
-                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
-            }
-            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.Error });
-
-
-
-            //Sign in - does it need?
         }
 
         // GET: /Manage/ChangePassword
@@ -188,14 +147,6 @@ namespace ServicesApp.Website.Controllers
 
         #region Helpers
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -212,16 +163,6 @@ namespace ServicesApp.Website.Controllers
                 return user.PasswordHash != null;
             }
             return false;
-        }
-
-        public enum ManageMessageId
-        {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
-            UpdateCustomerProfileSuccess,
-            UpdateServiceProviderProfileSuccess,
-            Error
         }
 
         #endregion

@@ -195,11 +195,13 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ServiceProviderController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ServiceCategoryController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Enums\ManageMessageId.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -320,10 +322,10 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Manage\UpdateCustomerProfile.cshtml" />
+    <Content Include="Views\Customer\UpdateProfile.cshtml" />
     <Content Include="Views\ServiceProvider\UpdateProfile.cshtml" />
     <Content Include="Views\Manage\ManageAdministrator.cshtml" />
-    <Content Include="Views\Manage\ManageCustomer.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\ServiceProvider\Index.cshtml" />
     <Content Include="Views\ServiceCategory\Create.cshtml" />
     <Content Include="Views\ServiceCategory\Delete.cshtml" />

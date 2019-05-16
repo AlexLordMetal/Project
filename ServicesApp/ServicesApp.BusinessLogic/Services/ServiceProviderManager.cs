@@ -32,6 +32,15 @@ namespace ServicesApp.BusinessLogic.Services
             return serviceProviderProfileViewModel;
         }
 
+        public async Task<bool> IsServiceProviderProfileExistAsync(string userId)
+        {
+            if (await context.ServiceProviderProfiles.FindAsync(userId) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId)
         {
             ServiceProviderProfile serviceProviderProfile = _mapper.Map<ServiceProviderProfile>(serviceProviderProfileViewModel);

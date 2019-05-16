@@ -12,6 +12,7 @@ using ServicesApp.DataProvider.DataModels;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.ViewModels;
 using Microsoft.AspNet.Identity;
+using ServicesApp.Website.Enums;
 
 namespace ServicesApp.Website.Controllers
 {
@@ -20,12 +21,14 @@ namespace ServicesApp.Website.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         private IOrderManager _orderManager;
-        private IServiceProviderManager _serviceProviderManager; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        private IServiceProviderManager _serviceProviderManager;
+        private ICustomerManager _customerManager;
 
-        public OrderController(IOrderManager orderManager, IServiceProviderManager serviceProviderManager)
+        public OrderController(IOrderManager orderManager, IServiceProviderManager serviceProviderManager, ICustomerManager customerManager)
         {
             _orderManager = orderManager;
             _serviceProviderManager = serviceProviderManager;
+            _customerManager = customerManager;
         }
 
         // GET: Order/Create
@@ -35,6 +38,11 @@ namespace ServicesApp.Website.Controllers
             if (serviceProviderServiceId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+            if (!await _customerManager.IsCustomerProfileExistAsync(userId))
+            {
+                return RedirectToAction("Index", "Customer", new { Message = ManageMessageId.NullErrorCustomerProfile });
             }
             var viewModel = new OrderViewModelCustomer();
             viewModel.ServiceProviderService = await _serviceProviderManager.GetServiceRelationAsync<ServiceProviderServiceViewModelCustomer>((int)serviceProviderServiceId);
@@ -51,7 +59,7 @@ namespace ServicesApp.Website.Controllers
             if (ModelState.IsValid)
             {
                 await _orderManager.CreateOrderAsync(viewModel, User.Identity.GetUserId());
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Customer", new { Message = ManageMessageId.CreateOrderSuccess });
             }
             return new HttpStatusCodeResult(HttpStatusCode.Conflict);
         }

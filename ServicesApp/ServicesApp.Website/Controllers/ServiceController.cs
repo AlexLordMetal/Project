@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNet.Identity.Owin;
-using ServicesApp.BusinessLogic.IdentityServices;
-using ServicesApp.BusinessLogic.Interfaces;
+﻿using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.ViewModels;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ServicesApp.Website.Controllers
@@ -13,24 +10,11 @@ namespace ServicesApp.Website.Controllers
     {
         private IServiceManager _serviceManager;
         private IServiceCategoryManager _serviceCategoryManager;
-        private ApplicationUserManager _userManager;
 
         public ServiceController(IServiceManager serviceManager, IServiceCategoryManager serviceCategoryManager)
         {
             _serviceManager = serviceManager;
             _serviceCategoryManager = serviceCategoryManager;
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
         }
 
         // GET: Service
@@ -147,11 +131,6 @@ namespace ServicesApp.Website.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
             base.Dispose(disposing);
         }
     }

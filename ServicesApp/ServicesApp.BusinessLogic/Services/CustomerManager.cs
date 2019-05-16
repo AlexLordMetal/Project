@@ -27,6 +27,15 @@ namespace ServicesApp.BusinessLogic.Services
             return customerProfileViewModel;
         }
 
+        public async Task<bool> IsCustomerProfileExistAsync(string userId)
+        {
+            if (await context.CustomerProfiles.FindAsync(userId) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task UpdateCustomerProfileAsync(CustomerProfileViewModel customerProfileViewModel, string userId)
         {
             CustomerProfile customerProfile = _mapper.Map<CustomerProfileViewModel, CustomerProfile>(customerProfileViewModel);

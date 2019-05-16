@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ServicesApp.BusinessLogic.IdentityServices;
-using ServicesApp.DataProvider.IdentityModels;    // Very huevo
+using ServicesApp.DataProvider.IdentityModels;    // It's bad
 using ServicesApp.ViewModels.IdentityViewModels;
 using System.Threading.Tasks;
 using System.Web;
@@ -89,7 +89,7 @@ namespace ServicesApp.Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                //This is govnocode
+                //To do - move to business logic
                 var user = new ApplicationUser {
                     UserName = model.Email,
                     Email = model.Email                    
