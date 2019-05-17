@@ -1,0 +1,83 @@
+﻿@model ServicesApp.ViewModels.ViewModels.OrderViewModelCustomer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderService.Service.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderService.Service.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderService.Service.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderService.Service.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderService.ServicePrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderService.ServicePrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderService.ServiceProvider.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderService.ServiceProvider.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderService.ServiceProvider.ConfirmDocs)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderService.ServiceProvider.ConfirmDocs)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderConfirm)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderConfirm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsComplete)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsComplete)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Feedback)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Feedback)
+        </dd>
+    </dl>
+</div>
+<p>
+    @if (Model.IsComplete == false && Model.ServiceProviderConfirm == true && Model.OrderDate < DateTime.Now)
+    {
+        @Html.ActionLink("Complete Order", "Complete", new { id = Model.Id })
+    }
+    @Html.ActionLink("Back to List", "Index")
+</p>

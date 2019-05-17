@@ -344,10 +344,11 @@
     <Content Include="Views\ServiceProvider\DeleteServiceRelation.cshtml" />
     <Content Include="Views\Order\Create.cshtml" />
     <Content Include="Views\Order\Delete.cshtml" />
-    <Content Include="Views\Order\Details.cshtml" />
-    <Content Include="Views\Order\Edit.cshtml" />
-    <Content Include="Views\Order\Index.cshtml" />
-    <Content Include="Views\Order\Create - Копировать.cshtml" />
+    <Content Include="Views\Order\Customer\Details.cshtml" />
+    <Content Include="Views\Order\Complete.cshtml" />
+    <Content Include="Views\Order\Customer\Index.cshtml" />
+    <Content Include="Views\Order\ServiceProvider\Index.cshtml" />
+    <Content Include="Views\Order\ServiceProvider\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

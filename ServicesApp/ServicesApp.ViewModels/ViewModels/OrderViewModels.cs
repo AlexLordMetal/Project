@@ -9,6 +9,10 @@ namespace ServicesApp.ViewModels.ViewModels
         [Display(Name = "Id")]
         public int? Id { get; set; }
 
+        public string CustomerId { get; set; }
+
+        public int ServiceProviderServiceId { get; set; }
+
         [DataType(DataType.Text)]
         [StringLength(200)]
         [Display(Name = "Feedback")]
@@ -22,13 +26,17 @@ namespace ServicesApp.ViewModels.ViewModels
 
         [Required]
         [Display(Name = "Order Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime OrderDate { get; set; }
     }
 
     public class OrderViewModelCustomer : OrderViewModelShort
     {
-        public int ServiceProviderServiceId { get; set; }
-
         public ServiceProviderServiceViewModelCustomer ServiceProviderService { get; set; }
+    }
+
+    public class OrderViewModelServiceProvider : OrderViewModelCustomer
+    {
+        public CustomerProfileViewModel Customer { get; set; }
     }
 }

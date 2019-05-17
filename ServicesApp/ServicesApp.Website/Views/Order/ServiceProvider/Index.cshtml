@@ -1,4 +1,4 @@
-﻿@model List<ServicesApp.ViewModels.ViewModels.OrderViewModelCustomer>
+﻿@model List<ServicesApp.ViewModels.ViewModels.OrderViewModelServiceProvider>
 
 @{
     ViewBag.Title = "Index";
@@ -19,6 +19,15 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceProviderService.ServicePrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Surname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Phone)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceProviderConfirm)
@@ -45,6 +54,15 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ServiceProviderService.ServicePrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.Surname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.Phone)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ServiceProviderConfirm)

@@ -66,61 +66,104 @@ namespace ServicesApp.Website.Controllers
 
 
         // GET: Order
+        [Authorize]
         public async Task<ActionResult> Index()
         {
             var userId = User.Identity.GetUserId();
-            var viewModel = await _orderManager.GetCustomerOrdersAsync<OrderViewModelCustomer>(userId);
-            //var orders = db.Orders.Include(o => o.Customer);
-            return View(viewModel);
+            if (User.IsInRole("Customer"))
+            {
+                var viewModel = await _orderManager.GetCustomerOrdersAsync<OrderViewModelCustomer>(userId);
+                return View("Customer/Index", viewModel);
+            }
+            if (User.IsInRole("ServiceProvider"))
+            {
+                var viewModel = await _orderManager.GetServiceProviderOrdersAsync<OrderViewModelServiceProvider>(userId);
+                return View("ServiceProvider/Index", viewModel);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
 
-        //// GET: Order/Details/5
-        //public async Task<ActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Order order = await db.Orders.FindAsync(id);
-        //    if (order == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(order);
-        //}
+        // GET: Order/Details/5
+        [Authorize]
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            var userId = User.Identity.GetUserId();
+            if (userId == viewModel.CustomerId && User.IsInRole("Customer"))
+            {
+                return View("Customer/Details", viewModel);
+            }
+            if (userId == viewModel.ServiceProviderService.ServiceProviderId && User.IsInRole("ServiceProvider"))
+            {
+                return View("ServiceProvider/Details", viewModel);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
 
-        //// GET: Order/Edit/5
-        //public async Task<ActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Order order = await db.Orders.FindAsync(id);
-        //    if (order == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.CustomerId = new SelectList(db.CustomerProfiles, "Id", "Name", order.CustomerId);
-        //    return View(order);
-        //}
+        // GET: Order/Confirm/5
+        [Authorize(Roles = "ServiceProvider")]
+        public async Task<ActionResult> Confirm(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            if (User.Identity.GetUserId() == viewModel.ServiceProviderService.ServiceProviderId)
+            {
+                viewModel.ServiceProviderConfirm = true;
+                await _orderManager.ModifyAsync(viewModel);
+                return RedirectToAction("Details", new { id });
+            }
+            return RedirectToAction("Index", "ServiceProvider", new { Message = ManageMessageId.Error });
+        }
 
-        //// POST: Order/Edit/5
-        //// Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        //// сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Edit([Bind(Include = "Id,IsComplete,Feedback,CustomerId")] Order order)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(order).State = EntityState.Modified;
-        //        await db.SaveChangesAsync();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.CustomerId = new SelectList(db.CustomerProfiles, "Id", "Name", order.CustomerId);
-        //    return View(order);
-        //}
+        // GET: Order/Complete/5
+        [Authorize(Roles = "Customer")]
+        public async Task<ActionResult> Complete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            if (User.Identity.GetUserId() == viewModel.CustomerId)
+            {
+                return View(viewModel);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
+
+        // POST: Order/Complete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
+        public async Task<ActionResult> Complete(OrderViewModelShort viewModel)
+        {
+            if (ModelState.IsValid && User.Identity.GetUserId() == viewModel.CustomerId)
+            {
+                viewModel.IsComplete = true;
+                await _orderManager.ModifyAsync(viewModel);
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Complete", new { id = viewModel.Id });
+        }
 
         //// GET: Order/Delete/5
         //public async Task<ActionResult> Delete(int? id)
@@ -150,10 +193,6 @@ namespace ServicesApp.Website.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }
