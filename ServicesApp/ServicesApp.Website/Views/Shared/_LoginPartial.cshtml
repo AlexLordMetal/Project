@@ -6,21 +6,37 @@
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-            <li>
+            <li class="nav-item dropdown">
                 @if (User.IsInRole("Administrator"))
                 {
-                    @Html.ActionLink("Admin panel", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Admin
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a href="@Url.Action("Index", "ServiceCategory")">Manage Categories</a></li>
+                        <li><a href="@Url.Action("Index", "Service")">Manage Services</a></li>
+                        <li><a href="@Url.Action("Approve", "Service")">Approve Services<span class="badge" id="results"></span></a></li>
+                    </ul>
                 }
                 else if (User.IsInRole("Customer"))
                 {
-                    @Html.ActionLink("Hello, customer " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Hello, customer @User.Identity.GetUserName() !
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Your Profile", "Index", "Customer")</li>
+                            <li>@Html.ActionLink("Your Orders", "Index", "Order")</li>
+                        </ul>
+                    </div>
                 }
                 else if (User.IsInRole("ServiceProvider"))
                 {
                     @Html.ActionLink("Hello, service provider " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
                 }
             </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Sign out</a></li>
+            <li class="nav-item"><a href="javascript:document.getElementById('logoutForm').submit()">Sign out</a></li>
         </ul>
     }
 }
@@ -31,3 +47,9 @@ else
         <li>@Html.ActionLink("Sign in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#results').load('@Url.Action("NotApprovedCounter", "Service")')
+    });
+</script>

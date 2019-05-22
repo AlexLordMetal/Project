@@ -6,9 +6,7 @@ using ServicesApp.ViewModels.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ServicesApp.BusinessLogic.Services
@@ -26,30 +24,30 @@ namespace ServicesApp.BusinessLogic.Services
 
         public async Task<List<T>> GetCustomerOrdersAsync<T>(string userId) where T : OrderViewModelShort
         {
-            var datamodel = await context.Orders
+            var dataModel = await context.Orders
                 .Where(x => x.CustomerId == userId)
                 .Include(x => x.ServiceProviderService)
                 .Include(x => x.Customer)
                 .ToListAsync();
-            var viewModel = _mapper.Map<List<T>>(datamodel);
+            var viewModel = _mapper.Map<List<T>>(dataModel);
             return viewModel;
         }
 
         public async Task<List<T>> GetServiceProviderOrdersAsync<T>(string userId) where T : OrderViewModelShort
         {
-            var datamodel = await context.Orders
+            var dataModel = await context.Orders
                 .Where(x => x.ServiceProviderService.ServiceProviderId == userId)
                 .Include(x => x.ServiceProviderService)
                 .Include(x => x.Customer)
                 .ToListAsync();
-            var viewModel = _mapper.Map<List<T>>(datamodel);
+            var viewModel = _mapper.Map<List<T>>(dataModel);
             return viewModel;
         }
 
         public async Task<T> GetOrderByIdAsync<T>(int id) where T : OrderViewModelShort
         {
-            var datamodel = await context.Orders.FindAsync(id);
-            var viewModel = _mapper.Map<T>(datamodel);
+            var dataModel = await context.Orders.FindAsync(id);
+            var viewModel = _mapper.Map<T>(dataModel);
             return viewModel;
         }
 
@@ -61,15 +59,23 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task ConfirmOrderAsync(int id, string serviceProviderId)
+        {
+            var dataModel = await context.Orders.FindAsync(id);
+            if (dataModel.ServiceProviderService.ServiceProviderId == serviceProviderId)
+            {
+                dataModel.ServiceProviderConfirm = true;
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task ModifyAsync(OrderViewModelShort viewModel)
         {
             if (await context.Orders.AnyAsync(x => x.Id == viewModel.Id))
             {
                 var dataModel = _mapper.Map<Order>(viewModel);
-                context.Orders.AddOrUpdate(dataModel);
-                //works with Services, but doesn't work with Orders
-                //context.Orders.Attach(dataModel);
-                //context.Entry<Order>(dataModel).State = EntityState.Modified;
+                context.Orders.Attach(dataModel);
+                context.Entry<Order>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
         }

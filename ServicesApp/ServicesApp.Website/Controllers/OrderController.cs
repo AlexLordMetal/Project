@@ -63,8 +63,7 @@ namespace ServicesApp.Website.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.Conflict);
         }
-
-
+        
         // GET: Order
         [Authorize]
         public async Task<ActionResult> Index()
@@ -108,7 +107,7 @@ namespace ServicesApp.Website.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
 
-        // GET: Order/Confirm/5
+        //GET: Order/Confirm/5
         [Authorize(Roles = "ServiceProvider")]
         public async Task<ActionResult> Confirm(int? id)
         {
@@ -116,19 +115,32 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
-            if (viewModel == null)
-            {
-                return HttpNotFound();
-            }
-            if (User.Identity.GetUserId() == viewModel.ServiceProviderService.ServiceProviderId)
-            {
-                viewModel.ServiceProviderConfirm = true;
-                await _orderManager.ModifyAsync(viewModel);
-                return RedirectToAction("Details", new { id });
-            }
-            return RedirectToAction("Index", "ServiceProvider", new { Message = ManageMessageId.Error });
+            await _orderManager.ConfirmOrderAsync((int)id, User.Identity.GetUserId());
+            return RedirectToAction("Details", new { id });
         }
+
+        //Second variant - split on 2 methods, like get/post
+        // GET: Order/Confirm/5
+        //[Authorize(Roles = "ServiceProvider")]
+        //public async Task<ActionResult> Confirm(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
+        //    if (viewModel == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    if (User.Identity.GetUserId() == viewModel.ServiceProviderService.ServiceProviderId)
+        //    {
+        //        viewModel.ServiceProviderConfirm = true;
+        //        await _orderManager.ModifyAsync(viewModel);
+        //        return RedirectToAction("Details", new { id });
+        //    }
+        //    return RedirectToAction("Index", "ServiceProvider", new { Message = ManageMessageId.Error });
+        //}
 
         // GET: Order/Complete/5
         [Authorize(Roles = "Customer")]

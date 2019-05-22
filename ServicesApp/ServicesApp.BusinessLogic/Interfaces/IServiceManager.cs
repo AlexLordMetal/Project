@@ -11,5 +11,6 @@ namespace ServicesApp.BusinessLogic.Interfaces
         Task AddAsync(ServiceViewModelCreateShort viewModel, bool isApproved);
         Task ModifyAsync(ServiceViewModelCreateShort viewModel, bool isApproved=true);
         Task DeleteByIdAsync(int? id);
+        Task<int> NotApprovedCount();
     }
 }

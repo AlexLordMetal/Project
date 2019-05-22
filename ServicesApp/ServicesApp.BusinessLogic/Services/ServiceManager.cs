@@ -95,6 +95,11 @@ namespace ServicesApp.BusinessLogic.Services
             //Need exception "Id not found" or something else
         }
 
+        public async Task<int> NotApprovedCount()
+        {
+            return await context.Services.CountAsync(x => x.IsApproved == false);
+        }
+
         public async Task DeleteByIdAsync(int? id)
         {
             var dataModel = await context.Services.FindAsync(id);

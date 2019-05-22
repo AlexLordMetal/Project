@@ -83,6 +83,18 @@ namespace ServicesApp.Website.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.Error });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
+        public async Task<ActionResult> Manager()
+        {
+            var userId = User.Identity.GetUserId();
+            var customerProfileViewModelManage = new CustomerProfileViewModelManage();
+            customerProfileViewModelManage.HasPassword = HasPassword();
+            customerProfileViewModelManage.CustomerProfile = await _customerManager.GetCustomerProfileAsync(userId);
+            return View(customerProfileViewModelManage);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

@@ -17,7 +17,8 @@ namespace ServicesApp.ViewModels.IdentityViewModels
         public string Surname { get; set; }
 
         [Required]
-        [DataType(DataType.Text)]
+        [Phone]
+        [DataType(DataType.PhoneNumber)]
         [StringLength(100)]
         [Display(Name = "Phone Number")]
         public string Phone { get; set; }

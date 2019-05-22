@@ -18,7 +18,7 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service
-        public async Task<ActionResult> Index(string search, int page=1)
+        public async Task<ActionResult> Index(string search, int page = 1)
         {
             return View(await _serviceManager.GetListAsync(true, page, 3, search));
         }
@@ -29,6 +29,18 @@ namespace ServicesApp.Website.Controllers
         {
             var services = await _serviceManager.GetListAsync(false, page, 3);
             return View(services);
+        }
+
+        // GET: Service/NotApprovedCounter
+        [Authorize(Roles = "Administrator")]
+        public async Task<int?> NotApprovedCounter()
+        {
+            var count = await _serviceManager.NotApprovedCount();
+            if (count == 0)
+            {
+                return null;
+            }
+            return count;
         }
 
         // GET: Service/Details/5

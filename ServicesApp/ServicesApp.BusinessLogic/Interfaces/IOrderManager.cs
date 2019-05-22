@@ -10,6 +10,7 @@ namespace ServicesApp.BusinessLogic.Interfaces
         Task<List<T>> GetServiceProviderOrdersAsync<T>(string userId) where T : OrderViewModelShort;
         Task<T> GetOrderByIdAsync<T>(int id) where T : OrderViewModelShort;
         Task CreateOrderAsync(OrderViewModelShort viewModel, string customerId);
+        Task ConfirmOrderAsync(int id, string customerId);
         Task ModifyAsync(OrderViewModelShort viewModel);
     }
 }
