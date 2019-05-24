@@ -9,10 +9,11 @@
             <li class="nav-item dropdown">
                 @if (User.IsInRole("Administrator"))
                 {
-                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown">
                         Admin
+                        @*<span class="caret"></span>*@
                     </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <li><a href="@Url.Action("Index", "ServiceCategory")">Manage Categories</a></li>
                         <li><a href="@Url.Action("Index", "Service")">Manage Services</a></li>
                         <li><a href="@Url.Action("Approve", "Service")">Approve Services<span class="badge" id="results"></span></a></li>
@@ -21,7 +22,7 @@
                 else if (User.IsInRole("Customer"))
                 {
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
                             Hello, customer @User.Identity.GetUserName() !
                             <span class="caret"></span>
                         </button>
