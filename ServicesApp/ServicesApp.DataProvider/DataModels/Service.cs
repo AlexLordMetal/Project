@@ -20,6 +20,8 @@ namespace ServicesApp.DataProvider.DataModels
         [ForeignKey("Category")]
         public int? CategoryId { get; set; }
 
+        public virtual Photo Photo { get; set; }
+
         public virtual ServiceCategory Category { get; set; }
 
         public virtual List<ServiceProviderService> ServiceProviderServices { get; set; }

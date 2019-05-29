@@ -12,7 +12,7 @@ namespace ServicesApp.Website
             //            "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-            "~/Scripts/jquery-3.4.1.js",
+            "~/Scripts/jquery-3.4.1.min.js",
             "~/Scripts/jquery-ui-1.12.1.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -28,7 +28,7 @@ namespace ServicesApp.Website
                       "~/Scripts/bootstrap.bundle.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap.min.css",
+                "~/Content/bootstrap.min (4).css",
                 "~/Content/site.css",
                 "~/Content/themes/base/jquery-ui.css"));
         }

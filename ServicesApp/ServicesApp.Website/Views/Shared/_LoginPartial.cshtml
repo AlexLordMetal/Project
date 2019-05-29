@@ -1,56 +1,62 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
-
         <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item dropdown">
+            <li class="dropdown">
                 @if (User.IsInRole("Administrator"))
                 {
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         Admin
-                        @*<span class="caret"></span>*@
+                        <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                    <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "ServiceCategory")">Manage Categories</a></li>
                         <li><a href="@Url.Action("Index", "Service")">Manage Services</a></li>
-                        <li><a href="@Url.Action("Approve", "Service")">Approve Services<span class="badge" id="results"></span></a></li>
+                        <li><a href="@Url.Action("Approve", "Service")">Approve Services<span class="badge" id="admin-counter"></span></a></li>
                     </ul>
                 }
                 else if (User.IsInRole("Customer"))
                 {
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-                            Hello, customer @User.Identity.GetUserName() !
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Your Profile", "Index", "Customer")</li>
-                            <li>@Html.ActionLink("Your Orders", "Index", "Order")</li>
-                        </ul>
-                    </div>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Hello, customer @User.Identity.GetUserName() !
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Index", "Customer")">Your Profile</a></li>
+                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="user-counter"></span></a></li>
+                    </ul>
                 }
                 else if (User.IsInRole("ServiceProvider"))
                 {
-                    @Html.ActionLink("Hello, service provider " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Hello, service provider @User.Identity.GetUserName() !
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Action("Index", "ServiceProvider")">Your Profile</a></li>
+                        <li><a href="@Url.Action("Services", "ServiceProvider")">Your Services</a></li>
+                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="user-counter"></span></a></li>
+                    </ul>
                 }
             </li>
-            <li class="nav-item"><a href="javascript:document.getElementById('logoutForm').submit()">Sign out</a></li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-log-out"></span> Sign Out</a></li>
         </ul>
     }
 }
+
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Sign in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <li><a href="@Url.Action("Register", "Account")" id="registerLink"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+    <li><a href="@Url.Action("Login", "Account")" id="registerLink"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
     </ul>
 }
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#results').load('@Url.Action("NotApprovedCounter", "Service")')
-    });
+        $(document).ready(function () {
+            $('#admin-counter').load('@Url.Action("NotApprovedCounter", "Service")')
+        });
 </script>
