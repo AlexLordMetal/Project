@@ -18,9 +18,15 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service
-        public async Task<ActionResult> Index(string search, int page = 1)
+        public ActionResult Index()
         {
-            return View(await _serviceManager.GetListAsync(true, page, 3, search));
+            return View();
+        }
+
+        // GET: Service
+        public async Task<ActionResult> ServiceTable(string search, int page = 1)
+        {
+            return PartialView(await _serviceManager.GetListAsync(true, page, 3, search));
         }
 
         // GET: Service/Approve

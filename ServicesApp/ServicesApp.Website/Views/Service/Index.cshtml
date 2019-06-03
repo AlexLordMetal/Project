@@ -1,17 +1,8 @@
 ﻿@model ServicesApp.ViewModels.ViewModels.ServicesListViewModel
-@using ServicesApp.Website.HtmlHelpers
 @{
     ViewBag.Title = "Index";
 }
 <h2>Services</h2>
-
-@using (Html.BeginForm("Index", "Service", FormMethod.Get))
-{
-<p>
-    Find by name: @Html.EditorFor(model => model.Search)
-    <input type="submit" value="Search" />
-</p>
-}
 
 @if (User.IsInRole("Administrator"))
 {
@@ -26,51 +17,102 @@
     </p>
 }
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Description)
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="input-group">
+            <div class="input-group-btn">
+                <input id="Search" type="text" class="form-control" placeholder="Find by Name">
+                <span class="input-group-btn">
+                    <button id="search-button" class="btn btn-primary" type="submit" value="Search">
+                        Search
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="input-group">
+            <span class="input-group-addon">Order By:</span>
+            <select class="form-control" id="order-by" name="orderby">
+                <option selected value="names-ascending">Names Ascending</option>
+                <option value="names-descending">Names Descending</option>
+                <option value="names-ascending">Categories Ascending</option>
+                <option value="names-descending">Categories Descending</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-    @foreach (var item in Model.Services)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @if (User.IsInRole("Administrator"))
-            {
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            }
-            else
-            {
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id })
-                </td>
-            }
-        </tr>
-    }
+<div id="table-container"></div>
 
-</table>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#search-button").click(function (e) {
+                loadServicesTableWithParams()
+            });
+            $("#Search").keypress(function (e) {
+                if (e.keyCode == "13") {
+                    loadServicesTableWithParams()
+                }
+            });
+            $("#table-container .pagination li button").click(function (e) {
+                    loadServicesTablePaging()
+            });
+            loadServicesTable('@Url.Action("ServiceTable", "Service", null, Request.Url.Scheme)', { page: 1, search: "" });
+        });
+        var loadServicesTableWithParams = function () {
+            var options = {};
 
-<ul class="pagination">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }), Model.Search)
-</ul>
+            options.search = $("input#Search").val();
+            //if not page page button clicked
+            options.page = 1;//$(".pagination .active a")[0].text;
+            //else get page from button
+            loadServicesTable('@Url.Action("ServiceTable", "Service", null, Request.Url.Scheme)', options);
+            //set active to requiered page
+        }
+
+            var loadServicesTablePaging = function () {
+            var options = {};
+
+            options.search = $("input#Search").val();
+            options.page = $(".pagination .active a")[0].text;
+            loadServicesTable('@Url.Action("ServiceTable", "Service", null, Request.Url.Scheme)', options);
+        }
+
+        var loadServicesTable = function (link, options) {
+            var url = new URL(link);
+            url.searchParams.set('search', options.search)
+            url.searchParams.set('page', options.page)
+            $('#table-container').load(url.href, function () {
+                alert($(".pagination .active")[0].innerText)
+            });
+        }
+</script>
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $("#search-button").click(function () {
+                var SearchBy = $("#SearchBy").val();
+                var SearcValue = $("#Search").val();
+                var SetData = $("#DataSearching");
+                SetData.html("");
+                $.ajax({
+                    type: "post",
+                    url: "/Home/GetSearchingData?SearchBy=" + SearchBy + "&SearchValue=" + SearcValue,
+                    contentType: "html",
+                    success: function (result) {
+                        if (result.lenght == 0) {
+                            SetData.append('<tr style="color:red"><td colspan="3">No Match Data</td></tr>')
+                        }
+                        else {
+                            $.each(result, function (index, value) {
+                                var Data = "<tr>" +....;
+                            SetData.append(Data);
+                            })
+                        }
+                    }
+                })
+            });
+        });
+
+    </script>*@

@@ -358,6 +358,7 @@
     <Content Include="Views\Order\ServiceProvider\Details.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Internal.cshtml" />
+    <Content Include="Views\Service\ServiceTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
