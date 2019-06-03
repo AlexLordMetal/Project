@@ -10,6 +10,5 @@ namespace ServicesApp.ViewModels.ViewModels
     {
         public IEnumerable<ServiceViewModelFull> Services { get; set; }
         public PageInfoViewModel PageInfo { get; set; }
-        public string Search { get; set; }
     }
 }

@@ -22,48 +22,42 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<ServicesListViewModel> GetListAsync(bool isApproved, int pageNumber, int itemsPerPage, string searchString=null)
+        public async Task<ServicesListViewModel> GetListAsync(ServicesSearchModel searchModel)
         {
             var pageInfo = new PageInfoViewModel();
-            pageInfo.PageNumber = pageNumber;
-            pageInfo.PageSize = itemsPerPage;
+            pageInfo.PageNumber = searchModel.Page;
+            pageInfo.PageSize = searchModel.ItemsPerPage;
 
-            List<Service> dataModel = null;
+            var getServices = context.Services.Where(x => x.IsApproved == searchModel.IsApproved);
 
-            if (!String.IsNullOrWhiteSpace(searchString))
+            if (!String.IsNullOrWhiteSpace(searchModel.Search))
             {
-                pageInfo.TotalItems = await context.Services
-                    .Where(x => x.IsApproved == isApproved)
-                    .Where(x => x.Name.Contains(searchString))
-                    .CountAsync();
-
-                dataModel = await context.Services
-                    .Where(x => x.IsApproved == isApproved)
-                    .Where(x => x.Name.Contains(searchString))
-                    .OrderBy(x => x.Id)
-                    .Skip(pageInfo.SkipItems)
-                    .Take(pageInfo.PageSize)
-                    .Include(x => x.Category)
-                    .ToListAsync();
+                getServices = getServices.Where(x => x.Name.Contains(searchModel.Search));
             }
-            else
+            if (searchModel.CategoryId != null)
             {
-                pageInfo.TotalItems = await context.Services
-                    .Where(x => x.IsApproved == isApproved)
-                    .CountAsync();
-
-                dataModel = await context.Services
-                    .Where(x => x.IsApproved == isApproved)
-                    .OrderBy(x => x.Id)
-                    .Skip(pageInfo.SkipItems)
-                    .Take(pageInfo.PageSize)
-                    .Include(x => x.Category)
-                    .ToListAsync();
+                getServices = getServices.Where(x => x.CategoryId == searchModel.CategoryId);
             }
+            if (searchModel.OrderBy == "ascending")
+            {
+                getServices = getServices.OrderBy(x => x.Name);
+            }
+            else if (searchModel.OrderBy == "descending")
+            {
+                getServices = getServices.OrderByDescending(x => x.Name);
+            }
+
+            pageInfo.TotalItems = await getServices.CountAsync();
+
+            var dataModel = await getServices
+                .Skip(pageInfo.SkipItems)
+                .Take(pageInfo.PageSize)
+                .Include(x => x.Category)
+                .ToListAsync();
+
             var viewModel = new ServicesListViewModel();
             viewModel.Services = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
             viewModel.PageInfo = pageInfo;
-            viewModel.Search = searchString;
             return viewModel;
         }
 

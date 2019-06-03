@@ -46,6 +46,8 @@
 </table>
 
 <ul class="pagination">
-    <li class='active'><a >1</a></li>
-    <li><a >2</a></li>
+    @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+    {
+        <li class='@(Model.PageInfo.PageNumber==i?"active":"")'><a >@i</a></li>
+    }
 </ul>

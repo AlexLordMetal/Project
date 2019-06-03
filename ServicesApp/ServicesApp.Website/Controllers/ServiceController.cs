@@ -1,5 +1,6 @@
 ﻿using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.ViewModels;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -18,23 +19,33 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var viewModel = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            return View(viewModel);
         }
 
-        // GET: Service
-        public async Task<ActionResult> ServiceTable(string search, int page = 1)
+        // GET: ServiceTable
+        public async Task<ActionResult> ServiceTable(ServicesSearchModel searchModel)
         {
-            return PartialView(await _serviceManager.GetListAsync(true, page, 3, search));
+            searchModel.IsApproved = true;
+            return PartialView(await _serviceManager.GetListAsync(searchModel));
         }
 
         // GET: Service/Approve
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Approve(int page = 1)
         {
-            var services = await _serviceManager.GetListAsync(false, page, 3);
-            return View(services);
+            var viewModel = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            return View(viewModel);
+        }
+
+        // GET: NotApprovedServiceTable
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> NotApprovedServiceTable(ServicesSearchModel searchModel)
+        {
+            searchModel.IsApproved = false;
+            return PartialView("ServiceTable", await _serviceManager.GetListAsync(searchModel));
         }
 
         // GET: Service/NotApprovedCounter

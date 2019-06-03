@@ -1,50 +1,107 @@
-﻿@model ServicesApp.ViewModels.ViewModels.ServicesListViewModel
-@using ServicesApp.Website.HtmlHelpers
-
+﻿@model SelectList
 @{
     ViewBag.Title = "Services to Approve";
 }
 
-<h2>these services are not approved</h2>
+<h2>These services are not approved</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Description)
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="input-group">
+            <div class="input-group-btn">
+                <input id="Search" type="text" class="form-control" placeholder="Find by Name">
+                <span class="input-group-btn">
+                    <button id="search-button" class="btn btn-primary" type="submit" value="Search">
+                        Search
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="input-group">
+            <span class="input-group-addon">Select Category:</span>
+            @Html.DropDownList("Category", Model, "All", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="input-group">
+            <span class="input-group-addon">Order by Names:</span>
+            <select class="form-control" id="Orderby" name="Orderby">
+                <option value="ascending">Ascending</option>
+                <option value="descending">Descending</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-    @foreach (var item in Model.Services)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-    }
+<div id="table-container"></div>
 
-</table>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="input-group">
+            <span class="input-group-addon">Items per Page:</span>
+            <select class="form-control" id="ItemsPerPage" name="ItemsPerPage">
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-<ul class="pagination">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Approve", new { page = x }))
-</ul>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#search-button").click(function (e) {
+                loadServicesTableWithParams()
+            });
+            $("#Search").keypress(function (e) {
+                if (e.keyCode == "13") {
+                    loadServicesTableWithParams()
+                }
+            });
+            $("select#Orderby").change(function (e) {
+                loadServicesTableWithParams()
+            });
+            $("select#Category").change(function (e) {
+                loadServicesTableWithParams()
+            });
+            $("select#ItemsPerPage").change(function (e) {
+                loadServicesTableWithParams()
+            });
+            loadServicesTableWithParams();
+        });
+
+        var loadServicesTableWithParams = function (page) {
+            var options = {};
+
+            options.search = $("input#Search").val();
+            options.orderby = $("#Orderby :selected").val();
+            options.categoryid = $("#Category :selected").val();
+            options.itemsperpage = $("#ItemsPerPage :selected").val();
+            if (page == null) {
+                options.page = 1;
+            }
+            else {
+                options.page = page;
+            }
+
+            loadServicesTable('@Url.Action("NotApprovedServiceTable", "Service", null, Request.Url.Scheme)', options);
+        }
+
+        var loadServicesTable = function (link, options) {
+            var url = new URL(link);
+
+            url.searchParams.set('Search', options.search)
+            url.searchParams.set('CategoryId', options.categoryid)
+            url.searchParams.set('Orderby', options.orderby)
+            url.searchParams.set('ItemsPerPage', options.itemsperpage)
+            url.searchParams.set('Page', options.page)
+
+            $('#table-container').load(url.href, function () {
+                $(".pagination :not(.active) a").click(function (e) {
+                    loadServicesTableWithParams(e.target.innerText)
+                });
+            });
+        }
+</script>
