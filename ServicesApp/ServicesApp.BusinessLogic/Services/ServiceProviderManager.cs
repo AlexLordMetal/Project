@@ -27,9 +27,9 @@ namespace ServicesApp.BusinessLogic.Services
 
         public async Task<ServiceProviderProfileViewModel> GetServiceProviderProfileAsync(string userId)
         {
-            var serviceProviderProfile = await context.ServiceProviderProfiles.FindAsync(userId);
-            ServiceProviderProfileViewModel serviceProviderProfileViewModel = _mapper.Map<ServiceProviderProfileViewModel>(serviceProviderProfile);
-            return serviceProviderProfileViewModel;
+            var dataModel = await context.ServiceProviderProfiles.FindAsync(userId);
+            var viewModel = _mapper.Map<ServiceProviderProfileViewModel>(dataModel);
+            return viewModel;
         }
 
         public async Task<bool> IsServiceProviderProfileExistAsync(string userId)
@@ -41,11 +41,19 @@ namespace ServicesApp.BusinessLogic.Services
             return false;
         }
 
-        public async Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId)
+        public async Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel viewModel, string userId)
         {
-            ServiceProviderProfile serviceProviderProfile = _mapper.Map<ServiceProviderProfile>(serviceProviderProfileViewModel);
-            serviceProviderProfile.Id = userId;
-            context.ServiceProviderProfiles.AddOrUpdate(serviceProviderProfile);
+            var dataModel = _mapper.Map<ServiceProviderProfile>(viewModel);
+            dataModel.Id = userId;
+            if (await context.ServiceProviderProfiles.AnyAsync(x => x.Id == dataModel.Id))
+            {
+                context.ServiceProviderProfiles.Attach(dataModel);
+                context.Entry<ServiceProviderProfile>(dataModel).State = EntityState.Modified;
+            }
+            else
+            {
+                context.ServiceProviderProfiles.Add(dataModel);
+            }
             await context.SaveChangesAsync();
         }
 

@@ -80,6 +80,10 @@ namespace ServicesApp.Website.Controllers
         public async Task<ActionResult> Create()
         {
             var serviceViewModelCreateFull = new ServiceViewModelCreateFull();
+            if (serviceViewModelCreateFull.ServiceCategories == null)
+            {
+
+            }
             serviceViewModelCreateFull.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
 
             return View(serviceViewModelCreateFull);

@@ -26,7 +26,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "Customer")">Your Profile</a></li>
-                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="user-counter"></span></a></li>
+                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="customer-counter"></span></a></li>
                     </ul>
                 }
                 else if (User.IsInRole("ServiceProvider"))
@@ -38,7 +38,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "ServiceProvider")">Your Profile</a></li>
                         <li><a href="@Url.Action("Services", "ServiceProvider")">Your Services</a></li>
-                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="user-counter"></span></a></li>
+                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="service-provider-counter"></span></a></li>
                     </ul>
                 }
             </li>
@@ -57,6 +57,8 @@ else
 
 <script type="text/javascript">
         $(document).ready(function () {
-            $('#admin-counter').load('@Url.Action("NotApprovedCounter", "Service")')
+            $('#admin-counter').load('@Url.Action("NotApprovedCounter", "Service")');
+            $('#customer-counter').load('@Url.Action("NotCompletedCounter", "Order")');
+            $('#service-provider-counter').load('@Url.Action("NotConfirmedCounter", "Order")');
         });
 </script>

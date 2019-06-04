@@ -3,7 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
-using ServicesApp.Website.Enums;
+using ServicesApp.Website.Messages;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -47,13 +47,9 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index(string message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : "";
+            ViewBag.StatusMessage = message;
 
             var userId = User.Identity.GetUserId();
             if (await UserManager.IsInRoleAsync(userId, "Administrator"))
@@ -94,7 +90,7 @@ namespace ServicesApp.Website.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("Index", new { Message = ManageMessage.ChangePasswordSuccess });
             }
             AddErrors(result);
             return View(model);
@@ -121,7 +117,7 @@ namespace ServicesApp.Website.Controllers
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
-                    return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
+                    return RedirectToAction("Index", new { Message = ManageMessage.SetPasswordSuccess });
                 }
                 AddErrors(result);
             }

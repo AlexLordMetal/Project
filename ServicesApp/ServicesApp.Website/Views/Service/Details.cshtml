@@ -56,25 +56,25 @@
 
     @foreach (var item in Model.ServiceProviderServices)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceProvider.ConfirmDocs)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServicePrice)
-        </td>
-        <td>
-            @if (User.IsInRole("Customer"))
-            {
-                <p>
-                    @Html.ActionLink("Make Order", "Create", "Order", new { serviceProviderServiceId = item.Id }, null)
-                </p>
-            }
-        </td>
-    </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceProvider.ConfirmDocs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServicePrice)
+            </td>
+            <td>
+                @if (User.IsInRole("Customer"))
+                {
+                    <p>
+                        @Html.ActionLink("Make Order", "Create", "Order", new { serviceProviderServiceId = item.Id }, null)
+                    </p>
+                }
+            </td>
+        </tr>
     }
 
 </table>
@@ -87,9 +87,9 @@
 }
 else if (User.IsInRole("ServiceProvider"))
 {
-    <p>
-        @Html.ActionLink("Provide this Service", "AddServiceRelation", "ServiceProvider", new { serviceId = Model.Id }, null) |
-    </p>
+        <p>
+            @Html.ActionLink("Provide this Service/Change Price", "AddServiceRelation", "ServiceProvider", new { serviceId = Model.Id }, null) |
+        </p>
 }
 <p>
     @Html.ActionLink("Back to List", "Index")

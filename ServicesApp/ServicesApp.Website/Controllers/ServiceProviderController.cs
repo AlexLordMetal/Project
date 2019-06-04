@@ -4,7 +4,7 @@ using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
 using ServicesApp.ViewModels.ViewModels;
-using ServicesApp.Website.Enums;
+using ServicesApp.Website.Messages;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -36,16 +36,9 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: /ServiceProvider/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index(string message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.UpdateServiceProviderProfileSuccess ? "Your service provider profile has been updated."
-                : message == ManageMessageId.AddServiceRelationSuccess ? "Your service relation has been updated."
-                : message == ManageMessageId.NullErrorServiceProviderProfile ? "You can't provide services now. At first you must add an info to your profile."
-                : "";
+            ViewBag.StatusMessage = message;
 
             var userId = User.Identity.GetUserId();
             var serviceProviderProfileViewModelManage = new ServiceProviderProfileViewModelManage();
@@ -79,15 +72,17 @@ namespace ServicesApp.Website.Controllers
             if (userId != null)
             {
                 await _serviceProviderManager.UpdateServiceProviderProfileAsync(model, userId);
-                return RedirectToAction("Index", new { Message = ManageMessageId.UpdateServiceProviderProfileSuccess });
+                return RedirectToAction("Index", new { Message = ManageMessage.UpdateProfileSuccess });
             }
-            return RedirectToAction("Index", new { Message = ManageMessageId.Error });
+            return RedirectToAction("Index", new { Message = ManageMessage.Error });
 
         }
 
         // GET: /ServiceProvider/Services
-        public async Task<ActionResult> Services()
+        public async Task<ActionResult> Services(string message)
         {
+            ViewBag.StatusMessage = message;
+
             return View(await _serviceProviderManager.GetServiceProviderServicesAsync(User.Identity.GetUserId()));
         }
 
@@ -101,7 +96,7 @@ namespace ServicesApp.Website.Controllers
             var userId = User.Identity.GetUserId();
             if (!await _serviceProviderManager.IsServiceProviderProfileExistAsync(userId))
             {
-                return RedirectToAction("Index", new { Message = ManageMessageId.NullErrorServiceProviderProfile });
+                return RedirectToAction("Index", new { Message = ManageMessage.NullErrorServiceProviderProfile });
             }
             var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)serviceId);
             if (serviceProviderServiceFullViewModel == null)
@@ -124,9 +119,9 @@ namespace ServicesApp.Website.Controllers
             if (model.ServiceProviderId != null)
             {
                 await _serviceProviderManager.AddOrUpdateServiceRelationAsync(model);
-                return RedirectToAction("Index", new { Message = ManageMessageId.AddServiceRelationSuccess });
+                return RedirectToAction("Services", new { Message = ManageMessage.AddServiceRelationSuccess });
             }
-            return RedirectToAction("Index", new { Message = ManageMessageId.Error });
+            return RedirectToAction("Index", new { Message = ManageMessage.Error });
         }
 
         // GET: /ServiceProvider/DeleteServiceRelation/5

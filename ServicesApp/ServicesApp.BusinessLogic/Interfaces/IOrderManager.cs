@@ -12,5 +12,7 @@ namespace ServicesApp.BusinessLogic.Interfaces
         Task CreateOrderAsync(OrderViewModelShort viewModel, string customerId);
         Task ConfirmOrderAsync(int id, string customerId);
         Task ModifyAsync(OrderViewModelShort viewModel);
+        Task<int> NotConfirmedCount(string userId);
+        Task<int> NotCompletedCount(string userId);
     }
 }

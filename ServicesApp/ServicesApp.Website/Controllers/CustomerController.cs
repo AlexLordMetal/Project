@@ -3,7 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
-using ServicesApp.Website.Enums;
+using ServicesApp.Website.Messages;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -34,17 +34,9 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index(string message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.UpdateCustomerProfileSuccess ? "Your customer profile has been updated."
-                : message == ManageMessageId.CreateOrderSuccess ? "Your order has been created."
-                : message == ManageMessageId.ConfirmOrderSuccess ? "You confirmed order fulfillment."
-                : message == ManageMessageId.NullErrorCustomerProfile ? "You can't create orders now. At first you must add an info to your profile."
-                : "";
+            ViewBag.StatusMessage = message;
 
             var userId = User.Identity.GetUserId();
             var customerProfileViewModelManage = new CustomerProfileViewModelManage();
@@ -78,9 +70,9 @@ namespace ServicesApp.Website.Controllers
             if (userId != null)
             {
                 await _customerManager.UpdateCustomerProfileAsync(model, userId);
-                return RedirectToAction("Index", new { Message = ManageMessageId.UpdateCustomerProfileSuccess });
+                return RedirectToAction("Index", new { Message = ManageMessage.UpdateProfileSuccess });
             }
-            return RedirectToAction("Index", new { Message = ManageMessageId.Error });
+            return RedirectToAction("Index", new { Message = ManageMessage.Error });
         }
 
         [HttpPost]

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using ServicesApp.DataProvider;
-using ServicesApp.DataProvider.DataModels;
+﻿using Microsoft.AspNet.Identity;
 using ServicesApp.BusinessLogic.Interfaces;
+using ServicesApp.DataProvider;
 using ServicesApp.ViewModels.ViewModels;
-using Microsoft.AspNet.Identity;
-using ServicesApp.Website.Enums;
+using ServicesApp.Website.Messages;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace ServicesApp.Website.Controllers
 {
@@ -42,7 +36,7 @@ namespace ServicesApp.Website.Controllers
             var userId = User.Identity.GetUserId();
             if (!await _customerManager.IsCustomerProfileExistAsync(userId))
             {
-                return RedirectToAction("Index", "Customer", new { Message = ManageMessageId.NullErrorCustomerProfile });
+                return RedirectToAction("Index", "Customer", new { Message = ManageMessage.NullErrorCustomerProfile });
             }
             var viewModel = new OrderViewModelCustomer();
             viewModel.ServiceProviderService = await _serviceProviderManager.GetServiceRelationAsync<ServiceProviderServiceViewModelCustomer>((int)serviceProviderServiceId);
@@ -59,15 +53,17 @@ namespace ServicesApp.Website.Controllers
             if (ModelState.IsValid)
             {
                 await _orderManager.CreateOrderAsync(viewModel, User.Identity.GetUserId());
-                return RedirectToAction("Index", "Customer", new { Message = ManageMessageId.CreateOrderSuccess });
+                return RedirectToAction("Index", "Order", new { Message = ManageMessage.CreateOrderSuccess });
             }
-            return new HttpStatusCodeResult(HttpStatusCode.Conflict);
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
         
         // GET: Order
         [Authorize]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string message)
         {
+            ViewBag.StatusMessage = message;
+
             var userId = User.Identity.GetUserId();
             if (User.IsInRole("Customer"))
             {
@@ -119,29 +115,6 @@ namespace ServicesApp.Website.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        //Second variant - split on 2 methods, like get/post
-        // GET: Order/Confirm/5
-        //[Authorize(Roles = "ServiceProvider")]
-        //public async Task<ActionResult> Confirm(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
-        //    if (viewModel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    if (User.Identity.GetUserId() == viewModel.ServiceProviderService.ServiceProviderId)
-        //    {
-        //        viewModel.ServiceProviderConfirm = true;
-        //        await _orderManager.ModifyAsync(viewModel);
-        //        return RedirectToAction("Details", new { id });
-        //    }
-        //    return RedirectToAction("Index", "ServiceProvider", new { Message = ManageMessageId.Error });
-        //}
-
         // GET: Order/Complete/5
         [Authorize(Roles = "Customer")]
         public async Task<ActionResult> Complete(int? id)
@@ -175,6 +148,30 @@ namespace ServicesApp.Website.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Complete", new { id = viewModel.Id });
+        }
+
+        // GET: Order/NotConfirmedCounter
+        [Authorize(Roles = "ServiceProvider")]
+        public async Task<int?> NotConfirmedCounter()
+        {
+            var count = await _orderManager.NotConfirmedCount(User.Identity.GetUserId());
+            if (count == 0)
+            {
+                return null;
+            }
+            return count;
+        }
+
+        // GET: Order/NotCompletedCounter
+        [Authorize(Roles = "Customer")]
+        public async Task<int?> NotCompletedCounter()
+        {
+            var count = await _orderManager.NotCompletedCount(User.Identity.GetUserId());
+            if (count == 0)
+            {
+                return null;
+            }
+            return count;
         }
 
         //// GET: Order/Delete/5

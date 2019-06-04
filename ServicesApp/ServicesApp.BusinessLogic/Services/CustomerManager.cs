@@ -4,7 +4,7 @@ using ServicesApp.DataProvider;
 using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
 using System;
-using System.Data.Entity.Migrations;
+using System.Data.Entity;
 using System.Threading.Tasks;
 
 namespace ServicesApp.BusinessLogic.Services
@@ -22,9 +22,9 @@ namespace ServicesApp.BusinessLogic.Services
 
         public async Task<CustomerProfileViewModel> GetCustomerProfileAsync(string userId)
         {
-            var customerProfile = await context.CustomerProfiles.FindAsync(userId);
-            var customerProfileViewModel = _mapper.Map<CustomerProfile, CustomerProfileViewModel>(customerProfile);
-            return customerProfileViewModel;
+            var dataModel = await context.CustomerProfiles.FindAsync(userId);
+            var viewModel = _mapper.Map<CustomerProfileViewModel>(dataModel);
+            return viewModel;
         }
 
         public async Task<bool> IsCustomerProfileExistAsync(string userId)
@@ -36,11 +36,19 @@ namespace ServicesApp.BusinessLogic.Services
             return false;
         }
 
-        public async Task UpdateCustomerProfileAsync(CustomerProfileViewModel customerProfileViewModel, string userId)
+        public async Task UpdateCustomerProfileAsync(CustomerProfileViewModel viewModel, string userId)
         {
-            CustomerProfile customerProfile = _mapper.Map<CustomerProfileViewModel, CustomerProfile>(customerProfileViewModel);
-            customerProfile.Id = userId;
-            context.CustomerProfiles.AddOrUpdate(customerProfile);
+            var dataModel = _mapper.Map<CustomerProfile>(viewModel);
+            dataModel.Id = userId;
+            if (await context.CustomerProfiles.AnyAsync(x => x.Id == dataModel.Id))
+            {
+                context.CustomerProfiles.Attach(dataModel);
+                context.Entry<CustomerProfile>(dataModel).State = EntityState.Modified;
+            }
+            else
+            {
+                context.CustomerProfiles.Add(dataModel);
+            }
             await context.SaveChangesAsync();
         }
 

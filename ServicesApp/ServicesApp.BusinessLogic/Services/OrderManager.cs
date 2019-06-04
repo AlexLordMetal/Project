@@ -80,6 +80,20 @@ namespace ServicesApp.BusinessLogic.Services
             }
         }
 
+        public async Task<int> NotConfirmedCount(string userId)
+        {
+            return await context.Orders.Where(x => x.ServiceProviderService.ServiceProviderId == userId)
+                .CountAsync(x => x.ServiceProviderConfirm == false);
+        }
+
+        public async Task<int> NotCompletedCount(string userId)
+        {
+            return await context.Orders.Where(x => x.CustomerId == userId)
+                .Where(x => x.ServiceProviderConfirm == true)
+                .Where(x => x.OrderDate < DateTime.Now)
+                .CountAsync(x => x.IsComplete == false);
+        }
+
         public void Dispose()
         {
             context.Dispose();
