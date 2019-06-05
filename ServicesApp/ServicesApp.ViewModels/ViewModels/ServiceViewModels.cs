@@ -1,6 +1,6 @@
-﻿using ServicesApp.ViewModels.IdentityViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ServicesApp.ViewModels.ViewModels
@@ -15,6 +15,8 @@ namespace ServicesApp.ViewModels.ViewModels
         [StringLength(100)]
         [Display(Name = "Service Name")]
         public string Name { get; set; }
+
+        public PhotoViewModel Photo { get; set; }
     }
 
     public class ServiceViewModelFull : ServiceViewModelShort
@@ -31,7 +33,7 @@ namespace ServicesApp.ViewModels.ViewModels
         public List<ServiceProviderServiceViewModelCustomer> ServiceProviderServices { get; set; }
     }
 
-    public class ServiceViewModelCreateShort : ServiceViewModelShort
+    public class ServiceViewModelCreate : ServiceViewModelShort
     {
         [Required]
         [DataType(DataType.Text)]
@@ -42,10 +44,10 @@ namespace ServicesApp.ViewModels.ViewModels
         [Required]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
-    }
 
-    public class ServiceViewModelCreateFull : ServiceViewModelCreateShort
-    {
+        [Display(Name = "Service Photo")]
+        public HttpPostedFileBase UploadPhoto { get; set; }
+
         [Display(Name = "Categories")]
         public SelectList ServiceCategories { get; set; }
     }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace ServicesApp.BusinessLogic.Services
 {
@@ -68,7 +69,7 @@ namespace ServicesApp.BusinessLogic.Services
             return viewModel;
         }
 
-        public async Task AddAsync(ServiceViewModelCreateShort viewModel, bool isApproved)
+        public async Task AddAsync(ServiceViewModelCreate viewModel, bool isApproved)
         {
             var dataModel = _mapper.Map<Service>(viewModel);
             dataModel.IsApproved = isApproved;
@@ -76,7 +77,7 @@ namespace ServicesApp.BusinessLogic.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task ModifyAsync(ServiceViewModelCreateShort viewModel, bool isApproved=true)
+        public async Task ModifyAsync(ServiceViewModelCreate viewModel, bool isApproved=true)
         {
             if (await context.Services.AnyAsync(x => x.Id == viewModel.Id))
             {

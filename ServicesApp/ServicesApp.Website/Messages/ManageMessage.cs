@@ -15,6 +15,7 @@ namespace ServicesApp.Website.Messages
         public const string CreateOrderSuccess = "Your order has been created.";
         public const string ConfirmOrderSuccess = "You confirmed order fulfillment.";
         public const string NullErrorCustomerProfile = "You can't create orders now. At first you must add an info to your profile.";
+        public const string NoCategoryError = "You must add at least one category.";
         public const string Error = "An error has occurred.";
     }
 }

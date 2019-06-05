@@ -1,0 +1,12 @@
+﻿Clean bad Comments
+Reconsider ServiceViewModels
+Add Photo in ServiceProviderService
+Add Stars
+Add Page with Feedbacks and Rating in ServiceProviderService
+Add Excluded Dates in Order Create
+Move javascript to separate files
+
+
+
+Add Export/Import (Categories, Services)
+Add Logging

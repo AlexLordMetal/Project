@@ -1,6 +1,8 @@
 ﻿using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.ViewModels;
-using System.Collections.Generic;
+using ServicesApp.Website.Messages;
+using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -19,8 +21,10 @@ namespace ServicesApp.Website.Controllers
         }
 
         // GET: Service
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string message)
         {
+            ViewBag.StatusMessage = message;
+
             var viewModel = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
             return View(viewModel);
         }
@@ -78,30 +82,34 @@ namespace ServicesApp.Website.Controllers
         // GET: Service/Create
         [Authorize(Roles = "Administrator, ServiceProvider")]
         public async Task<ActionResult> Create()
-        {
-            var serviceViewModelCreateFull = new ServiceViewModelCreateFull();
-            if (serviceViewModelCreateFull.ServiceCategories == null)
+        {            
+            var serviceCategories = await _serviceCategoryManager.GetAllAsync();
+            if (serviceCategories.Count == 0)
             {
-
+                return RedirectToAction("Index", new { Message = ManageMessage.NoCategoryError });
             }
-            serviceViewModelCreateFull.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            var serviceViewModelCreate = new ServiceViewModelCreate();
+            serviceViewModelCreate.ServiceCategories = new SelectList(serviceCategories, "Id", "Name");
 
-            return View(serviceViewModelCreateFull);
+            return View(serviceViewModelCreate);
         }
 
         // POST: Service/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, ServiceProvider")]
-        public async Task<ActionResult> Create(ServiceViewModelCreateShort serviceViewModelCreateShort)
+        public async Task<ActionResult> Create(ServiceViewModelCreate serviceViewModelCreate)
         {
+            imageFileValidator(serviceViewModelCreate);
             if (ModelState.IsValid)
-            {
+            {   
+                imageFileSaver(serviceViewModelCreate);
                 var isAdministrator = User.IsInRole("Administrator");
-                await _serviceManager.AddAsync(serviceViewModelCreateShort, isAdministrator);
+                await _serviceManager.AddAsync(serviceViewModelCreate, isAdministrator);
                 return RedirectToAction("Index");
             }
-            return new HttpStatusCodeResult(HttpStatusCode.Conflict); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            serviceViewModelCreate.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            return View(serviceViewModelCreate);
         }
 
         // GET: Service/Edit/5
@@ -112,28 +120,28 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var serviceViewModelCreateFull = await _serviceManager.GetByIdAsync<ServiceViewModelCreateFull>(id);
-            if (serviceViewModelCreateFull == null)
+            var serviceViewModelCreate = await _serviceManager.GetByIdAsync<ServiceViewModelCreate>(id);
+            if (serviceViewModelCreate == null)
             {
                 return HttpNotFound();
             }
-            serviceViewModelCreateFull.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
-            return View(serviceViewModelCreateFull);
+            serviceViewModelCreate.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
+            return View(serviceViewModelCreate);
         }
 
         // POST: Service/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Edit(ServiceViewModelCreateShort serviceViewModelCreateShort)
+        public async Task<ActionResult> Edit(ServiceViewModelCreate serviceViewModelCreate)
         {
             if (ModelState.IsValid)
             {
-                await _serviceManager.ModifyAsync(serviceViewModelCreateShort);
+                await _serviceManager.ModifyAsync(serviceViewModelCreate);
                 return RedirectToAction("Index");
             }
 
-            return View(serviceViewModelCreateShort);
+            return View(serviceViewModelCreate);
         }
 
         // GET: Service/Delete/5
@@ -165,6 +173,37 @@ namespace ServicesApp.Website.Controllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+        }
+
+        private void imageFileValidator(ServiceViewModelCreate serviceViewModelCreate)
+        {
+            var imageTypes = new string[]{
+                    "image/bmp",
+                    "image/gif",
+                    "image/jpeg",
+                    "image/pjpeg",
+                    "image/png"
+                };
+
+            if (serviceViewModelCreate.UploadPhoto.ContentLength == 0)
+            {
+                ModelState.AddModelError("UploadPhoto", "File cannot be zero size");
+            }
+            else if (!imageTypes.Contains(serviceViewModelCreate.UploadPhoto.ContentType))
+            {
+                ModelState.AddModelError("UploadPhoto", "Please choose either a BMP, GIF, JPG or PNG image.");
+            }
+        }
+
+        private void imageFileSaver(ServiceViewModelCreate viewModel)
+        {
+            var imageName = DateTime.Now.Ticks.ToString();
+            var imageExt = System.IO.Path.GetExtension(viewModel.UploadPhoto.FileName).ToLower();
+            var imagePath = Server.MapPath("~/Content/DataImages/");
+
+            viewModel.Photo = new PhotoViewModel();
+            viewModel.Photo.Url = imagePath + imageName + imageExt;
+            viewModel.UploadPhoto.SaveAs(viewModel.Photo.Url);
         }
     }
 }
