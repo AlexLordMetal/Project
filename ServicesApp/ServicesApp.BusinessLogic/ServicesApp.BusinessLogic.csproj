@@ -88,12 +88,14 @@
     <Compile Include="IdentityServices\ApplicationUserManager.cs" />
     <Compile Include="Interfaces\ICustomerManager.cs" />
     <Compile Include="Interfaces\IOrderManager.cs" />
+    <Compile Include="Interfaces\IPhotoManager.cs" />
     <Compile Include="Interfaces\IServiceManager.cs" />
     <Compile Include="Interfaces\IServiceProviderManager.cs" />
     <Compile Include="Interfaces\IServiceCategoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CustomerManager.cs" />
     <Compile Include="Services\OrderManager.cs" />
+    <Compile Include="Services\PhotoManager.cs" />
     <Compile Include="Services\ServiceManager.cs" />
     <Compile Include="Services\ServiceCategoryManager.cs" />
     <Compile Include="Services\ServiceProviderManager.cs" />

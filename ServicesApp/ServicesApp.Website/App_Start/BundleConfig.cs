@@ -29,6 +29,7 @@ namespace ServicesApp.Website
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.min (4).css",
+                "~/Content/styles.additional.css",
                 "~/Content/site.css",
                 "~/Content/themes/base/jquery-ui.css"));
         }

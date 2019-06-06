@@ -135,12 +135,14 @@ namespace ServicesApp.Website.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Edit(ServiceViewModelCreate serviceViewModelCreate)
         {
+            imageFileValidator(serviceViewModelCreate);
             if (ModelState.IsValid)
             {
+                imageFileSaver(serviceViewModelCreate);
                 await _serviceManager.ModifyAsync(serviceViewModelCreate);
                 return RedirectToAction("Index");
             }
-
+            serviceViewModelCreate.ServiceCategories = new SelectList(await _serviceCategoryManager.GetAllAsync(), "Id", "Name");
             return View(serviceViewModelCreate);
         }
 
@@ -177,7 +179,9 @@ namespace ServicesApp.Website.Controllers
 
         private void imageFileValidator(ServiceViewModelCreate serviceViewModelCreate)
         {
-            var imageTypes = new string[]{
+            if (serviceViewModelCreate.UploadPhoto != null)
+            {
+                var imageTypes = new string[]{
                     "image/bmp",
                     "image/gif",
                     "image/jpeg",
@@ -185,25 +189,29 @@ namespace ServicesApp.Website.Controllers
                     "image/png"
                 };
 
-            if (serviceViewModelCreate.UploadPhoto.ContentLength == 0)
-            {
-                ModelState.AddModelError("UploadPhoto", "File cannot be zero size");
-            }
-            else if (!imageTypes.Contains(serviceViewModelCreate.UploadPhoto.ContentType))
-            {
-                ModelState.AddModelError("UploadPhoto", "Please choose either a BMP, GIF, JPG or PNG image.");
+                if (serviceViewModelCreate.UploadPhoto.ContentLength == 0)
+                {
+                    ModelState.AddModelError("UploadPhoto", "File cannot be zero size");
+                }
+                else if (!imageTypes.Contains(serviceViewModelCreate.UploadPhoto.ContentType))
+                {
+                    ModelState.AddModelError("UploadPhoto", "Please choose either a BMP, GIF, JPG or PNG image.");
+                }
             }
         }
 
         private void imageFileSaver(ServiceViewModelCreate viewModel)
         {
-            var imageName = DateTime.Now.Ticks.ToString();
-            var imageExt = System.IO.Path.GetExtension(viewModel.UploadPhoto.FileName).ToLower();
-            var imagePath = Server.MapPath("~/Content/DataImages/");
+            if (viewModel.UploadPhoto != null)
+            {
+                var imageName = DateTime.Now.Ticks.ToString();
+                var imageExt = System.IO.Path.GetExtension(viewModel.UploadPhoto.FileName).ToLower();
+                var imagePath = "/Content/DataImages/";
 
-            viewModel.Photo = new PhotoViewModel();
-            viewModel.Photo.Url = imagePath + imageName + imageExt;
-            viewModel.UploadPhoto.SaveAs(viewModel.Photo.Url);
+                viewModel.Photo = new PhotoViewModel();
+                viewModel.Photo.Url = imagePath + imageName + imageExt;
+                viewModel.UploadPhoto.SaveAs(Server.MapPath("~") + viewModel.Photo.Url);
+            }
         }
     }
 }

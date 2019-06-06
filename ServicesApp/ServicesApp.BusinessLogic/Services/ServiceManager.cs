@@ -18,9 +18,12 @@ namespace ServicesApp.BusinessLogic.Services
 
         private readonly IMapper _mapper;
 
-        public ServiceManager(IMapper mapper)
+        private IPhotoManager _photoManager;
+
+        public ServiceManager(IMapper mapper, IPhotoManager photoManager)
         {
             _mapper = mapper;
+            _photoManager = photoManager;
         }
 
         public async Task<ServicesListViewModel> GetListAsync(ServicesSearchModel searchModel)
@@ -39,11 +42,11 @@ namespace ServicesApp.BusinessLogic.Services
             {
                 getServices = getServices.Where(x => x.CategoryId == searchModel.CategoryId);
             }
-            if (searchModel.OrderBy == "ascending")
+            if (searchModel.SortAscending == true)
             {
                 getServices = getServices.OrderBy(x => x.Name);
             }
-            else if (searchModel.OrderBy == "descending")
+            else
             {
                 getServices = getServices.OrderByDescending(x => x.Name);
             }
@@ -72,6 +75,10 @@ namespace ServicesApp.BusinessLogic.Services
         public async Task AddAsync(ServiceViewModelCreate viewModel, bool isApproved)
         {
             var dataModel = _mapper.Map<Service>(viewModel);
+            if (viewModel.Photo != null)
+            {
+                dataModel.PhotoId = await _photoManager.AddAsync(viewModel.Photo);
+            }
             dataModel.IsApproved = isApproved;
             context.Services.Add(dataModel);
             await context.SaveChangesAsync();
@@ -82,6 +89,10 @@ namespace ServicesApp.BusinessLogic.Services
             if (await context.Services.AnyAsync(x => x.Id == viewModel.Id))
             {
                 var dataModel = _mapper.Map<Service>(viewModel);
+                if (viewModel.Photo != null)
+                {
+                    dataModel.PhotoId = await _photoManager.AddAsync(viewModel.Photo);
+                }
                 dataModel.IsApproved = isApproved;
                 context.Services.Attach(dataModel);
                 context.Entry<Service>(dataModel).State = EntityState.Modified;

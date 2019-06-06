@@ -53,6 +53,7 @@ namespace ServicesApp.Website
             container.RegisterType<IServiceCategoryManager, ServiceCategoryManager>();
             container.RegisterType<IServiceManager, ServiceManager>();
             container.RegisterType<IOrderManager, OrderManager>();
+            container.RegisterType<IPhotoManager, PhotoManager>();
 
             // Initialize AutoMapper
             var config = new MapperConfiguration(cfg =>

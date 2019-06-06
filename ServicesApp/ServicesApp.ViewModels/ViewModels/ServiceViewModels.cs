@@ -45,6 +45,9 @@ namespace ServicesApp.ViewModels.ViewModels
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
+        [Display(Name = "Service Photo Id")]
+        public int? PhotoId { get; set; }
+
         [Display(Name = "Service Photo")]
         public HttpPostedFileBase UploadPhoto { get; set; }
 

@@ -2,6 +2,9 @@
 @{
     ViewBag.Title = "Index";
 }
+
+<div id="action-url" data-url=@Url.Action("ServiceTable", "Service", null, Request.Url.Scheme)></div>
+
 <h2>Services</h2>
 
 @if (User.IsInRole("Administrator"))
@@ -18,7 +21,7 @@
 }
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-lg-4">
         <div class="input-group">
             <div class="input-group-btn">
                 <input id="Search" type="text" class="form-control" placeholder="Find by Name">
@@ -30,23 +33,24 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-lg-4">
         <div class="input-group">
             <span class="input-group-addon">Select Category:</span>
             @Html.DropDownList("Category", Model, "All", new { @class = "form-control" })
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-lg-4">
         <div class="input-group">
             <span class="input-group-addon">Order by Names:</span>
-            <select class="form-control" id="Orderby" name="Orderby">
-                <option value="ascending">Ascending</option>
-                <option value="descending">Descending</option>
+            <select class="form-control" id="SortAscending" name="SortAscending">
+                <option value="true">Ascending</option>
+                <option value="false">Descending</option>
             </select>
         </div>
     </div>
 </div>
 
+<hr />
 <div id="table-container"></div>
 
 <div class="row">
@@ -62,58 +66,6 @@
     </div>
 </div>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#search-button").click(function (e) {
-                loadServicesTableWithParams()
-            });
-            $("#Search").keypress(function (e) {
-                if (e.keyCode == "13") {
-                    loadServicesTableWithParams()
-                }
-            });
-            $("select#Orderby").change(function (e) {
-                loadServicesTableWithParams()
-            });
-            $("select#Category").change(function (e) {
-                loadServicesTableWithParams()
-            });
-            $("select#ItemsPerPage").change(function (e) {
-                loadServicesTableWithParams()
-            });
-            loadServicesTableWithParams();
-        });
-
-        var loadServicesTableWithParams = function (page) {
-            var options = {};
-
-            options.search = $("input#Search").val();
-            options.orderby = $("#Orderby :selected").val();
-            options.categoryid = $("#Category :selected").val();
-            options.itemsperpage = $("#ItemsPerPage :selected").val();
-            if (page == null) {
-                options.page = 1;
-            }
-            else {
-                options.page = page;
-            }
-
-            loadServicesTable('@Url.Action("ServiceTable", "Service", null, Request.Url.Scheme)', options);
-        }
-
-        var loadServicesTable = function (link, options) {
-            var url = new URL(link);
-
-            url.searchParams.set('Search', options.search)
-            url.searchParams.set('CategoryId', options.categoryid)
-            url.searchParams.set('Orderby', options.orderby)
-            url.searchParams.set('ItemsPerPage', options.itemsperpage)
-            url.searchParams.set('Page', options.page)
-
-            $('#table-container').load(url.href, function () {
-                $(".pagination :not(.active) a").click(function (e) {
-                    loadServicesTableWithParams(e.target.innerText)
-                });
-            });
-        }
-    </script>
+@section Scripts {
+    <script src="/Scripts/servicetable.js" type="text/javascript"></script>
+}

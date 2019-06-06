@@ -4,19 +4,25 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Service</h2>
 
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-6 col-md-4">
+        @if (Model.Photo != null)
+        {
+            <img src=@Model.Photo.Url class="img-rounded img-responsive" />
+        }
+    </div>
+</div>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Service", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
     <div class="form-horizontal">
-        <h4>Service</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
+        @Html.HiddenFor(model => model.PhotoId)
+        <hr/>
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -36,14 +42,22 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CategoryId, Model.ServiceCategories, null , htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CategoryId, Model.ServiceCategories, null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.UploadPhoto, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.UploadPhoto, new { type = "file", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UploadPhoto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>

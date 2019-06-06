@@ -25,7 +25,7 @@ namespace ServicesApp.BusinessLogic
             CreateMap<Service, ServiceViewModelWithRelations>().ForMember(x => x.Category, x => x.MapFrom(z => z.Category.Name));
 
             CreateMap<Service, ServiceViewModelCreate>();
-            CreateMap<ServiceViewModelCreate, Service>().ForMember(x => x.IsApproved, x => x.Ignore());
+            CreateMap<ServiceViewModelCreate, Service>().ForMember(x => x.IsApproved, x => x.Ignore()).ForMember(x => x.Photo, x => x.Ignore());
 
             CreateMap<ServiceProviderService, ServiceProviderServiceRelationViewModel>();
             CreateMap<ServiceProviderServiceRelationViewModel, ServiceProviderService>();
@@ -37,6 +37,9 @@ namespace ServicesApp.BusinessLogic
             CreateMap<OrderViewModelShort, Order>();
             CreateMap<Order, OrderViewModelCustomer>();
             CreateMap<Order, OrderViewModelServiceProvider>();
+
+            CreateMap<PhotoViewModel, Photo>();
+            CreateMap<Photo, PhotoViewModel>();
         }
     }    
 }

@@ -10,35 +10,38 @@
                 {
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         Admin
+                        <span class="badge admin-counter"></span>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "ServiceCategory")">Manage Categories</a></li>
                         <li><a href="@Url.Action("Index", "Service")">Manage Services</a></li>
-                        <li><a href="@Url.Action("Approve", "Service")">Approve Services<span class="badge" id="admin-counter"></span></a></li>
+                        <li><a href="@Url.Action("Approve", "Service")">Approve Services<span class="badge admin-counter"></span></a></li>
                     </ul>
                 }
                 else if (User.IsInRole("Customer"))
                 {
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Hello, customer @User.Identity.GetUserName() !
+                        Hello, customer @User.Identity.GetUserName()
+                        <span class="badge customer-counter"></span>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "Customer")">Your Profile</a></li>
-                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="customer-counter"></span></a></li>
+                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge customer-counter"></span></a></li>
                     </ul>
                 }
                 else if (User.IsInRole("ServiceProvider"))
                 {
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Hello, service provider @User.Identity.GetUserName() !
+                        Hello, service provider @User.Identity.GetUserName()
+                        <span class="badge service-provider-counter"></span>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("Index", "ServiceProvider")">Your Profile</a></li>
                         <li><a href="@Url.Action("Services", "ServiceProvider")">Your Services</a></li>
-                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge" id="service-provider-counter"></span></a></li>
+                        <li><a href="@Url.Action("Index", "Order")">Your Orders<span class="badge service-provider-counter"></span></a></li>
                     </ul>
                 }
             </li>
@@ -50,15 +53,15 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-    <li><a href="@Url.Action("Register", "Account")" id="registerLink"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-    <li><a href="@Url.Action("Login", "Account")" id="registerLink"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
+        <li><a href="@Url.Action("Register", "Account")" id="registerLink"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+        <li><a href="@Url.Action("Login", "Account")" id="registerLink"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
     </ul>
 }
 
 <script type="text/javascript">
         $(document).ready(function () {
-            $('#admin-counter').load('@Url.Action("NotApprovedCounter", "Service")');
-            $('#customer-counter').load('@Url.Action("NotCompletedCounter", "Order")');
-            $('#service-provider-counter').load('@Url.Action("NotConfirmedCounter", "Order")');
+            $('.admin-counter').load('@Url.Action("NotApprovedCounter", "Service")');
+            $('.customer-counter').load('@Url.Action("NotCompletedCounter", "Order")');
+            $('.service-provider-counter').load('@Url.Action("NotConfirmedCounter", "Order")');
         });
 </script>

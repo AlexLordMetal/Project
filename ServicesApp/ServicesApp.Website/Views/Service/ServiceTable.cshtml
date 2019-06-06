@@ -1,53 +1,71 @@
 ﻿@model ServicesApp.ViewModels.ViewModels.ServicesListViewModel
+@foreach (var item in Model.Services)
+{
+    <div class="panel panel-default">
+        <div class="panel-body row">
+            <div class="col-sm-3 col-lg-3 fix-height-150">
+                <a href=@Url.Action("Details", new { id = item.Id })>
+                    @if (item.Photo != null)
+                    {
+                        <img src=@item.Photo.Url class="img-rounded img-responsive img-height-100" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-150" />
+                    }
+                </a>
+            </div>
+            <div class="col-sm-9 col-lg-9">
+                <div>
+                    <dl class="dl-horizontal">
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services.FirstOrDefault().Description)
-        </th>
-        <th></th>
-    </tr>
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Name)
+                        </dt>
 
-    @foreach (var item in Model.Services)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @if (User.IsInRole("Administrator"))
-            {
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            }
-            else
-            {
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id })
-                </td>
-            }
-        </tr>
-    }
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </dd>
 
-</table>
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Category)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Description)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </dd>
+                    </dl>
+                </div>
+                <div>
+                    <a href=@Url.Action("Details", new { id = item.Id }) class="btn btn-primary">Details</a>
+
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a href=@Url.Action("Edit", new { id = item.Id }) class="btn btn-default">Edit</a>
+                        <a href=@Url.Action("Delete", new { id = item.Id }) class="btn btn-danger">Delete</a>
+                    }
+                    else
+                    {
+
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
 
 <ul class="pagination">
     @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
     {
-        <li class='@(Model.PageInfo.PageNumber==i?"active":"")'><a >@i</a></li>
+        <li class='@(Model.PageInfo.PageNumber==i?"active":"")'><a href="#">@i</a></li>
     }
 </ul>

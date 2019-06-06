@@ -13,6 +13,7 @@ namespace ServicesApp.DataProvider
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceProviderService> ServiceProviderServices { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
