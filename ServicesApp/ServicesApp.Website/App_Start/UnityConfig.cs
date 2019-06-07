@@ -52,6 +52,7 @@ namespace ServicesApp.Website
             container.RegisterType<IServiceProviderManager, ServiceProviderManager>();
             container.RegisterType<IServiceCategoryManager, ServiceCategoryManager>();
             container.RegisterType<IServiceManager, ServiceManager>();
+            container.RegisterType<IProviderServiceRelationManager, ProviderServiceRelationManager>();
             container.RegisterType<IOrderManager, OrderManager>();
             container.RegisterType<IPhotoManager, PhotoManager>();
 

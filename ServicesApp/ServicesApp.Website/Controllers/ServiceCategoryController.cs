@@ -63,12 +63,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var serviceCategoryViewModelFull = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelFull>(id);
-            if (serviceCategoryViewModelFull == null)
+            var serviceCategoryViewModelShort = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelShort>(id);
+            if (serviceCategoryViewModelShort == null)
             {
                 return HttpNotFound();
             }
-            return View(serviceCategoryViewModelFull);
+            return View(serviceCategoryViewModelShort);
         }
 
         // POST: ServiceCategories/Edit/5
@@ -91,12 +91,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var serviceCategoryViewModelFull = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelFull>(id);
-            if (serviceCategoryViewModelFull == null)
+            var serviceCategoryViewModelShort = await _serviceCategoryManager.GetByIdAsync<ServiceCategoryViewModelShort>(id);
+            if (serviceCategoryViewModelShort == null)
             {
                 return HttpNotFound();
             }
-            return View(serviceCategoryViewModelFull);
+            return View(serviceCategoryViewModelShort);
         }
 
         // POST: ServiceCategories/Delete/5

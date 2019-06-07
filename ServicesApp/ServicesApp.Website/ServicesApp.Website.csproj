@@ -202,12 +202,11 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ServiceCategoryController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
-    <Compile Include="Enums\ManageMessageId.cs" />
+    <Compile Include="Controllers\ServiceRelationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HtmlHelpers\PagingHelpers.cs" />
-    <Compile Include="Messages\ManageMessage.cs" />
+    <Compile Include="HelpClasses\ManageMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -350,9 +349,9 @@
     <Content Include="Views\Service\Details.cshtml" />
     <Content Include="Views\Service\Approve.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\ServiceProvider\AddServiceRelation.cshtml" />
-    <Content Include="Views\ServiceProvider\Services.cshtml" />
-    <Content Include="Views\ServiceProvider\DeleteServiceRelation.cshtml" />
+    <Content Include="Views\ServiceRelation\Create.cshtml" />
+    <Content Include="Views\ServiceRelation\Index.cshtml" />
+    <Content Include="Views\ServiceRelation\Delete.cshtml" />
     <Content Include="Views\Order\Create.cshtml" />
     <Content Include="Views\Order\Delete.cshtml" />
     <Content Include="Views\Order\Customer\Details.cshtml" />

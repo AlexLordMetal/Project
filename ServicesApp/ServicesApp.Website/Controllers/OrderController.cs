@@ -2,7 +2,7 @@
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.DataProvider;
 using ServicesApp.ViewModels.ViewModels;
-using ServicesApp.Website.Messages;
+using ServicesApp.Website.HelpClasses;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,13 +15,13 @@ namespace ServicesApp.Website.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         private IOrderManager _orderManager;
-        private IServiceProviderManager _serviceProviderManager;
+        private IProviderServiceRelationManager _providerServiceRelationManager;
         private ICustomerManager _customerManager;
 
-        public OrderController(IOrderManager orderManager, IServiceProviderManager serviceProviderManager, ICustomerManager customerManager)
+        public OrderController(IOrderManager orderManager, IProviderServiceRelationManager providerServiceRelationManager, ICustomerManager customerManager)
         {
             _orderManager = orderManager;
-            _serviceProviderManager = serviceProviderManager;
+            _providerServiceRelationManager = providerServiceRelationManager;
             _customerManager = customerManager;
         }
 
@@ -39,7 +39,7 @@ namespace ServicesApp.Website.Controllers
                 return RedirectToAction("Index", "Customer", new { Message = ManageMessage.NullErrorCustomerProfile });
             }
             var viewModel = new OrderViewModelCustomer();
-            viewModel.ServiceProviderService = await _serviceProviderManager.GetServiceRelationAsync<ServiceProviderServiceViewModelCustomer>((int)serviceProviderServiceId);
+            viewModel.ServiceProviderService = await _providerServiceRelationManager.GetServiceRelationAsync<ProviderServiceViewModelCustomer>((int)serviceProviderServiceId);
             viewModel.OrderDate = DateTime.Today.AddDays(1);
             return View(viewModel);
         }

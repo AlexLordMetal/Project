@@ -57,7 +57,7 @@
     }
     else if (User.IsInRole("ServiceProvider"))
     {
-        @Html.ActionLink("Provide this Service/Change Price", "AddServiceRelation", "ServiceProvider", new { serviceId = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Provide this Service", "Create", "ServiceRelation", new { serviceId = Model.Id }, new { @class = "btn btn-primary" })
     }
      | @Html.ActionLink("Back to List", "Index")
 </div>

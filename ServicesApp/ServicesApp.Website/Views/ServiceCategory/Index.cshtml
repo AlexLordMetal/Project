@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Manage Categories</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -24,9 +24,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                <a href=@Url.Action("Details", new { id = item.Id }) class="btn btn-primary">Details</a>
+                <a href=@Url.Action("Edit", new { id = item.Id }) class="btn btn-default">Edit</a>
+                <a href=@Url.Action("Delete", new { id = item.Id }) class="btn btn-danger">Delete</a>
             </td>
         </tr>
     }

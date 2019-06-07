@@ -87,6 +87,7 @@
     <Compile Include="IdentityServices\ApplicationSignInManager.cs" />
     <Compile Include="IdentityServices\ApplicationUserManager.cs" />
     <Compile Include="Interfaces\ICustomerManager.cs" />
+    <Compile Include="Interfaces\IProviderServiceRelationManager.cs" />
     <Compile Include="Interfaces\IOrderManager.cs" />
     <Compile Include="Interfaces\IPhotoManager.cs" />
     <Compile Include="Interfaces\IServiceManager.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Services\ServiceManager.cs" />
     <Compile Include="Services\ServiceCategoryManager.cs" />
     <Compile Include="Services\ServiceProviderManager.cs" />
+    <Compile Include="Services\ProviderServiceRelationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

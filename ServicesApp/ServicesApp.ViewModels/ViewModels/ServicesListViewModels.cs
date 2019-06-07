@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ServicesApp.ViewModels.ViewModels
 {
     public class ServicesListViewModel
     {
-        public IEnumerable<ServiceViewModelFull> Services { get; set; }
+        public IEnumerable<ServiceViewModel> Services { get; set; }
         public PageInfoViewModel PageInfo { get; set; }
     }
 }

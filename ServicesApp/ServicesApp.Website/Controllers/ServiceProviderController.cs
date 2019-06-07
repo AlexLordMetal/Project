@@ -3,9 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
-using ServicesApp.ViewModels.ViewModels;
-using ServicesApp.Website.Messages;
-using System.Net;
+using ServicesApp.Website.HelpClasses;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -76,77 +74,6 @@ namespace ServicesApp.Website.Controllers
             }
             return RedirectToAction("Index", new { Message = ManageMessage.Error });
 
-        }
-
-        // GET: /ServiceProvider/Services
-        public async Task<ActionResult> Services(string message)
-        {
-            ViewBag.StatusMessage = message;
-
-            return View(await _serviceProviderManager.GetServiceProviderServicesAsync(User.Identity.GetUserId()));
-        }
-
-        // GET: /ServiceProvider/AddServiceRelation
-        public async Task<ActionResult> AddServiceRelation(int? serviceId)
-        {
-            if (serviceId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var userId = User.Identity.GetUserId();
-            if (!await _serviceProviderManager.IsServiceProviderProfileExistAsync(userId))
-            {
-                return RedirectToAction("Index", new { Message = ManageMessage.NullErrorServiceProviderProfile });
-            }
-            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync(userId, (int)serviceId);
-            if (serviceProviderServiceFullViewModel == null)
-            {
-                return View();
-            }
-            return View(serviceProviderServiceFullViewModel);
-        }
-
-        // POST: /ServiceProvider/AddServiceRelation
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddServiceRelation(ServiceProviderServiceRelationViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            model.ServiceProviderId = User.Identity.GetUserId();
-            if (model.ServiceProviderId != null)
-            {
-                await _serviceProviderManager.AddOrUpdateServiceRelationAsync(model);
-                return RedirectToAction("Services", new { Message = ManageMessage.AddServiceRelationSuccess });
-            }
-            return RedirectToAction("Index", new { Message = ManageMessage.Error });
-        }
-
-        // GET: /ServiceProvider/DeleteServiceRelation/5
-        public async Task<ActionResult> DeleteServiceRelation(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var userId = User.Identity.GetUserId();
-            var serviceProviderServiceFullViewModel = await _serviceProviderManager.GetServiceRelationAsync<ServiceProviderServiceFullViewModel>((int)id);
-            if (serviceProviderServiceFullViewModel == null || User.Identity.GetUserId() != serviceProviderServiceFullViewModel.ServiceProviderId)
-            {
-                return HttpNotFound();
-            }
-            return View(serviceProviderServiceFullViewModel);
-        }
-
-        // POST: /ServiceProvider/DeleteServiceRelation/5
-        [HttpPost, ActionName("DeleteServiceRelation")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteServiceRelationConfirmed(int? id)
-        {
-            await _serviceProviderManager.DeleteServiceRelationAsync((int)id);
-            return RedirectToAction("Services");
         }
 
         protected override void Dispose(bool disposing)

@@ -1,7 +1,7 @@
-﻿@model List<ServicesApp.ViewModels.ViewModels.ServiceProviderServiceFullViewModel>
+﻿@model List<ServicesApp.ViewModels.ViewModels.ProviderServiceFullViewModel>
 
 @{
-    ViewBag.Title = "Your Services";
+    ViewBag.Title = "Your Service Relations";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -41,7 +41,7 @@
 
         <td>
             @Html.ActionLink("Service Details", "Details", "Service", new { id = item.ServiceId }, null) |
-            @Html.ActionLink("Delete Relation", "DeleteServiceRelation", new { id = item.Id })
+            @Html.ActionLink("Delete Relation", "Delete", new { id = item.Id })
         </td>
     </tr>
     }

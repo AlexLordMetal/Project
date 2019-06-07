@@ -1,6 +1,6 @@
 ﻿using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.ViewModels;
-using ServicesApp.Website.Messages;
+using ServicesApp.Website.HelpClasses;
 using System;
 using System.Linq;
 using System.Net;
@@ -154,12 +154,12 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var serviceViewModelFull = await _serviceManager.GetByIdAsync<ServiceViewModelFull>(id);
-            if (serviceViewModelFull == null)
+            var serviceViewModel = await _serviceManager.GetByIdAsync<ServiceViewModel>(id);
+            if (serviceViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(serviceViewModelFull);
+            return View(serviceViewModel);
         }
 
         // POST: Service/Delete/5

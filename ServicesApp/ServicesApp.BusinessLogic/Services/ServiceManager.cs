@@ -60,12 +60,12 @@ namespace ServicesApp.BusinessLogic.Services
                 .ToListAsync();
 
             var viewModel = new ServicesListViewModel();
-            viewModel.Services = _mapper.Map<List<ServiceViewModelFull>>(dataModel);
+            viewModel.Services = _mapper.Map<List<ServiceViewModel>>(dataModel);
             viewModel.PageInfo = pageInfo;
             return viewModel;
         }
 
-        public async Task<T> GetByIdAsync<T>(int? id) where T : ServiceViewModelShort
+        public async Task<T> GetByIdAsync<T>(int? id) where T : ServiceViewModel
         {
             var dataModel = await context.Services.FindAsync(id);
             var viewModel = _mapper.Map<T>(dataModel);

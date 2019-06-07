@@ -32,7 +32,7 @@ namespace ServicesApp.ViewModels.ViewModels
 
     public class OrderViewModelCustomer : OrderViewModelShort
     {
-        public ServiceProviderServiceViewModelCustomer ServiceProviderService { get; set; }
+        public ProviderServiceViewModelCustomer ServiceProviderService { get; set; }
     }
 
     public class OrderViewModelServiceProvider : OrderViewModelCustomer

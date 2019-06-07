@@ -3,7 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using ServicesApp.BusinessLogic.IdentityServices;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
-using ServicesApp.Website.Messages;
+using ServicesApp.Website.HelpClasses;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;

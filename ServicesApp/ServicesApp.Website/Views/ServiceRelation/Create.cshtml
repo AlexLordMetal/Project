@@ -1,0 +1,90 @@
+﻿@model ServicesApp.ViewModels.ViewModels.ProviderServiceCreateViewModel
+@{
+    ViewBag.Title = "Create Service Relation";
+}
+
+<h3>Service</h3>
+<div class="row">
+    <div class="col-sm-3 col-lg-3 fix-height-150">
+        @if (Model.Service.Photo != null)
+        {
+            <img src=@Model.Service.Photo.Url class="img-rounded img-responsive img-height-100" />
+        }
+        else
+        {
+            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-150" />
+        }
+    </div>
+    <div class="col-sm-9 col-lg-9">
+        <div>
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Service.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Service.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Service.Category)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Service.Category)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Service.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Service.Description)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Create", "ServiceRelation", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.ServiceId)
+    @Html.HiddenFor(model => model.ServiceProviderId)
+
+    <h3>@ViewBag.Title</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ServicePrice, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ServicePrice, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ServicePrice, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UploadPhoto, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.UploadPhoto, new { type = "file", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UploadPhoto, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Create" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

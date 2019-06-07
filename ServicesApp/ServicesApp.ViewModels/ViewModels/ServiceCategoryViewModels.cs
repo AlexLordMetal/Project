@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 
 namespace ServicesApp.ViewModels.ViewModels
 {
@@ -19,6 +18,6 @@ namespace ServicesApp.ViewModels.ViewModels
     public class ServiceCategoryViewModelFull : ServiceCategoryViewModelShort
     {
         [Display(Name = "Category Services")]
-        public List<ServiceViewModelShort> Services { get; set; }
+        public List<ServiceViewModel> Services { get; set; }
     }
 }

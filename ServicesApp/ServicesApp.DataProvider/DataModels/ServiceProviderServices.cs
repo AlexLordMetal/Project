@@ -12,11 +12,18 @@ namespace ServicesApp.DataProvider.DataModels
 
         [ForeignKey("ServiceProvider")]
         public string ServiceProviderId { get; set; }
+
         [ForeignKey("Service")]
         public int ServiceId { get; set; }
 
+        [ForeignKey("Photo")]
+        public int? PhotoId { get; set; }
+
         public virtual Service Service { get; set; }
+
         public virtual ServiceProviderProfile ServiceProvider { get; set; }
+
+        public virtual Photo Photo { get; set; }
 
         public int ServicePrice { get; set; }
 

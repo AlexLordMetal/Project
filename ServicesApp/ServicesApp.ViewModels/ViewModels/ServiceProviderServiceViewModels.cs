@@ -1,26 +1,36 @@
 ﻿using ServicesApp.ViewModels.IdentityViewModels;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace ServicesApp.ViewModels.ViewModels
 {
-    public class ServiceProviderServiceRelationViewModel
+    public class ProviderServiceRelationViewModel
     {
         public int? Id { get; set; }
         public int? ServiceId { get; set; }
         public string ServiceProviderId { get; set; }
+        public int? PhotoId { get; set; }
+        public PhotoViewModel Photo { get; set; }
 
         [Required]
         [Display(Name = "Service Price")]
-        public int ServicePrice { get; set; }
+        public int? ServicePrice { get; set; }
     }
 
-    public class ServiceProviderServiceFullViewModel : ServiceProviderServiceRelationViewModel
+    public class ProviderServiceFullViewModel : ProviderServiceRelationViewModel
     {
-        public ServiceViewModelFull Service { get; set; }
+        public ServiceViewModel Service { get; set; }
     }
 
-    public class ServiceProviderServiceViewModelCustomer : ServiceProviderServiceFullViewModel
+    public class ProviderServiceViewModelCustomer : ProviderServiceFullViewModel
     {
         public ServiceProviderProfileViewModel ServiceProvider { get; set; }
     }
+
+    public class ProviderServiceCreateViewModel : ProviderServiceFullViewModel
+    {
+        [Display(Name = "Service Photo")]
+        public HttpPostedFileBase UploadPhoto { get; set; }
+    }
+
 }
