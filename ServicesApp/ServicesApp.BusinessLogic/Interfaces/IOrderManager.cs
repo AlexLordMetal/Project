@@ -1,4 +1,5 @@
 ﻿using ServicesApp.ViewModels.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,5 +15,6 @@ namespace ServicesApp.BusinessLogic.Interfaces
         Task ModifyAsync(OrderViewModelShort viewModel);
         Task<int> NotConfirmedCount(string userId);
         Task<int> NotCompletedCount(string userId);
+        Task<List<DateTime>> GetExcludedDatesAsync(string serviceProviderId);
     }
 }

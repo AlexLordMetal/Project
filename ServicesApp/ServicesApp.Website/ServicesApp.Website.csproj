@@ -216,6 +216,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min %284%29.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\DataImages\ErrorImage.png" />
+    <Content Include="Content\DataImages\NoImage.png" />
     <Content Include="Content\errors.css" />
     <Content Include="Content\styles.additional.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -363,10 +365,10 @@
     <Content Include="Views\Error\Internal.cshtml" />
     <Content Include="Views\Service\ServiceTable.cshtml" />
     <Content Include="Views\Error\BadRequest.cshtml" />
+    <Content Include="Views\ServiceRelation\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\DataImages\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

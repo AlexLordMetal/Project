@@ -1,5 +1,5 @@
 ﻿@model ServicesApp.ViewModels.ViewModels.ServiceViewModelWithRelations
-
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Details";
 }
@@ -57,7 +57,14 @@
     }
     else if (User.IsInRole("ServiceProvider"))
     {
+        if (Model.ServiceProviderServices.Any(m => m.ServiceProviderId == User.Identity.GetUserId()))
+        {
+            @Html.ActionLink("Change your Service Relation", "Edit", "ServiceRelation", new { serviceId = Model.Id }, new { @class = "btn btn-primary" })
+        }
+        else
+        {
         @Html.ActionLink("Provide this Service", "Create", "ServiceRelation", new { serviceId = Model.Id }, new { @class = "btn btn-primary" })
+        }
     }
      | @Html.ActionLink("Back to List", "Index")
 </div>
@@ -92,7 +99,7 @@
             <td>
                 @if (User.IsInRole("Customer"))
                 {
-                        @Html.ActionLink("Make Order", "Create", "Order", new { serviceProviderServiceId = item.Id }, new { @class="btn btn-primary"})
+                    @Html.ActionLink("Make Order", "Create", "Order", new { serviceProviderServiceId = item.Id }, new { @class = "btn btn-primary" })
                 }
             </td>
         </tr>

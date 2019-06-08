@@ -27,6 +27,7 @@ namespace ServicesApp.BusinessLogic
             CreateMap<ServiceViewModelCreate, Service>().ForMember(x => x.IsApproved, x => x.Ignore()).ForMember(x => x.Photo, x => x.Ignore());
 
             CreateMap<ServiceProviderService, ProviderServiceRelationViewModel>();
+            CreateMap<ServiceProviderService, ProviderServiceCreateViewModel>();
             CreateMap<ProviderServiceRelationViewModel, ServiceProviderService>().ForMember(x => x.Photo, x => x.Ignore());
 
             CreateMap<ServiceProviderService, ProviderServiceFullViewModel>();

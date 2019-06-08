@@ -1,4 +1,4 @@
-﻿@model ServicesApp.ViewModels.ViewModels.OrderViewModelCustomer
+﻿@model ServicesApp.ViewModels.ViewModels.OrderViewModelCreate
 
 @{
     ViewBag.Title = "Create";
@@ -76,6 +76,15 @@
 <script type="text/javascript">
     $(function () {
         // This will make every element with the class "date-picker" into a DatePicker element
-        $('.date-picker').datepicker({ minDate: +1, maxDate: "+2M", dateFormat: "dd.mm.yy" });
+        $('.date-picker').datepicker({
+            beforeShowDay: function (date) {
+                var array = ('@Html.Raw(Model.ExcludedDates)');
+                var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+                return [array.indexOf(string) == -1]
+            },
+            minDate: +1,
+            maxDate: "+2M",
+            dateFormat: "dd.mm.yy"
+        });
     })
 </script>

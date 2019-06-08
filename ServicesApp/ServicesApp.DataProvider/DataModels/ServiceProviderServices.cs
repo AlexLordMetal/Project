@@ -27,6 +27,8 @@ namespace ServicesApp.DataProvider.DataModels
 
         public int ServicePrice { get; set; }
 
+        public string Description { get; set; }
+
         public virtual List<Order> Orders  { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿Clean bad Comments
 +  Reconsider ServiceViewModels
-Add Photo in ServiceProviderService
++  Add Photo in ServiceProviderService
 Add Stars
 Add Page with Feedbacks and Rating in ServiceProviderService
-Add Excluded Dates in Order Create
++  Add Excluded Dates in Order Create
 +- Move javascript to separate files
-- Unique Names of Service and ServiceCategory
+-  Unique Names of Service and ServiceCategory
 
 
 - Add Export/Import (Categories, Services)

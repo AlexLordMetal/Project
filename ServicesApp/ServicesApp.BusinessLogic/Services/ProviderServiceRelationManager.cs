@@ -29,10 +29,10 @@ namespace ServicesApp.BusinessLogic.Services
         {
             return await context.ServiceProviderServices.AnyAsync(x => (x.ServiceProviderId == serviceProviderId) & (x.ServiceId == serviceId));
         }
-        public async Task<ProviderServiceFullViewModel> GetServiceRelationAsync(string serviceProviderId, int serviceId)
+        public async Task<T> GetServiceRelationAsync<T>(string serviceProviderId, int serviceId) where T : ProviderServiceFullViewModel
         {
             var dataModel = await context.ServiceProviderServices.FirstOrDefaultAsync(x => (x.ServiceProviderId == serviceProviderId) & (x.ServiceId == serviceId));
-            var viewModel = _mapper.Map<ProviderServiceFullViewModel>(dataModel);
+            var viewModel = _mapper.Map<T>(dataModel);
             return viewModel;
         }
 
@@ -63,6 +63,22 @@ namespace ServicesApp.BusinessLogic.Services
             }
             context.ServiceProviderServices.Add(dataModel);
             await context.SaveChangesAsync();
+        }
+
+        public async Task ModifyServiceRelationAsync(ProviderServiceCreateViewModel viewModel)
+        {
+            if (await context.Services.AnyAsync(x => x.Id == viewModel.Id))
+            {
+                var dataModel = _mapper.Map<ServiceProviderService>(viewModel);
+                if (viewModel.Photo != null)
+                {
+                    dataModel.PhotoId = await _photoManager.AddAsync(viewModel.Photo);
+                }
+                context.ServiceProviderServices.Attach(dataModel);
+                context.Entry<ServiceProviderService>(dataModel).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
+            //Need exception "Id not found" or something else
         }
 
         public async Task DeleteServiceRelationAsync(int id)

@@ -15,6 +15,12 @@ namespace ServicesApp.ViewModels.ViewModels
         [Required]
         [Display(Name = "Service Price")]
         public int? ServicePrice { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [StringLength(1000)]
+        [Display(Name = "Provider Description")]
+        public string Description { get; set; }
     }
 
     public class ProviderServiceFullViewModel : ProviderServiceRelationViewModel

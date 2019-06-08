@@ -6,6 +6,15 @@
 
 <h2>Delete relation to this service?</h2>
 
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-6 col-md-4">
+        @if (Model.Photo != null)
+        {
+            <img src=@Model.Service.Photo.Url class="img-rounded img-responsive" />
+        }
+    </div>
+</div>
+
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -41,13 +50,22 @@
             @Html.DisplayFor(model => model.ServicePrice)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

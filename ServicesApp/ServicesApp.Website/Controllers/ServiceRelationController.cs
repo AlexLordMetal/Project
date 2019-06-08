@@ -70,11 +70,49 @@ namespace ServicesApp.Website.Controllers
             imageFileValidator(viewModel);
             if (ModelState.IsValid)
             {
+                if (await _providerServiceRelationManager.IsRelationExistsAsync(viewModel.ServiceProviderId, (int)viewModel.ServiceId))
+                {
+                    return RedirectToAction("Index", new { Message = ManageMessage.ServiceRelationExists });
+                }
                 imageFileSaver(viewModel);
                 await _providerServiceRelationManager.CreateServiceRelationAsync(viewModel);
                 return RedirectToAction("Index", new { Message = ManageMessage.AddServiceRelationSuccess });
             }
             viewModel.Service = await _serviceManager.GetByIdAsync<ServiceViewModel>(viewModel.ServiceId);
+            return View(viewModel);
+        }
+
+        // GET: /ServiceRelation/Edit/5
+        [Authorize(Roles = "ServiceProvider")]
+        public async Task<ActionResult> Edit(int? serviceId)
+        {
+            if (serviceId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var userId = User.Identity.GetUserId();
+            var viewModel = await _providerServiceRelationManager.GetServiceRelationAsync<ProviderServiceCreateViewModel>(userId, (int)serviceId);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(viewModel);
+        }
+
+        //POST: /ServiceRelation/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ServiceProvider")]
+        public async Task<ActionResult> Edit(ProviderServiceCreateViewModel viewModel)
+        {
+            imageFileValidator(viewModel);
+            if (ModelState.IsValid)
+            {
+                imageFileSaver(viewModel);
+                await _providerServiceRelationManager.ModifyServiceRelationAsync(viewModel);
+                return RedirectToAction("Index", new { Message = ManageMessage.AddServiceRelationSuccess });
+            }
+            viewModel = await _providerServiceRelationManager.GetServiceRelationAsync<ProviderServiceCreateViewModel>((int)viewModel.Id);
             return View(viewModel);
         }
 

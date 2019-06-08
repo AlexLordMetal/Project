@@ -1,6 +1,6 @@
 ﻿@model ServicesApp.ViewModels.ViewModels.ProviderServiceCreateViewModel
 @{
-    ViewBag.Title = "Create Service Relation";
+    ViewBag.Title = "Edit Service Relation";
 }
 
 <h3>Service</h3>
@@ -47,14 +47,26 @@
     </div>
 </div>
 
-@using (Html.BeginForm("Create", "ServiceRelation", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+<hr />
+<h3>@ViewBag.Title</h3>
+
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-6 col-md-4">
+        @if (Model.Photo != null)
+        {
+            <img src=@Model.Photo.Url class="img-rounded img-responsive" />
+        }
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "ServiceRelation", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Id)
     @Html.HiddenFor(model => model.ServiceId)
     @Html.HiddenFor(model => model.ServiceProviderId)
 
-    <h3>@ViewBag.Title</h3>
+
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -84,7 +96,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-primary" value="Create" />
+            <input type="submit" class="btn btn-primary" value="Edit" />
         </div>
     </div>
 }

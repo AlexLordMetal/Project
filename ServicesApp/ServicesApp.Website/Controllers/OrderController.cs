@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.DataProvider;
 using ServicesApp.ViewModels.ViewModels;
@@ -38,9 +39,9 @@ namespace ServicesApp.Website.Controllers
             {
                 return RedirectToAction("Index", "Customer", new { Message = ManageMessage.NullErrorCustomerProfile });
             }
-            var viewModel = new OrderViewModelCustomer();
+            var viewModel = new OrderViewModelCreate();
             viewModel.ServiceProviderService = await _providerServiceRelationManager.GetServiceRelationAsync<ProviderServiceViewModelCustomer>((int)serviceProviderServiceId);
-            viewModel.OrderDate = DateTime.Today.AddDays(1);
+            await setDates(viewModel);
             return View(viewModel);
         }
 
@@ -75,7 +76,7 @@ namespace ServicesApp.Website.Controllers
                 var viewModel = await _orderManager.GetServiceProviderOrdersAsync<OrderViewModelServiceProvider>(userId);
                 return View("ServiceProvider/Index", viewModel);
             }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            return HttpNotFound();
         }
 
         // GET: Order/Details/5
@@ -174,35 +175,21 @@ namespace ServicesApp.Website.Controllers
             return count;
         }
 
-        //// GET: Order/Delete/5
-        //public async Task<ActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Order order = await db.Orders.FindAsync(id);
-        //    if (order == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(order);
-        //}
-
-        //// POST: Order/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> DeleteConfirmed(int id)
-        //{
-        //    Order order = await db.Orders.FindAsync(id);
-        //    db.Orders.Remove(order);
-        //    await db.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
-
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+        }
+
+        private async Task setDates(OrderViewModelCreate viewModel)
+        {
+            var excludedDates = await _orderManager.GetExcludedDatesAsync(viewModel.ServiceProviderService.ServiceProviderId);
+            var orderDate = DateTime.Today.AddDays(1);
+            while (excludedDates.Contains(orderDate))
+            {
+                orderDate = orderDate.AddDays(1);
+            }
+            viewModel.ExcludedDates = JsonConvert.SerializeObject(excludedDates);
+            viewModel.OrderDate = orderDate;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ServicesApp.ViewModels.IdentityViewModels;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.ViewModels
@@ -14,7 +15,7 @@ namespace ServicesApp.ViewModels.ViewModels
         public int ServiceProviderServiceId { get; set; }
 
         [DataType(DataType.Text)]
-        [StringLength(200)]
+        [StringLength(1000)]
         [Display(Name = "Feedback")]
         public string Feedback { get; set; }
 
@@ -38,5 +39,10 @@ namespace ServicesApp.ViewModels.ViewModels
     public class OrderViewModelServiceProvider : OrderViewModelCustomer
     {
         public CustomerProfileViewModel Customer { get; set; }
+    }
+
+    public class OrderViewModelCreate : OrderViewModelCustomer
+    {
+        public string ExcludedDates { get; set; }
     }
 }

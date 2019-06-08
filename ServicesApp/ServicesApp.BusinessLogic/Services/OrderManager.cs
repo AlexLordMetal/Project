@@ -94,6 +94,17 @@ namespace ServicesApp.BusinessLogic.Services
                 .CountAsync(x => x.IsComplete == false);
         }
 
+        public async Task<List<DateTime>> GetExcludedDatesAsync(string serviceProviderId)
+        {
+            var excludedDates = new List<DateTime>();
+            excludedDates.AddRange(await context.Orders
+                .Where(x => x.ServiceProviderService.ServiceProviderId == serviceProviderId)
+                .Select(x => x.OrderDate).Where(x => x >= DateTime.Now)
+                .ToListAsync()
+                );
+            return excludedDates;
+        }
+
         public void Dispose()
         {
             context.Dispose();
