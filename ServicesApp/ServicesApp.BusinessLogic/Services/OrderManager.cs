@@ -22,7 +22,7 @@ namespace ServicesApp.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<T>> GetCustomerOrdersAsync<T>(string userId) where T : OrderViewModelShort
+        public async Task<List<T>> GetCustomerOrdersAsync<T>(string userId) where T : OrderViewModelCustomer
         {
             var dataModel = await context.Orders
                 .Where(x => x.CustomerId == userId)
@@ -33,7 +33,7 @@ namespace ServicesApp.BusinessLogic.Services
             return viewModel;
         }
 
-        public async Task<List<T>> GetServiceProviderOrdersAsync<T>(string userId) where T : OrderViewModelShort
+        public async Task<List<T>> GetServiceProviderOrdersAsync<T>(string userId) where T : OrderViewModelCustomer
         {
             var dataModel = await context.Orders
                 .Where(x => x.ServiceProviderService.ServiceProviderId == userId)
@@ -44,17 +44,16 @@ namespace ServicesApp.BusinessLogic.Services
             return viewModel;
         }
 
-        public async Task<T> GetOrderByIdAsync<T>(int id) where T : OrderViewModelShort
+        public async Task<T> GetOrderByIdAsync<T>(int id) where T : OrderViewModelCustomer
         {
             var dataModel = await context.Orders.FindAsync(id);
             var viewModel = _mapper.Map<T>(dataModel);
             return viewModel;
         }
 
-        public async Task CreateOrderAsync(OrderViewModelShort viewModel, string customerId)
+        public async Task CreateOrderAsync(OrderViewModelShort viewModel)
         {
             var dataModel = _mapper.Map<Order>(viewModel);
-            dataModel.CustomerId = customerId;
             context.Orders.Add(dataModel);
             await context.SaveChangesAsync();
         }
@@ -62,21 +61,30 @@ namespace ServicesApp.BusinessLogic.Services
         public async Task ConfirmOrderAsync(int id, string serviceProviderId)
         {
             var dataModel = await context.Orders.FindAsync(id);
-            if (dataModel.ServiceProviderService.ServiceProviderId == serviceProviderId)
+            if (dataModel != null && dataModel.ServiceProviderService.ServiceProviderId == serviceProviderId)
             {
                 dataModel.ServiceProviderConfirm = true;
                 await context.SaveChangesAsync();
             }
+            else
+            {
+                throw new Exception();
+            }
         }
 
-        public async Task ModifyAsync(OrderViewModelShort viewModel)
+        public async Task CompleteAsync(OrderViewModelCustomer viewModel)
         {
             if (await context.Orders.AnyAsync(x => x.Id == viewModel.Id))
             {
                 var dataModel = _mapper.Map<Order>(viewModel);
+                dataModel.IsComplete = true;
                 context.Orders.Attach(dataModel);
                 context.Entry<Order>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception();
             }
         }
 

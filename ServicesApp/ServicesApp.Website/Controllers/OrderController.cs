@@ -26,6 +26,26 @@ namespace ServicesApp.Website.Controllers
             _customerManager = customerManager;
         }
 
+        // GET: Order
+        [Authorize(Roles = "ServiceProvider, Customer")]
+        public async Task<ActionResult> Index(string message)
+        {
+            ViewBag.StatusMessage = message;
+
+            var userId = User.Identity.GetUserId();
+            if (User.IsInRole("Customer"))
+            {
+                var viewModel = await _orderManager.GetCustomerOrdersAsync<OrderViewModelCustomer>(userId);
+                return View("Customer/Index", viewModel);
+            }
+            if (User.IsInRole("ServiceProvider"))
+            {
+                var viewModel = await _orderManager.GetServiceProviderOrdersAsync<OrderViewModelServiceProvider>(userId);
+                return View("ServiceProvider/Index", viewModel);
+            }
+            return HttpNotFound();
+        }
+
         // GET: Order/Create
         [Authorize(Roles = "Customer")]
         public async Task<ActionResult> Create(int? serviceProviderServiceId)
@@ -49,38 +69,19 @@ namespace ServicesApp.Website.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
-        public async Task<ActionResult> Create(OrderViewModelCustomer viewModel)
+        public async Task<ActionResult> Create(OrderViewModelShort viewModel)
         {
             if (ModelState.IsValid)
             {
-                await _orderManager.CreateOrderAsync(viewModel, User.Identity.GetUserId());
+                viewModel.CustomerId = User.Identity.GetUserId();
+                await _orderManager.CreateOrderAsync(viewModel);
                 return RedirectToAction("Index", "Order", new { Message = ManageMessage.CreateOrderSuccess });
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
         
-        // GET: Order
-        [Authorize]
-        public async Task<ActionResult> Index(string message)
-        {
-            ViewBag.StatusMessage = message;
-
-            var userId = User.Identity.GetUserId();
-            if (User.IsInRole("Customer"))
-            {
-                var viewModel = await _orderManager.GetCustomerOrdersAsync<OrderViewModelCustomer>(userId);
-                return View("Customer/Index", viewModel);
-            }
-            if (User.IsInRole("ServiceProvider"))
-            {
-                var viewModel = await _orderManager.GetServiceProviderOrdersAsync<OrderViewModelServiceProvider>(userId);
-                return View("ServiceProvider/Index", viewModel);
-            }
-            return HttpNotFound();
-        }
-
         // GET: Order/Details/5
-        [Authorize]
+        [Authorize(Roles = "ServiceProvider, Customer")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -101,7 +102,7 @@ namespace ServicesApp.Website.Controllers
             {
                 return View("ServiceProvider/Details", viewModel);
             }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         //GET: Order/Confirm/5
@@ -124,7 +125,7 @@ namespace ServicesApp.Website.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelServiceProvider>((int)id);
+            var viewModel = await _orderManager.GetOrderByIdAsync<OrderViewModelCustomer>((int)id);
             if (viewModel == null)
             {
                 return HttpNotFound();
@@ -133,22 +134,26 @@ namespace ServicesApp.Website.Controllers
             {
                 return View(viewModel);
             }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         // POST: Order/Complete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
-        public async Task<ActionResult> Complete(OrderViewModelShort viewModel)
+        public async Task<ActionResult> Complete(OrderViewModelCustomer viewModel)
         {
-            if (ModelState.IsValid && User.Identity.GetUserId() == viewModel.CustomerId)
+            if (ModelState.IsValid)
             {
-                viewModel.IsComplete = true;
-                await _orderManager.ModifyAsync(viewModel);
+                if (User.Identity.GetUserId() != viewModel.CustomerId)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                await _orderManager.CompleteAsync(viewModel);
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Complete", new { id = viewModel.Id });
+            viewModel.ServiceProviderService = await _providerServiceRelationManager.GetServiceRelationAsync<ProviderServiceViewModelCustomer>(viewModel.ServiceProviderServiceId);
+            return View(viewModel);
         }
 
         // GET: Order/NotConfirmedCounter

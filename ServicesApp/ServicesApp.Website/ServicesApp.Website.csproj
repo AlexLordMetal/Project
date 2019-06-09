@@ -219,6 +219,7 @@
     <Content Include="Content\DataImages\ErrorImage.png" />
     <Content Include="Content\DataImages\NoImage.png" />
     <Content Include="Content\errors.css" />
+    <Content Include="Content\star.rating.css" />
     <Content Include="Content\styles.additional.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -305,6 +306,7 @@
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\servicetable.js" />
+    <Content Include="Scripts\star.rating.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -355,7 +357,6 @@
     <Content Include="Views\ServiceRelation\Index.cshtml" />
     <Content Include="Views\ServiceRelation\Delete.cshtml" />
     <Content Include="Views\Order\Create.cshtml" />
-    <Content Include="Views\Order\Delete.cshtml" />
     <Content Include="Views\Order\Customer\Details.cshtml" />
     <Content Include="Views\Order\Complete.cshtml" />
     <Content Include="Views\Order\Customer\Index.cshtml" />

@@ -13,7 +13,7 @@ namespace ServicesApp.DataProvider.DataModels
         public bool ServiceProviderConfirm { get; set; }
         public DateTime OrderDate { get; set; }
         public string Feedback { get; set; }
-        public int Stars { get; set; }
+        public int? Rating { get; set; }
 
         [ForeignKey("Customer")]
         public string CustomerId { get; set; }

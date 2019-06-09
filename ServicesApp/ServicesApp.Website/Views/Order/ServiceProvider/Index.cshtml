@@ -1,82 +1,221 @@
 ﻿@model List<ServicesApp.ViewModels.ViewModels.OrderViewModelServiceProvider>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Your Orders";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceProviderService.Service.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceProviderService.Service.Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceProviderService.ServicePrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Surname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Phone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().ServiceProviderConfirm)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().OrderDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().IsComplete)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Feedback)
-        </th>
-        <th></th>
-    </tr>
+@foreach (var item in Model)
+{
+    <div class="panel panel-default">
+        <div class="panel-body row">
+            <div class="col-sm-3 col-lg-3 fix-height-300">
+                @if (item.ServiceProviderService.Photo != null)
+                {
+                    <img src=@item.ServiceProviderService.Photo.Url class="img-rounded img-responsive img-height-300" />
+                }
+                else
+                {
+                    <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
+                }
+            </div>
+            <div class="col-sm-5 col-lg-5">
+                <dl class="dl-horizontal">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceProviderService.Service.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceProviderService.Service.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceProviderService.ServicePrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer.Surname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer.Phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceProviderConfirm)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsComplete)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Feedback)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id = item.Id })
-        </td>
-    </tr>
+                    <dt>
+                        Service
+                    </dt>
+
+                    <dd>
+                        <a href="" data-toggle="modal" data-target="#descService-@item.Id">
+                            @Html.DisplayFor(modelItem => item.ServiceProviderService.Service.Name)
+                        </a>
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(modelItem => item.ServiceProviderService.Description)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(modelItem => item.ServiceProviderService.Description)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(modelItem => item.ServiceProviderService.ServicePrice)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(modelItem => item.ServiceProviderService.ServicePrice)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(modelItem => item.OrderDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </dd>
+                    
+                    <dt>
+                        Customer
+                    </dt>
+
+                    <dd>
+                        <a href="" data-toggle="modal" data-target="#descCustomer-@item.Id">
+                            @Html.DisplayFor(modelItem => item.Customer.Name)
+                        </a>
+                    </dd>
+
+                    @if (item.ServiceProviderConfirm == true)
+                    {
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.ServiceProviderConfirm)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.ServiceProviderConfirm)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.IsComplete)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.IsComplete)
+                        </dd>
+                    }
+
+                </dl>
+            </div>
+            <div class="col-sm-4 col-lg-4">
+                <dl>
+                    @if (item.IsComplete == true)
+                    {
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Feedback)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Feedback)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Rating)
+                        </dt>
+                        <dd>
+                            <input value="@item.Rating" type="text" class="rating star-rating" data-size="sm" data-show-clear="false" data-show-caption="false">
+                        </dd>
+                    }
+                </dl>
+                <div>
+                    <a href=@Url.Action("Details", new { id = item.Id }) class="btn btn-primary">Order Details</a>
+                    @if (item.ServiceProviderConfirm == false && item.OrderDate > DateTime.Now)
+                    {
+                        <a href=@Url.Action("Confirm", new { id = item.Id }) class="btn btn-default">Confirm Order</a>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="descService-@item.Id" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Service</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-4 col-lg-4 fix-height-300">
+                            @if (item.ServiceProviderService.Service.Photo != null)
+                            {
+                                <img src=@item.ServiceProviderService.Service.Photo.Url class="img-rounded img-responsive img-height-300" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
+                            }
+                        </div>
+                        <div class="col-sm-8 col-lg-8">
+                            <div>
+                                <dl class="dl-horizontal">
+
+                                    <dt>
+                                        @Html.DisplayNameFor(modelItem => item.ServiceProviderService.Service.Name)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.ServiceProviderService.Service.Name)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(modelItem => item.ServiceProviderService.Service.Category)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.ServiceProviderService.Service.Category)
+                                    </dd>
+
+                                    <dt>
+                                        @Html.DisplayNameFor(modelItem => item.ServiceProviderService.Service.Description)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(modelItem => item.ServiceProviderService.Service.Description)
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="descCustomer-@item.Id" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Customer</h3>
+                </div>
+                <div class="modal-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Customer.Name)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Customer.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Customer.Surname)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Customer.Surname)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(modelItem => item.Customer.Phone)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Customer.Phone)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
-</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.star-rating').rating({ displayOnly: true });
+    });
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/star-rating")
+}

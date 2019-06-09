@@ -6,4 +6,12 @@
     img .img-height-150 {
         max-height: 150px;
     }
+
+    div .fix-height-300 {
+        height: 150px;
+    }
+
+    img .img-height-300 {
+        max-height: 150px;
+    }
 }
