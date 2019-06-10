@@ -33,6 +33,21 @@ namespace ServicesApp.Website.Controllers
             return View(await _providerServiceRelationManager.GetServiceProviderServicesAsync(User.Identity.GetUserId()));
         }
 
+        // GET: /ServiceRelation/Details/5
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var viewModel = await _providerServiceRelationManager.GetServiceRelationAsync<ProviderServiceViewModelWithFeedbacks>((int)id);
+            if (viewModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(viewModel);
+        }
+
         // GET: /ServiceRelation/Create
         [Authorize(Roles = "ServiceProvider")]
         public async Task<ActionResult> Create(int? serviceId)

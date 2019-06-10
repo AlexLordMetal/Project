@@ -8,10 +8,10 @@
     }
 
     div .fix-height-300 {
-        height: 150px;
+        height: 300px;
     }
 
     img .img-height-300 {
-        max-height: 150px;
+        height: 300px;
     }
 }

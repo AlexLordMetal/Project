@@ -284,6 +284,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\ServiceManApp - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ServiceManApp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -311,7 +313,6 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="TODOOOOOOOOOOOOOOOOOOOOOOOOOO.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -367,6 +368,7 @@
     <Content Include="Views\Service\ServiceTable.cshtml" />
     <Content Include="Views\Error\BadRequest.cshtml" />
     <Content Include="Views\ServiceRelation\Edit.cshtml" />
+    <Content Include="Views\ServiceRelation\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

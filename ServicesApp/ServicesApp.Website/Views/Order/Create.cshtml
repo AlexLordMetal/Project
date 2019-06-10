@@ -1,5 +1,5 @@
 ﻿@model ServicesApp.ViewModels.ViewModels.OrderViewModelCreate
-
+@using System.Globalization
 @{
     ViewBag.Title = "Create Order";
 }
@@ -60,6 +60,16 @@
                     @Html.DisplayFor(model => model.ServiceProviderService.ServiceProvider.ConfirmDocs)
                 </dd>
 
+                @if (Model.ServiceProviderService.AvgRating != null)
+                {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ServiceProviderService.AvgRating)
+                    </dt>
+
+                    <dd>
+                        <input id="star-rating" value="@Model.ServiceProviderService.AvgRating.Value.ToString(CultureInfo.InvariantCulture)"  class="rating" type="text" data-size="xs" data-show-clear="false" data-show-caption="false">
+                    </dd>
+                }
             </dl>
         </div>
     </div>
@@ -163,6 +173,13 @@
     })
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#star-rating').rating({ displayOnly: true, step: 0.1 });
+    });
+</script>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/star-rating")
 }

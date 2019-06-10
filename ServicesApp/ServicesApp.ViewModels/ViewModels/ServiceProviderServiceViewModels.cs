@@ -1,5 +1,7 @@
 ﻿using ServicesApp.ViewModels.IdentityViewModels;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Web;
 
 namespace ServicesApp.ViewModels.ViewModels
@@ -31,6 +33,14 @@ namespace ServicesApp.ViewModels.ViewModels
     public class ProviderServiceViewModelCustomer : ProviderServiceFullViewModel
     {
         public ServiceProviderProfileViewModel ServiceProvider { get; set; }
+
+        [Display(Name = "Rating")]
+        public decimal? AvgRating { get; set; }
+    }
+
+    public class ProviderServiceViewModelWithFeedbacks : ProviderServiceViewModelCustomer
+    {
+        public List<OrderViewModelFeedback> Orders { get; set; }
     }
 
     public class ProviderServiceCreateViewModel : ProviderServiceFullViewModel

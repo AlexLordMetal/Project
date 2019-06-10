@@ -90,18 +90,22 @@
                     @if (item.IsComplete == true)
                     {
                         <dt>
-                            @Html.DisplayNameFor(modelItem => item.Feedback)
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(modelItem => item.Feedback)
-                        </dd>
-
-                        <dt>
                             @Html.DisplayNameFor(modelItem => item.Rating)
                         </dt>
                         <dd>
                             <input value="@item.Rating" type="text" class="rating star-rating" data-size="sm" data-show-clear="false" data-show-caption="false">
                         </dd>
+
+                        if (item.Feedback != null)
+                        {
+                            <dt>
+                                @Html.DisplayNameFor(modelItem => item.Feedback)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(modelItem => item.Feedback)
+                            </dd>
+                        }
+
                     }
                 </dl>
                 <div>

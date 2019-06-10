@@ -3,6 +3,8 @@ using ServicesApp.DataProvider.DataModels;
 using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
 using ServicesApp.ViewModels.ViewModels;
+using System;
+using System.Linq;
 
 namespace ServicesApp.BusinessLogic
 {
@@ -31,12 +33,17 @@ namespace ServicesApp.BusinessLogic
             CreateMap<ProviderServiceRelationViewModel, ServiceProviderService>().ForMember(x => x.Photo, x => x.Ignore());
 
             CreateMap<ServiceProviderService, ProviderServiceFullViewModel>();
-            CreateMap<ServiceProviderService, ProviderServiceViewModelCustomer>();
+            CreateMap<ServiceProviderService, ProviderServiceViewModelCustomer>()
+                .ForMember(x => x.AvgRating, x => x.MapFrom(z => z.Orders.Where(y => y.Rating != null).Average(y => y.Rating)));
+            CreateMap<ServiceProviderService, ProviderServiceViewModelWithFeedbacks>()
+                .ForMember(x => x.AvgRating, x => x.MapFrom(z => z.Orders.Where(y => y.Rating != null).Average(y => y.Rating)))
+                .ForMember(x => x.Orders, x => x.MapFrom(z => z.Orders.Where(y => y.IsComplete == true)));
 
             CreateMap<OrderViewModelCustomer, Order>();
             CreateMap<OrderViewModelShort, Order>();
             CreateMap<Order, OrderViewModelCustomer>();
             CreateMap<Order, OrderViewModelServiceProvider>();
+            CreateMap<Order, OrderViewModelFeedback>();
 
             CreateMap<PhotoViewModel, Photo>();
             CreateMap<Photo, PhotoViewModel>();

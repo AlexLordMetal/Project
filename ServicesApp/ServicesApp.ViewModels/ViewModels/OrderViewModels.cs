@@ -44,6 +44,7 @@ namespace ServicesApp.ViewModels.ViewModels
         public string Feedback { get; set; }
 
         [Required]
+        [Display(Name = "Rating")]
         public int? Rating { get; set; }
     }
 
@@ -52,4 +53,21 @@ namespace ServicesApp.ViewModels.ViewModels
         public CustomerProfileViewModel Customer { get; set; }
     }
 
+    public class OrderViewModelFeedback
+    {
+        [Display(Name = "Id")]
+        public int? Id { get; set; }
+
+        [Display(Name = "Order Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
+        public DateTime OrderDate { get; set; }
+
+        [Display(Name = "Feedback")]
+        public string Feedback { get; set; }
+
+        [Display(Name = "Rating")]
+        public int? Rating { get; set; }
+
+        public CustomerProfileViewModel Customer { get; set; }
+    }
 }
