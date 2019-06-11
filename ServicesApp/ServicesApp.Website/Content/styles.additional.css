@@ -3,15 +3,20 @@
         height: 150px;
     }
 
-    img .img-height-150 {
-        max-height: 150px;
-    }
-
     div .fix-height-300 {
         height: 300px;
     }
 
-    img .img-height-300 {
+    div .fix-height-450 {
         height: 300px;
     }
+
+    div > img .img-height-150 {
+        max-height: 50px;
+    }
+
+    div > img .img-height-300 {
+        max-height: 300px;
+    }
+
 }

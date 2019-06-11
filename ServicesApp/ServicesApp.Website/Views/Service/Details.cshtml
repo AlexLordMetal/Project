@@ -75,16 +75,16 @@
     @foreach (var item in Model.ServiceProviderServices)
     {
         <div class="panel panel-default col-sm-4">
-            <div class="panel-body" style="height:450px">
+            <div class="panel-body fix-height-450">
                 <div>
                     <a href=@Url.Action("Details", new { id = item.Id })>
                         @if (item.Photo != null)
                         {
-                            <img src=@item.Photo.Url class="img-rounded img-responsive" style="max-height:200px" />
+                            <img src=@item.Photo.Url class="img-rounded img-responsive img-height-300" />
                         }
                         else
                         {
-                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive" style="max-height:200px" />
+                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
                         }
                     </a>
                 </div>
