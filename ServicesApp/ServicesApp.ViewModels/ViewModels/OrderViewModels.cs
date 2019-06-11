@@ -11,7 +11,7 @@ namespace ServicesApp.ViewModels.ViewModels
 
         [Required]
         [Display(Name = "Order Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy.MM.dd}")]
         public DateTime OrderDate { get; set; }
 
         [Display(Name = "Confirmed by service provider")]
@@ -58,7 +58,7 @@ namespace ServicesApp.ViewModels.ViewModels
         public int? Id { get; set; }
 
         [Display(Name = "Order Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy.MM.dd}")]
         public DateTime OrderDate { get; set; }
 
         [Display(Name = "Feedback")]
