@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
 using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.DataProvider;
-using ServicesApp.DataProvider.DataModels;
 using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
-using ServicesApp.ViewModels.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServicesApp.BusinessLogic.Services

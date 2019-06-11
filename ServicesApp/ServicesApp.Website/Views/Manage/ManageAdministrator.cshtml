@@ -1,16 +1,15 @@
 ﻿@model bool
     @* HasPassword *@
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "Administrator panel";
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <div>
-    <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt>Password</dt>
         <dd>
             [
             @if (Model)
@@ -24,21 +23,21 @@
             ]
         </dd>
 
-        <dt>Service Categories:</dt>
+        <dt>Service Categories</dt>
         <dd>
             [
             @Html.ActionLink("Manage Categories", "Index", "ServiceCategory")
             ]
         </dd>
 
-        <dt>Services:</dt>
+        <dt>Services</dt>
         <dd>
             [
             @Html.ActionLink("Manage Services", "Index", "Service")
             ]
         </dd>
 
-        <dt>Not Approved Services:</dt>
+        <dt>Not Approved Services</dt>
         <dd>
             [
             @Html.ActionLink("Approve Services", "Approve", "Service")

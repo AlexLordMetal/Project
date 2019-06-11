@@ -28,7 +28,13 @@
     </nav>
 
     <div class="container body-content">
+
+        @if (ViewBag.StatusMessage != null)
+        {
+            <br />
         <p class="text-success">@ViewBag.StatusMessage</p>
+        <hr />
+        }
         @RenderBody()
         <hr />
         <footer>

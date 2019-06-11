@@ -6,7 +6,6 @@ using ServicesApp.ViewModels.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +28,7 @@ namespace ServicesApp.BusinessLogic.Services
         {
             return await context.ServiceProviderServices.AnyAsync(x => (x.ServiceProviderId == serviceProviderId) & (x.ServiceId == serviceId));
         }
+
         public async Task<T> GetServiceRelationAsync<T>(string serviceProviderId, int serviceId) where T : ProviderServiceFullViewModel
         {
             var dataModel = await context.ServiceProviderServices.FirstOrDefaultAsync(x => (x.ServiceProviderId == serviceProviderId) & (x.ServiceId == serviceId));
@@ -78,7 +78,10 @@ namespace ServicesApp.BusinessLogic.Services
                 context.Entry<ServiceProviderService>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
-            //Need exception "Id not found" or something else
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public async Task DeleteServiceRelationAsync(int id)

@@ -6,17 +6,17 @@
 
 <h3>Service Provider</h3>
 <div class="row">
-    <div class="col-sm-3 col-lg-3 fix-height-150">
+    <div class="col-sm-4 col-md-3 fix-height-250">
         @if (Model.ServiceProviderService.Photo != null)
         {
-            <img src=@Model.ServiceProviderService.Photo.Url class="img-rounded img-responsive img-height-150" />
+            <img src=@Model.ServiceProviderService.Photo.Url class="img-rounded img-responsive img-height-auto" />
         }
         else
         {
-            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-150" />
+            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-auto" />
         }
     </div>
-    <div class="col-sm-9 col-lg-9">
+    <div class="col-sm-8 col-md-9">
         <div>
             <dl class="dl-horizontal">
 
@@ -112,17 +112,17 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-4 col-lg-4 fix-height-300">
+                    <div class="col-sm-4 fix-height-200">
                         @if (Model.ServiceProviderService.Service.Photo != null)
                         {
-                            <img src=@Model.ServiceProviderService.Service.Photo.Url class="img-rounded img-responsive img-height-300" />
+                            <img src=@Model.ServiceProviderService.Service.Photo.Url class="img-rounded img-responsive img-height-auto" />
                         }
                         else
                         {
-                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
+                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-auto" />
                         }
                     </div>
-                    <div class="col-sm-8 col-lg-8">
+                    <div class="col-sm-8">
                         <div>
                             <dl class="dl-horizontal">
 

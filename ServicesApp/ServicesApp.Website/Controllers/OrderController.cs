@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using ServicesApp.BusinessLogic.Interfaces;
-using ServicesApp.DataProvider;
 using ServicesApp.ViewModels.ViewModels;
 using ServicesApp.Website.HelpClasses;
 using System;
@@ -13,8 +12,6 @@ namespace ServicesApp.Website.Controllers
 {
     public class OrderController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         private IOrderManager _orderManager;
         private IProviderServiceRelationManager _providerServiceRelationManager;
         private ICustomerManager _customerManager;
@@ -79,7 +76,7 @@ namespace ServicesApp.Website.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-        
+
         // GET: Order/Details/5
         [Authorize(Roles = "ServiceProvider, Customer")]
         public async Task<ActionResult> Details(int? id)
@@ -185,6 +182,7 @@ namespace ServicesApp.Website.Controllers
             base.Dispose(disposing);
         }
 
+        #region Helpers
         private async Task setDates(OrderViewModelCreate viewModel)
         {
             var excludedDates = await _orderManager.GetExcludedDatesAsync(viewModel.ServiceProviderService.ServiceProviderId);
@@ -196,5 +194,6 @@ namespace ServicesApp.Website.Controllers
             viewModel.ExcludedDates = JsonConvert.SerializeObject(excludedDates);
             viewModel.OrderDate = orderDate;
         }
+        #endregion
     }
 }

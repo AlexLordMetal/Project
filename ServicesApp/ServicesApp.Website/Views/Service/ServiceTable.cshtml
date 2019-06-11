@@ -3,19 +3,19 @@
 {
     <div class="panel panel-default">
         <div class="panel-body row">
-            <div class="col-sm-3 col-lg-3 fix-height-150">
+            <div class="col-sm-4 col-md-3 fix-height-150">
                 <a href=@Url.Action("Details", new { id = item.Id })>
                     @if (item.Photo != null)
                     {
-                        <img src=@item.Photo.Url class="img-rounded img-responsive img-height-150" />
+                        <img src=@item.Photo.Url class="img-rounded img-responsive img-height-auto" />
                     }
                     else
                     {
-                        <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-150" />
+                        <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-auto" />
                     }
                 </a>
             </div>
-            <div class="col-sm-9 col-lg-9">
+            <div class="col-sm-8 col-md-9">
                 <div>
                     <dl class="dl-horizontal">
 

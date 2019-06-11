@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ServicesApp.BusinessLogic.IdentityServices;
-using ServicesApp.DataProvider.IdentityModels;    // It's bad
+using ServicesApp.DataProvider.IdentityModels;
 using ServicesApp.ViewModels.IdentityViewModels;
 using System.Threading.Tasks;
 using System.Web;
@@ -89,7 +89,6 @@ namespace ServicesApp.Website.Controllers
         {
             if (ModelState.IsValid)
             {
-                //To do - move to business logic
                 var user = new ApplicationUser {
                     UserName = model.Email,
                     Email = model.Email                    

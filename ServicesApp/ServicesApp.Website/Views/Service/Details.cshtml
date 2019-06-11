@@ -2,53 +2,48 @@
 @using Microsoft.AspNet.Identity;
 @using System.Globalization;
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Service Details";
 }
 
-<h2>Service</h2>
+<h2>@ViewBag.Title</h2>
 
 <div class="row">
-    <div class="col-sm-offset-2 col-sm-6 col-md-4">
+    <div class="col-sm-5 col-md-4 fix-height-250">
         @if (Model.Photo != null)
         {
-            <img src=@Model.Photo.Url class="img-rounded img-responsive" />
+            <img src=@Model.Photo.Url class="img-rounded img-responsive img-height-auto" />
         }
         else
         {
-            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive" />
+            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-auto" />
         }
     </div>
-</div>
+    <div class="col-sm-7 col-md-8">
+        <dl class="dl-horizontal">
 
-<div>
-    <hr />
-    <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Category)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Category)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-    </dl>
+        </dl>
+    </div>
 </div>
 
 <div>
@@ -70,21 +65,21 @@
     | @Html.ActionLink("Back to List", "Index")
 </div>
 
-<h4>Service Providers</h4>
+<h3>Service Providers</h3>
 <div class="row">
     @foreach (var item in Model.ServiceProviderServices)
     {
         <div class="panel panel-default col-sm-4">
-            <div class="panel-body fix-height-450">
-                <div>
-                    <a href=@Url.Action("Details", new { id = item.Id })>
+            <div class="panel-body fix-height-500">
+                <div class="panel-body">
+                    <a href=@Url.Action("Details", "ServiceRelation", new { id = item.Id })>
                         @if (item.Photo != null)
                         {
-                            <img src=@item.Photo.Url class="img-rounded img-responsive img-height-300" />
+                            <img src=@item.Photo.Url class="img-rounded img-responsive max-height-200" />
                         }
                         else
                         {
-                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
+                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive max-height-200" />
                         }
                     </a>
                 </div>

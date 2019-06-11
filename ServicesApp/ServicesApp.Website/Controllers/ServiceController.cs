@@ -177,6 +177,7 @@ namespace ServicesApp.Website.Controllers
             base.Dispose(disposing);
         }
 
+        #region Helpers
         private void imageFileValidator(ServiceViewModelCreate serviceViewModelCreate)
         {
             if (serviceViewModelCreate.UploadPhoto != null)
@@ -213,5 +214,7 @@ namespace ServicesApp.Website.Controllers
                 viewModel.UploadPhoto.SaveAs(Server.MapPath("~") + viewModel.Photo.Url);
             }
         }
+        #endregion
+
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using ServicesApp.BusinessLogic.IdentityServices;
-using ServicesApp.BusinessLogic.Interfaces;
 using ServicesApp.ViewModels.IdentityViewModels;
 using ServicesApp.Website.HelpClasses;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace ServicesApp.Website.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public ManageController(ICustomerManager customerManager)
+        public ManageController()
         {
         }
 

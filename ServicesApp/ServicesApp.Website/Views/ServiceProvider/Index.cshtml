@@ -1,15 +1,14 @@
 ﻿@model ServicesApp.ViewModels.IdentityViewModels.ServiceProviderProfileViewModelManage
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "Your Profile";
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <div>
-    <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt>Password</dt>
         <dd>
             [
             @if (Model.HasPassword)
@@ -22,27 +21,17 @@
             }
             ]
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfile.Name):</dt>
+        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfile.Name)</dt>
         <dd>
             @Html.DisplayFor(m => m.ServiceProviderProfile.Name)
         </dd>
-        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfile.ConfirmDocs):</dt>
+        <dt>@Html.DisplayNameFor(m => m.ServiceProviderProfile.ConfirmDocs)</dt>
         <dd>
             @Html.DisplayFor(m => m.ServiceProviderProfile.ConfirmDocs)
         </dd>
         <dd>
             [
             @Html.ActionLink("Change", "UpdateProfile")
-            ]
-        </dd>
-        <dd>
-            [
-            @Html.ActionLink("Your Services", "Services")
-            ]
-        </dd>
-        <dd>
-            [
-            @Html.ActionLink("Your Orders", "Index", "Order")
             ]
         </dd>
     </dl>

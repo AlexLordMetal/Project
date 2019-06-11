@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing;
 
 namespace ServicesApp.BusinessLogic.Services
 {
@@ -98,7 +97,10 @@ namespace ServicesApp.BusinessLogic.Services
                 context.Entry<Service>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
-            //Need exception "Id not found" or something else
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public async Task<int> NotApprovedCount()
@@ -114,7 +116,10 @@ namespace ServicesApp.BusinessLogic.Services
                 context.Services.Remove(dataModel);
                 await context.SaveChangesAsync();
             }
-            //Need exception "Id not found" or something else
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public void Dispose()

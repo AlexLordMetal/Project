@@ -1,11 +1,11 @@
 ﻿@model SelectList
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Services";
 }
 
 <div id="action-url" data-url=@Url.Action("ServiceTable", "Service", null, Request.Url.Scheme)></div>
 
-<h2>Services</h2>
+<h2>@ViewBag.Title</h2>
 
 @if (User.IsInRole("Administrator"))
 {

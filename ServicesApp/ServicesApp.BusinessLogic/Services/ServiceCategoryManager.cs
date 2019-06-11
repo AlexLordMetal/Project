@@ -51,7 +51,10 @@ namespace ServicesApp.BusinessLogic.Services
                 context.Entry<ServiceCategory>(dataModel).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
-            //Need exception "Id not found" or something else
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public async Task DeleteByIdAsync(int? id)
@@ -67,7 +70,10 @@ namespace ServicesApp.BusinessLogic.Services
                 context.ServiceCategories.Remove(dataModel);
                 await context.SaveChangesAsync();
             }
-            //Need exception "Id not found" or something else
+            else
+            {
+                throw new Exception();
+            }
         }
 
         public void Dispose()

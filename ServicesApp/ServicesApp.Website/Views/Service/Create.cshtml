@@ -1,10 +1,10 @@
 ﻿@model ServicesApp.ViewModels.ViewModels.ServiceViewModelCreate
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Service";
 }
 
-    <h2>Create Service</h2>
+<h2>@ViewBag.Title</h2>
 
 
 @using (Html.BeginForm("Create", "Service", FormMethod.Post, new { enctype = "multipart/form-data" }))

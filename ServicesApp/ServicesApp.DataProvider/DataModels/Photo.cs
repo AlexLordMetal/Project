@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServicesApp.DataProvider.DataModels
+﻿namespace ServicesApp.DataProvider.DataModels
 {
     public class Photo
     {

@@ -1,6 +1,5 @@
 ﻿using ServicesApp.ViewModels.IdentityViewModels;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServicesApp.ViewModels.ViewModels

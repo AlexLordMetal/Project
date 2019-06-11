@@ -8,17 +8,17 @@
 
 <hr />
 <div class="row">
-    <div class="col-sm-4 col-lg-4 fix-height-300">
+    <div class="col-sm-5 col-md-4 fix-height-250">
         @if (Model.Photo != null)
         {
-            <img src=@Model.Photo.Url class="img-rounded img-responsive img-height-300" />
+            <img src=@Model.Photo.Url class="img-rounded img-responsive img-height-auto" />
         }
         else
         {
-            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
+            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-auto" />
         }
     </div>
-    <div class="col-sm-8 col-lg-8">
+    <div class="col-sm-7 col-md-8">
         <div>
             <dl class="dl-horizontal">
 
@@ -174,14 +174,14 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-4 col-lg-4 fix-height-300">
+                    <div class="col-sm-4 col-lg-4 fix-height-200">
                         @if (Model.Service.Photo != null)
                         {
-                            <img src=@Model.Service.Photo.Url class="img-rounded img-responsive img-height-300" />
+                            <img src=@Model.Service.Photo.Url class="img-rounded img-responsive img-height-auto" />
                         }
                         else
                         {
-                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-300" />
+                            <img src="~/Content/DataImages/NoImage.png" class="img-rounded img-responsive img-height-auto" />
                         }
                     </div>
                     <div class="col-sm-8 col-lg-8">

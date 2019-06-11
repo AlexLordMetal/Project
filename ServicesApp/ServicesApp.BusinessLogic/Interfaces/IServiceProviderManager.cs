@@ -5,7 +5,7 @@ namespace ServicesApp.BusinessLogic.Interfaces
 {
     public interface IServiceProviderManager
     {
-        Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel serviceProviderProfileViewModel, string userId);
+        Task UpdateServiceProviderProfileAsync(ServiceProviderProfileViewModel viewModel, string userId);
         Task<ServiceProviderProfileViewModel> GetServiceProviderProfileAsync(string userId);
         Task<bool> IsServiceProviderProfileExistAsync(string userId);
     }

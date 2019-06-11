@@ -5,7 +5,7 @@ namespace ServicesApp.BusinessLogic.Interfaces
 {
     public interface ICustomerManager
     {
-        Task UpdateCustomerProfileAsync(CustomerProfileViewModel customerProfileViewModel, string userId);
+        Task UpdateCustomerProfileAsync(CustomerProfileViewModel viewModel, string userId);
         Task<bool> IsCustomerProfileExistAsync(string userId);
         Task<CustomerProfileViewModel> GetCustomerProfileAsync(string userId);
     }

@@ -12,7 +12,6 @@ namespace ServicesApp.Website.Controllers
 {
     public class ServiceRelationController : Controller
     {
-
         private IProviderServiceRelationManager _providerServiceRelationManager;
         private IServiceProviderManager _serviceProviderManager;
         private IServiceManager _serviceManager;
@@ -156,12 +155,13 @@ namespace ServicesApp.Website.Controllers
             await _providerServiceRelationManager.DeleteServiceRelationAsync((int)id);
             return RedirectToAction("Index");
         }
-        
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
         }
 
+        #region Helpers
         private void imageFileValidator(ProviderServiceCreateViewModel viewModel)
         {
             if (viewModel.UploadPhoto != null)
@@ -198,5 +198,6 @@ namespace ServicesApp.Website.Controllers
                 viewModel.UploadPhoto.SaveAs(Server.MapPath("~") + viewModel.Photo.Url);
             }
         }
+        #endregion
     }
 }
